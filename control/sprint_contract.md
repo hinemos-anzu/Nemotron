@@ -5,7 +5,7 @@ Day1 — min logprob 可視化基盤の整備
 
 ## Date / branch / owner
 - Date: 2026-04-17
-- Branch: `claude/plan-sprint-framework-oC8Lg`
+- Branch: `planner/day1-logprob`
 - Owner: Planner
 - Target executor: Generator
 
@@ -54,18 +54,25 @@ Day1 — min logprob 可視化基盤の整備
 
 ## Inputs
 
-Generator が受け取るもの:
+### Planner 着手前確定条件（Generator に渡す前に Planner が自ら確認・記入すること）
 
-| Item | 場所 / 形式 |
-|------|------------|
-| 訓練データセット | 未確定（Generatorが確認して Planner に報告すること） |
-| ベースモデル or checkpoint | 未確定（Generatorが確認して Planner に報告すること） |
-| カテゴリラベルの有無 | 未確定（確認必須・なければブロッカーとして即報告） |
+以下3項目がすべて埋まるまで、Generator へ本スプリントを渡してはならない。
+未確定のまま渡すことは BLOCKED 扱いとする。
+
+| Item | 確定値 | 確定方法 | 状態 |
+|------|--------|---------|------|
+| 訓練データセットのパス | *(Planner記入)* | Kaggle dataset / local path を Planner が直接確認 | **PENDING** |
+| ベースモデル or checkpoint のパス | *(Planner記入)* | HuggingFace model ID or local path を Planner が直接確認 | **PENDING** |
+| カテゴリラベルの有無と列名 | *(Planner記入)* | データセットの schema を Planner が直接確認 | **PENDING** |
+
+**PENDING が1つでも残っている場合、このスプリントは BLOCKED である。**
+Generator に渡してよいのは、上表の「状態」欄が3つとも **CONFIRMED** になったときのみ。
+
+カテゴリラベルが存在しない場合: BLOCKED を宣言し、ラベル付与方針を決定する mini-sprint を先行させる。
 
 **Generatorへの指示:**
-データセットとモデルのパスが確定する前に実装を進めてはならない。
-パスが不明な場合は、ダミーデータで動くスタブを作り Planner に確認を求めること。
-`real` と `dummy` を混在させたまま渡してはならない。
+上表が CONFIRMED になった状態で渡される。パスは Planner が確定済みの値のみ使うこと。
+`real` と `dummy` を混在させたまま実装してはならない。
 
 ---
 
