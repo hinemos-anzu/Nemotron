@@ -1,13 +1,14 @@
 # Day2 Change Manifest
 
 - baseline_sha: 39f4bed90392567517b606d1301ae1c36a86a97c
-- modified_sha: d0da87a7d2d9893d3509d61a956f2905490b112f
+- modified_sha: TO_BE_FILLED_AFTER_PUSH
 - changed_variable_count: 1
 - changed_variable: B1 training-serving misalignment 修正
 
 ## 変更内容要約
-- Day2 では B1 のみを実験変数として定義した。
-- ただし Kaggle 実行証跡が未取得のため、B1 変更の実行結果は未確定。
+- 実装対象として指定された Kaggle Notebook (`original-nemotron-asymmetric-svd-26041602`) に対応する補助コードを追加。
+- 追加内容は Day2 evidence 自動採取（`/kaggle/working/day2_evidence.json` と `/kaggle/working/day2_evidence.md` 生成）。
+- B1 以外の施策は追加していない。
 
 ## 変更していない施策一覧
 - B2 以降の全施策
