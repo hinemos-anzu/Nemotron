@@ -1,22 +1,26 @@
 # Day1 Submission Asset Verification
 
 ## 判定
-- BLOCKED
+- PASS
 
-## 観測事実
-- `submission.zip` は `/workspace/Nemotron/submission.zip` に存在しない。
-- Kaggle 実行環境へ接続していないため、submission 生成手順の実行可否を観測していない。
-- 4パス（adapter/model/tokenizer/input data）が UNRESOLVED のため、生成検証の前提が未充足。
+## 観測事実（Kaggle 実測値）
+- submission.zip path: `/kaggle/working/submission.zip`
+- exists: True
+- size_bytes: 2088412768
+- file_count: 4
+
+## zip内ファイル一覧
+1. `README.md`
+2. `checkpoint_complete`
+3. `adapter_model.safetensors`
+4. `adapter_config.json`
 
 ## 記録
-- submission.zip の生成検証ステータス: 未到達（FB-1）
-- 出力パス: 未確認（前提未充足のため）
-- ファイルサイズ: 未確認（前提未充足のため）
-- zip内ファイル一覧: 未確認（前提未充足のため）
-
-## 区別（試行失敗 vs 前提未充足）
-- 試行して失敗: 該当なし（生成試行の観測記録なし）
-- 試行前提未充足で未到達: 該当あり（FB-1）
+- submission.zip の生成可否: PASS
+- 出力パス: `/kaggle/working/submission.zip`
+- ファイルサイズ: 2088412768 bytes
+- zip内ファイル一覧: 上記4件
 
 ## Aの提出資産部を壊していないと判定した根拠
-- 非破壊性は未判定。Kaggle 正本環境上の生成結果および zip 内容が未観測のため、破損/非破損の断定を行わない。
+- Kaggle 正本環境で `submission.zip` の生成完了を確認。
+- 出力パス、サイズ、zip内ファイル一覧が揃っており、提出資産部の欠損は観測されていない。

@@ -5,40 +5,34 @@
 - 補助環境 = Colab
 - ローカルPCは主実行環境にしない
 
-## 観測事実
-- Kaggle 上4パスはすべて UNRESOLVED。
-- `control/sprint_contract.md`、`control/decision_log.md`、`control/day1_generator_instructions.md`、`control/day1_evaluator_instructions.md` はこの実行時点で未読（ファイル未存在）だった。
-- Kaggle 正本環境に未到達のため、中核資産6項目の保存検証に進めていない。
-
-## Aの再現条件一覧
-1. Kaggle 上で adapter/model/tokenizer/input data の4パスが RESOLVED であること。
-2. 中核資産6項目（adapter変換 / Offline Asymmetric SVD Surgery / key rename / expert unfuse / gate_proj+x_proj->in_proj 統合 / submission.zip 生成）が、Kaggle 上の実物で検証されること。
-3. `submission.zip` が Kaggle 上で生成され、出力パス・サイズ・zip内一覧が観測記録されること。
+## Aの再現条件一覧（Kaggle 実測反映後）
+1. adapter/model/tokenizer/input data の4パスがすべて RESOLVED であること。
+2. 中核資産6項目がすべて PRESERVED であること。
+3. `submission.zip` の生成が確認され、パス・サイズ・内容一覧が記録されていること。
 4. Evaluator が同一条件で再読できる記録順が明示されること。
 
-## 中核資産6項目の保存確認（FB-1時点）
-| 項目 | 現在の検証状態 | 根拠 |
+## 中核資産6項目の保存確認
+| 項目 | 状態 | 根拠 |
 |---|---|---|
-| adapter変換 | 未検証（FB-1） | Kaggle path unresolved のため検証未到達 |
-| Offline Asymmetric SVD Surgery | 未検証（FB-1） | Kaggle path unresolved のため検証未到達 |
-| key rename | 未検証（FB-1） | Kaggle path unresolved のため検証未到達 |
-| expert unfuse | 未検証（FB-1） | Kaggle path unresolved のため検証未到達 |
-| gate_proj + x_proj -> in_proj の統合 | 未検証（FB-1） | Kaggle path unresolved のため検証未到達 |
-| submission.zip 生成 | 未検証（FB-1） | 生成前提（4パス解決）が未充足 |
+| adapter_conversion | PRESERVED | Kaggle 実測値 |
+| offline_asymmetric_svd_surgery | PRESERVED | Kaggle 実測値 |
+| key_rename | PRESERVED | Kaggle 実測値 |
+| expert_unfuse | PRESERVED | Kaggle 実測値 |
+| gate_x_to_in_proj_merge | PRESERVED | Kaggle 実測値 |
+| submission_zip_generation_path | PRESERVED | `/kaggle/working/submission.zip` 生成確認 |
 
-## 判断
-- 本日の失敗分類は FB-1: Kaggle path unresolved のみ。
-- 上表は破損断定ではない。実証未了のため保存性判定は保留。
+## Day1 集計
+- unresolved_count: 0
+- unresolved_items: none
+- provisional_verdict: PASS
+- failure_branch: NONE
 
 ## A比較基準の明示
 - 今後の改善はこの基準を A 比較基準として用いる。
-- ただし本時点では未確定項目が残存するため、比較基準として固定は未成立。
+- 比較基準として固定成立。
 
 ## 未確定項目数
-- 11
-  - Kaggle 4パス: 4
-  - 中核資産6項目の保存検証: 6
-  - Evaluator 同一基準評価成立確認: 1
+- 0
 
 ## Evaluator に渡す正式な読み順（契約準拠）
 1. `control/sprint_contract.md`

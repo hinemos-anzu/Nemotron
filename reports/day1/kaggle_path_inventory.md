@@ -1,15 +1,15 @@
 # Day1 Kaggle Path Inventory
 
-## 観測事実
-- 実行環境は `/workspace/Nemotron` のローカルワークスペースであり、Kaggle Notebook/Kernel 実行コンテキストは観測できない。
-- `control/` 配下の参照指定ファイルは存在確認できなかった。
+## 取得ソース
+- Kaggle Day1 証跡採取セルの実測値を正として反映。
 
-## 判断
-- Day1 contract で要求された Kaggle 上4パスは、この環境だけでは実パスを確定できない。
-
-| 項目名 | 実パス | 状態 | 備考 |
+| 項目名 | 実パス / resolved candidates | 状態 | 備考 |
 |---|---|---|---|
-| adapter path | 未確認 | UNRESOLVED | Kaggle 環境未接続のため未確認 |
-| model path | 未確認 | UNRESOLVED | Kaggle 環境未接続のため未確認 |
-| tokenizer path | 未確認 | UNRESOLVED | Kaggle 環境未接続のため未確認 |
-| input data path | 未確認 | UNRESOLVED | Kaggle 環境未接続のため未確認 |
+| adapter path | `/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20` | RESOLVED | Kaggle 実測値 |
+| model path | `/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1` | RESOLVED | Kaggle 実測値 |
+| tokenizer path | `/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1/tokenizer.json` / `/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1/tokenizer_config.json` / `/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1/special_tokens_map.json` | RESOLVED | resolved candidates |
+| input data path | `/kaggle/input` | RESOLVED | Kaggle 実測値 |
+
+## 集計
+- unresolved_count: 0
+- unresolved_items: none
