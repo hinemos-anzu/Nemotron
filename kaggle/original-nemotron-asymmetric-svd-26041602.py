@@ -396,7 +396,7 @@ if TEST_GENERATION:
         max_lora_rank=32,
         max_tokens=4096,
         top_p=0.95,
-        temperature=0.7,
+        temperature=0.6,
         n=3,
         max_num_seqs=64,
         gpu_memory_utilization=0.85,
