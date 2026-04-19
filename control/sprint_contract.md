@@ -1,10 +1,16 @@
 # Sprint title
-Day1 Sprint Contract — ベースAの0.86再現基準固定
+Day1 Sprint Contract — ベースAの0.85再現基準固定
 
 # Goal
-Day1 の目的は **Aの0.86再現基準固定** のみである。  
+Day1 の目的は **Aの0.85再現基準固定** のみである。  
 精度改善は目的に含めない。  
 Kaggle を正本環境として、ベースAの提出資産部が成立し、以後の改善を A 比で判定できる比較基準を固定する。
+
+# Baseline score correction
+- 以前の契約文では baseline score を `0.86` と記載していたが、これは誤記である。
+- Day1 の正式 baseline score は **0.85** とする。
+- 根拠は Kaggle 実測の baseline LB 記録である。
+- 以後、A比較基準のスコア参照は **0.85** を正とする。
 
 # In scope
 1. Kaggle 上でベースAの提出資産部を成立させるための再現条件の明文化
@@ -41,7 +47,7 @@ Kaggle を正本環境として、ベースAの提出資産部が成立し、以
 # Inputs
 1. ベースAの既存コード一式
 2. ベースAが依存する Kaggle 上の入力資産
-3. ベースAで 0.86 を記録したとされる既知の再現情報
+3. ベースAが **0.85** を記録した既知の再現情報
 4. Kaggle Notebook / Kaggle Dataset / Kaggle Input の実体
 5. 生成対象成果物の保存先ルール
 
@@ -63,7 +69,7 @@ Kaggle を正本環境として、ベースAの提出資産部が成立し、以
 |---|---|---|
 | SC-1 | 正本環境 | `reports/day1/reproduction_baseline.md` に「正本環境 = Kaggle」と明記されている |
 | SC-2 | パス解決 | `reports/day1/kaggle_path_inventory.md` に adapter / model / tokenizer / input data の4種類すべての絶対パスまたは Kaggle 入力パスが記録され、各項目が `RESOLVED` である |
-| SC-3 | 提出資産保存 | `reports/day1/reproduction_baseline.md` に、ベースAの中核資産6項目が個別に列挙され、各項目が `PRESERVED` または `NOT EXECUTED BUT SPECIFIED` ではなく、Day1 時点では `PRESERVED` と記録されている |
+| SC-3 | 提出資産保存 | `reports/day1/reproduction_baseline.md` に、ベースAの中核資産6項目が個別に列挙され、各項目が `PRESERVED` と記録されている |
 | SC-4 | submission.zip | `reports/day1/submission_asset_verification.md` に `submission.zip` の生成結果が記録され、出力パス、ファイルサイズ、zip内ファイル一覧の3点が確認できる |
 | SC-5 | A再現条件固定 | `reports/day1/reproduction_baseline.md` に、Aの再現に必要な前提条件が列挙され、未確定項目が `0` 件である |
 | SC-6 | 比較基準固定 | `reports/day1/reproduction_baseline.md` に「今後の改善はこの基準を A 比較基準として用いる」と明記されている |
@@ -102,7 +108,7 @@ Kaggle を正本環境として、ベースAの提出資産部が成立し、以
 ## FB-3: reproduction baseline not fixed
 条件:
 - Aの再現条件に未確定項目が残る
-- 0.86再現基準として固定できる説明が書けない
+- **0.85**再現基準として固定できる説明が書けない
 - Generator と Evaluator が同じ比較基準を読めない
 
 判定:
@@ -124,7 +130,7 @@ Kaggle を正本環境として、ベースAの提出資産部が成立し、以
 # Notes for Generator
 1. Day1 ではコード改善をしない
 2. Day1 では改善策Bを入れない
-3. Day1 の作業対象は「Aの0.86再現基準固定」のみ
+3. Day1 の作業対象は「Aの0.85再現基準固定」のみ
 4. Kaggle を正本環境として記録する
 5. すべての確認結果は以下のパスへ出力する
    - `reports/day1/kaggle_path_inventory.md`
