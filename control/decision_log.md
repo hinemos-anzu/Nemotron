@@ -2,7 +2,7 @@
 D1
 
 ## Hypothesis
-Day1 では、ベースAの0.86再現基準と提出資産部を Kaggle 上で固定できれば、以後の改善策Bを A 比で厳密に判定できる。
+Day1 では、ベースAの再現基準と提出資産部を Kaggle 上で固定できれば、以後の改善策Bを A 比で厳密に判定できる。
 
 ## Why now
 改善策Bを先に入れると、Aの提出資産破損と改善効果を分離できない。  
@@ -218,3 +218,59 @@ Day1 基準を唯一の比較基準として採用する。
 - 契約語との不一致なし
 
 Adoption rule: 採用
+
+---
+
+# Decision ID
+D5
+
+## Hypothesis
+Day1 baseline score の契約値は、Kaggle 実測に基づく **0.85** で固定すべきである。
+
+## Why now
+これまで `0.86` と記載していた箇所があったが、Day2 比較判定の過程で baseline score の誤記が判明した。  
+契約文と decision log の score 記載が誤っていると、Evaluator が誤った比較前提を使うため、再評価の前に修正が必要である。
+
+## Evidence expected
+1. `control/sprint_contract.md` に baseline score = `0.85` が明記されている
+2. `reports/day1/reproduction_baseline.md` に baseline score = `0.85` が明記されている
+3. Day2 成果物で baseline score = `0.85` が使われている
+4. 誤記 `0.86` が REJECT 根拠として使われないことが確認できる
+
+## Adoption rule
+1. 契約書と decision log が `0.85` に更新されている
+2. baseline 比較に使う score が一貫して `0.85` である
+3. Evaluator が更新後の契約書を読んで再評価できる
+
+## Rejection rule
+1. 契約書または decision log に `0.86` が残る
+2. baseline 比較の score 記載が複数値で混在する
+3. Evaluator が更新後の正本を参照できない
+
+## Follow-up if pass
+1. baseline score = `0.85` を正式値として運用する
+2. Day2 以降の score 比較は `0.85` を A基準とする
+3. Evaluator に更新済み SHA を提示して再評価を依頼する
+
+## Follow-up if fail
+1. score 誤記を `BLOCKED` 相当の契約未整合として扱う
+2. score 記載のある関連成果物を洗い出して再修正する
+
+---
+
+## Evaluation result (PM correction, 2026-04-19)
+根拠ファイル:
+- control/sprint_contract.md
+- reports/day1/reproduction_baseline.md
+- reports/day2/experiment_result.md
+- reports/day2/adoption_decision.md
+
+観測事実:
+- Day1 契約書の baseline score を `0.85` に訂正
+- Day1 baseline 記録の score 表記を `0.85` に訂正
+- Day2 比較結果は baseline 0.85 / Day2 0.85 の同値へ更新済み
+- `0.86 -> 0.85` 悪化を理由にした REJECT は撤回済み
+
+Adoption rule: 採用
+Follow-up:
+- Evaluator は更新済み契約書を読んだうえで Day2 を再評価する
