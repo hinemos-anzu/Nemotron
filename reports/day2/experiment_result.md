@@ -5,7 +5,7 @@
 
 ## 比較対象
 - baseline SHA: 39f4bed90392567517b606d1301ae1c36a86a97c
-- baseline score (A): 0.86
+- baseline score (A): 0.85
 
 ## 実行条件
 - 1実験1変数: B1 training-serving misalignment 修正のみ
@@ -23,13 +23,13 @@
 - submission_assets_preserved: True
 - LB score (Day2 B1): 0.85
 - comparable_against_baseline: True
-- provisional_verdict: REJECT
+- provisional_verdict: HOLD
 
 ## A比で悪化したか否か
-- 悪化した（0.86 -> 0.85）
+- 悪化なし（同値: 0.85 = 0.85）
 
 ## 0.86超えに向かう根拠の有無
-- なし（LB実測で baseline を下回った）
+- UNCONFIRMED（同値であり、上振れ根拠は未確定）
 
 ## 判定上の分類
-- worse than baseline
+- same as baseline
