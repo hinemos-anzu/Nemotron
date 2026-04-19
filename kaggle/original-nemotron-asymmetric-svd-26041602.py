@@ -9,6 +9,7 @@ B1 scope only:
 
 import json
 import os
+import shutil
 import zipfile
 from datetime import datetime, UTC
 from pathlib import Path
@@ -60,10 +61,38 @@ def reconcile_serving_metadata(adapter_dir: str | Path) -> dict:
     config_path = adapter_dir / "adapter_config.json"
     model_path = adapter_dir / "adapter_model.safetensors"
 
+    if not (config_path.exists() and model_path.exists()):
+        source_candidates = [
+            os.environ.get("ADAPTER_PATH", ""),
+            "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20",
+        ]
+        source_candidates = [Path(p) for p in source_candidates if p]
+
+        for src in source_candidates:
+            src_config = src / "adapter_config.json"
+            src_model = src / "adapter_model.safetensors"
+            if src_config.exists() and src_model.exists():
+                adapter_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src_config, config_path)
+                shutil.copy2(src_model, model_path)
+                break
+
     if not config_path.exists():
-        raise FileNotFoundError(f"adapter_config.json not found: {config_path}")
+        return {
+            "timestamp_utc": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+            "alignment_scope": "B1 training-serving misalignment",
+            "adapter_dir": str(adapter_dir),
+            "status": "BLOCKED",
+            "reason": f"adapter_config.json not found: {config_path}",
+        }
     if not model_path.exists():
-        raise FileNotFoundError(f"adapter_model.safetensors not found: {model_path}")
+        return {
+            "timestamp_utc": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+            "alignment_scope": "B1 training-serving misalignment",
+            "adapter_dir": str(adapter_dir),
+            "status": "BLOCKED",
+            "reason": f"adapter_model.safetensors not found: {model_path}",
+        }
 
     with open(config_path, "r", encoding="utf-8") as f:
         config = json.load(f)
@@ -82,6 +111,7 @@ def reconcile_serving_metadata(adapter_dir: str | Path) -> dict:
         "timestamp_utc": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "alignment_scope": "B1 training-serving misalignment",
         "adapter_dir": str(adapter_dir),
+        "status": "PASS",
         "target_modules_before": previous_modules,
         "target_modules_after": inferred_modules,
         "inference_mode_before": previous_inference_mode,
@@ -176,8 +206,9 @@ if __name__ == "__main__":
     collect_day2_evidence(
         baseline_sha="39f4bed90392567517b606d1301ae1c36a86a97c",
         notes=[
-            "B1 serving alignment applied.",
-            f"Aligned target_modules={alignment['target_modules_after']}",
+            f"B1 serving alignment status={alignment.get('status', 'UNKNOWN')}",
+            f"Aligned target_modules={alignment.get('target_modules_after', 'N/A')}",
+            alignment.get("reason", ""),
             "Populate comparable_against_baseline/worse_than_baseline/evidence_for_gt_086 after Kaggle scoring logs are available.",
         ],
     )

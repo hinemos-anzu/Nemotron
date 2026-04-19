@@ -13,6 +13,7 @@
 
 ## 観測結果
 - Step2（初回実装）として B1 本体を実装済み。
+- Kaggle 実行で `adapter_config.json not found` が発生したため、B1 実装に adapter 入力パスからの最小コピー fallback を追加。
 - Step3（Kaggle再実行）後の比較指標は未取得。
 
 ## A比で悪化したか否か

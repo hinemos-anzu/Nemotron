@@ -13,7 +13,9 @@
 2. `reconcile_serving_metadata()` を追加し、`adapter_config.json` の `target_modules` を surgery 後 tensor key から再構成。
 3. `inference_mode` を serving 用に `True` へ補正。
 4. `serving_alignment.json` を出力し、before/after を記録。
-5. `day2_evidence.json` / `day2_evidence.md` 採取コードを維持。
+5. `WORKING_ADAPTER_DIR` に adapter 実体がない場合、`ADAPTER_PATH` / Kaggle input 既定パスから最小コピーして整合化処理を継続。
+6. adapter 実体が依然不足する場合は例外停止せず `status=BLOCKED` を返し、evidence に理由を記録。
+7. `day2_evidence.json` / `day2_evidence.md` 採取コードを維持。
 
 ## 変更していない施策一覧
 - router ロジック
