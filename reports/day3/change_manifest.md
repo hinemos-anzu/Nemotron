@@ -1,7 +1,7 @@
 # Day3 Change Manifest
 
 - baseline_sha: 39f4bed90392567517b606d1301ae1c36a86a97c
-- modified_sha: HEAD (this Day3 commit)
+- modified_sha: b2a7383b6567d8e4a1b784fddbc2b529caaa9c2f
 - changed_variable_count: 1
 - changed_variable: temperature
 
