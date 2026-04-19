@@ -11,11 +11,23 @@
 - 1実験1変数: `temperature` のみ変更
 - 変更値: `temperature=0.6`（他の推論パラメータは据え置き）
 
-## 観測結果
-- この作業コピーでは Kaggle 実行を行っていない（未実測）。
+## 観測結果（Kaggle実測）
+- timestamp_utc: 2026-04-19T12:57:46.120026Z
+- source_of_truth: Kaggle
+- one_variable_rule: True
+- submission_zip.exists: True
+- submission_zip.status: PASS
+- submission_zip.size_bytes: 2088413108
+- submission_zip.file_count: 5
+- submission_assets_preserved: True
+- comparable_against_baseline: False
+- worse_than_baseline: UNCONFIRMED
+- evidence_for_gt_086: UNCONFIRMED
+- provisional_verdict: HOLD
 
 ## baseline 比
-- BLOCKED（未実測のため 改善 / 同値 / 悪化 を判定不可）
+- BLOCKED（`comparable_against_baseline=False` のため、改善 / 同値 / 悪化の確定判定は不可）
 
 ## 補足メモ
-- 実測判定には Kaggle 上で同一条件実行が必要。
+- `submission.zip` は正常生成（PASS）。
+- baseline 比較可能性を満たす追加証跡が必要。
