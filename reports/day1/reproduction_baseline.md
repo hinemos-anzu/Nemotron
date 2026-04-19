@@ -1,9 +1,13 @@
-# Day1 Reproduction Baseline (A=0.86 固定)
+# Day1 Reproduction Baseline (A=0.85 固定)
 
 ## 正本環境
 - 正本環境 = Kaggle
 - 補助環境 = Colab
 - ローカルPCは主実行環境にしない
+
+## Baseline score
+- baseline score (A): 0.85
+- 以前の 0.86 記載は誤記であり、Kaggle 実測に基づく正式値は 0.85 とする
 
 ## Aの再現条件一覧（Kaggle 実測反映後）
 1. adapter/model/tokenizer/input data の4パスがすべて RESOLVED であること。
@@ -29,6 +33,7 @@
 
 ## A比較基準の明示
 - 今後の改善はこの基準を A 比較基準として用いる。
+- baseline score は 0.85 を正式値とする。
 - 比較基準として固定成立。
 
 ## 未確定項目数
