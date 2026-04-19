@@ -1,20 +1,16 @@
 # Day2 Submission Asset Check
 
 ## 提出資産部が壊れていないか
-- 観測上は非破壊（提示ログで `submission.zip generated successfully` を確認）
+- 未判定（B1 実装後の Kaggle 再実行前）
 
 ## submission.zip
-- 生成可否: PASS
-- path: `/kaggle/working/submission.zip`
-- size: 2088412768
-- file list:
-  - README.md
-  - checkpoint_complete
-  - adapter_model.safetensors
-  - adapter_config.json
+- 生成可否: BLOCKED
+- path: 未確認（B1 実装後ランの証跡未取得）
+- size: 未確認（B1 実装後ランの証跡未取得）
+- file list: 未確認（B1 実装後ランの証跡未取得）
 
 ## 判定
-- PASS
+- BLOCKED
 
 ## 理由
-- Kaggle 実行ログに生成成功があり、サイズ・ファイル一覧の観測値が提示されている。
+- Day2 Step2 は実装段階であり、B1 実装後の Kaggle 実行証跡をまだ受領していない。
