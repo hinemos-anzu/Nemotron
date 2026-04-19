@@ -1,16 +1,17 @@
 # Day2 Submission Asset Check
 
 ## 提出資産部が壊れていないか
-- 未判定（B1 実装後の Kaggle 再実行前）
+- コード上の生成経路は保持（`submission.csv` / `submission.zip` 生成コードあり）
+- 実測判定は未実行（Kaggle 再実行待ち）
 
 ## submission.zip
 - 生成可否: BLOCKED
-- path: 未確認（B1 実装後ランの証跡未取得）
-- size: 未確認（B1 実装後ランの証跡未取得）
-- file list: 未確認（B1 実装後ランの証跡未取得）
+- path: `/kaggle/working/submission.zip`（コード上の想定）
+- size: 未確認（実行未了）
+- file list: 未確認（実行未了）
 
 ## 判定
 - BLOCKED
 
 ## 理由
-- Day2 Step2 は実装段階であり、B1 実装後の Kaggle 実行証跡をまだ受領していない。
+- Step2 は実装完了。Step3（Kaggle 実行役）からの実測証跡未受領のため、実測 PASS/FAIL 判定は未確定。
