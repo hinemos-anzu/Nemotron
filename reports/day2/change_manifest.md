@@ -1,7 +1,7 @@
 # Day2 Change Manifest
 
 - baseline_sha: 39f4bed90392567517b606d1301ae1c36a86a97c
-- modified_sha: TO_BE_FILLED_AFTER_PUSH
+- modified_sha: 9295ccac05dcbde28aa606a9d8e15d773515a343
 - changed_variable_count: 1
 - changed_variable: B1 training-serving misalignment 修正
 
