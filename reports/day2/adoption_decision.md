@@ -1,18 +1,17 @@
 # Day2 Adoption Decision
 
 ## 最終判定
-- HOLD
+- REJECT
 
 ## 判定理由
-- B1 serving alignment は PASS（notes: `B1 serving alignment status=PASS`）。
+- B1 serving alignment は PASS。
 - submission.zip 証跡は PASS。
-- ただし `comparable_against_baseline=False` のため、A固定基準に対する悪化有無を確定できない。
+- ただし LB スコアが baseline 0.86 に対して 0.85 で悪化したため、Day2 Run1 の採用条件を満たさない。
 
 ## A比で悪化していないか
-- 未判定（`worse_than_baseline=UNCONFIRMED`）
+- 悪化あり（0.86 -> 0.85）
 
 ## 次に進む条件
-1. baseline 比較可能な評価指標を取得し、`comparable_against_baseline=True/False` を確定する。
-2. `worse_than_baseline` を確定値（True/False）に更新する。
-3. `evidence_for_gt_086` を確定値に更新する。
-4. 上記確定後に ADOPT / REJECT を再判定する。
+1. B1 を維持したまま悪化要因を特定し、同一比較条件で再実行する。
+2. A比で非悪化（>=0.86）を満たす実測を取得する。
+3. 比較証拠更新後に ADOPT / HOLD を再判定する。
