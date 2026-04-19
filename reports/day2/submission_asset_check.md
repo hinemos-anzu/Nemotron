@@ -1,17 +1,22 @@
 # Day2 Submission Asset Check
 
 ## 提出資産部が壊れていないか
-- コード上の生成経路は保持（`submission.csv` / `submission.zip` 生成コードあり）
-- 実測判定は未実行（Kaggle 再実行待ち）
+- submission_assets_preserved: True（Kaggle 実測）
 
 ## submission.zip
-- 生成可否: BLOCKED
-- path: `/kaggle/working/submission.zip`（コード上の想定）
-- size: 未確認（実行未了）
-- file list: 未確認（実行未了）
+- 生成可否: PASS
+- path: `/kaggle/working/submission.zip`
+- size: 2088413107
+- file list:
+  - serving_alignment.json
+  - adapter_config.json
+  - README.md
+  - adapter_model.safetensors
+  - checkpoint_complete
 
 ## 判定
-- BLOCKED
+- PASS
 
 ## 理由
-- Step2 は実装完了。Step3（Kaggle 実行役）からの実測証跡未受領のため、実測 PASS/FAIL 判定は未確定。
+- Kaggle 実測で `exists=True`, `status=PASS`, `size_bytes>0`, `file_count=5` を確認。
+- zip内ファイル一覧が取得されている。

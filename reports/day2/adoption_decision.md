@@ -4,14 +4,15 @@
 - HOLD
 
 ## 判定理由
-- 元コード保持 + B1 1変数追加は完了。
-- ただし B1 実装後の Kaggle 実測比較が未取得のため ADOPT/REJECT を確定できない。
+- B1 serving alignment は PASS（notes: `B1 serving alignment status=PASS`）。
+- submission.zip 証跡は PASS。
+- ただし `comparable_against_baseline=False` のため、A固定基準に対する悪化有無を確定できない。
 
 ## A比で悪化していないか
-- 未判定（比較証拠不足）
+- 未判定（`worse_than_baseline=UNCONFIRMED`）
 
 ## 次に進む条件
-1. 本 SHA を Kaggle で実行する。
-2. `day2_evidence.json` / `day2_evidence.md` を回収する。
-3. submission.zip の実測 path / size / file list を反映する。
-4. A比の悪化有無と >0.86方向根拠を更新する。
+1. baseline 比較可能な評価指標を取得し、`comparable_against_baseline=True/False` を確定する。
+2. `worse_than_baseline` を確定値（True/False）に更新する。
+3. `evidence_for_gt_086` を確定値に更新する。
+4. 上記確定後に ADOPT / REJECT を再判定する。
