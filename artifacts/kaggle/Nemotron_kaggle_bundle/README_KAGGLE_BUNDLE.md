@@ -37,13 +37,23 @@ any additional file-finding steps by the execution role.
 # 1. Set working directory to bundle root
 cd /kaggle/working/Nemotron
 
-# 2. Run entrypoint (Quick Gate set, default)
-python kaggle/run_baseline_with_debug.py --eval-set quick_gate_v1
+# S1.6A: 3 splits all required — run in order
 
-# 3. Or run specific eval set
+# Split 1: Quick Gate (75 samples — 早期フィルタ)
+python kaggle/run_baseline_with_debug.py --eval-set quick_gate_v1
+# → save reports/kaggle_run/ as quick_gate_run/ before next run
+
+# Split 2: Diagnostic (150 samples — 失敗原因分析)
 python kaggle/run_baseline_with_debug.py --eval-set diagnostic_v1
+# → save reports/kaggle_run/ as diagnostic_run/
+
+# Split 3: Promotion (400 samples — Kaggle 昇格判定)
 python kaggle/run_baseline_with_debug.py --eval-set promotion_v1
+# → save reports/kaggle_run/ as promotion_run/
 ```
+
+**注意:** 各 split の `reports/kaggle_run/` と `logs/kaggle_run/` は次実行で上書きされる。
+必ず実行ごとに別フォルダへ退避すること。
 
 ---
 

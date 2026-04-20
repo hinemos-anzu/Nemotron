@@ -44,20 +44,56 @@ Replace `<dataset-name>` with the actual Kaggle dataset slug.
 
 ---
 
-## Execution Command
+## Execution Command — S1.6A requires all 3 splits
 
-Run the entrypoint (one `Add Data` per session is enough):
+S1.6A の目的は Quick Gate / Diagnostic / Promotion の **3 split 全実行** です。
+3本を順番に実行してください。各実行の報告ファイルは上書きされるため、
+**各実行後に reports/kaggle_run/ と logs/kaggle_run/ を手元に保存してから次へ進むこと**。
 
 ```bash
-# Default: Quick Gate set only (fastest, ~75 samples)
+# ── Split 1: Quick Gate (75 samples, 最短フィルタ) ─────────────────────────
 python kaggle/run_baseline_with_debug.py --eval-set quick_gate_v1
+# → 完了後: reports/kaggle_run/ と logs/kaggle_run/ を
+#           quick_gate_run/ にリネームして保存
 
-# Full diagnostic set (~150 samples)
+# ── Split 2: Diagnostic (150 samples, 失敗原因分析用) ──────────────────────
 python kaggle/run_baseline_with_debug.py --eval-set diagnostic_v1
+# → 完了後: reports/kaggle_run/ と logs/kaggle_run/ を
+#           diagnostic_run/ にリネームして保存
 
-# Full promotion set (~400 samples)
+# ── Split 3: Promotion (400 samples, Kaggle 昇格判定用) ────────────────────
 python kaggle/run_baseline_with_debug.py --eval-set promotion_v1
+# → 完了後: reports/kaggle_run/ と logs/kaggle_run/ を
+#           promotion_run/ にリネームして保存
 ```
+
+### 3 split を一括実行する場合 (Python セル内)
+
+```python
+import subprocess, shutil
+from pathlib import Path
+
+splits = ["quick_gate_v1", "diagnostic_v1", "promotion_v1"]
+for split in splits:
+    print(f"\n=== Running {split} ===")
+    result = subprocess.run(
+        ["python", "kaggle/run_baseline_with_debug.py", "--eval-set", split],
+        cwd="/kaggle/working/Nemotron",
+    )
+    # save reports before overwrite
+    dst = Path(f"/kaggle/working/debug_{split}")
+    shutil.copytree("reports/kaggle_run", dst / "reports", dirs_exist_ok=True)
+    shutil.copytree("logs/kaggle_run",    dst / "logs",    dirs_exist_ok=True)
+    print(f"  saved debug output to {dst}")
+```
+
+### eval-set ごとのサンプル数 (frozen v1)
+
+| split | file | rows | 用途 |
+|---|---|---:|---|
+| `quick_gate_v1` | `data/eval/quick_gate_v1.csv` | 75 | 早期 Go/No-Go フィルタ |
+| `diagnostic_v1` | `data/eval/diagnostic_v1.csv` | 150 | 失敗原因分析 |
+| `promotion_v1` | `data/eval/promotion_v1.csv` | 400 | Kaggle 昇格判定 |
 
 ---
 
