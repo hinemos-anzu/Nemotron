@@ -1,0 +1,401 @@
+sample_id,split_name,category,difficulty_bucket,problem,expected_answer,failure_mode_primary,failure_mode_secondary,conversion_sensitive_flag,inclusion_reason
+PR_001,promotion_v1,numeral,easy,"Express 6/16 as a decimal. If it terminates, give the exact decimal. If repeating, write the repeating block in parentheses.",PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_002,promotion_v1,numeral,easy,What is the GCD of 12 and 8?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_003,promotion_v1,numeral,easy,What is the GCD of 60 and 10?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_004,promotion_v1,numeral,easy,What is the decimal value of the binary number 011100?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_005,promotion_v1,numeral,easy,"Express 7/32 as a decimal. If it terminates, give the exact decimal. If repeating, write the repeating block in parentheses.",PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_006,promotion_v1,numeral,easy,What is the decimal value of the binary number 111001?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_007,promotion_v1,numeral,easy,What is the GCD of 48 and 20?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_008,promotion_v1,numeral,easy,Convert 224 (decimal) to hexadecimal. Use uppercase letters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_009,promotion_v1,numeral,easy,Convert 114 (base 10) to binary (base 2). Give the result without leading zeros.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_010,promotion_v1,numeral,easy,What is 2^11?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_011,promotion_v1,numeral,easy,Convert 131 (decimal) to hexadecimal. Use uppercase letters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_012,promotion_v1,numeral,easy,What is 406 mod 7?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_013,promotion_v1,numeral,easy,What is the decimal value of the binary number 010011?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_014,promotion_v1,numeral,easy,What is 87 mod 17?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_015,promotion_v1,numeral,easy,What is 389 mod 19?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_016,promotion_v1,numeral,easy,What is the decimal value of the binary number 010110?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_017,promotion_v1,numeral,easy,What is the GCD of 24 and 10?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_018,promotion_v1,numeral,easy,Convert 86 (base 10) to binary (base 2). Give the result without leading zeros.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_019,promotion_v1,numeral,easy,What is 436 mod 23?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_020,promotion_v1,numeral,easy,Convert 244 (decimal) to hexadecimal. Use uppercase letters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_021,promotion_v1,numeral,easy,Convert 69 (base 10) to binary (base 2). Give the result without leading zeros.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_022,promotion_v1,numeral,easy,Convert 232 (decimal) to hexadecimal. Use uppercase letters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_023,promotion_v1,numeral,easy,What is 2^10?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_024,promotion_v1,numeral,easy,What is 177 mod 7?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_025,promotion_v1,numeral,easy,Convert 214 (decimal) to hexadecimal. Use uppercase letters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_026,promotion_v1,numeral,easy,What is 2^4?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_027,promotion_v1,numeral,easy,What is the decimal value of the binary number 110001?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_028,promotion_v1,numeral,easy,"Express 4/8 as a decimal. If it terminates, give the exact decimal. If repeating, write the repeating block in parentheses.",PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_029,promotion_v1,numeral,easy,Convert 154 (decimal) to hexadecimal. Use uppercase letters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_030,promotion_v1,numeral,easy,What is 412 mod 23?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_031,promotion_v1,numeral,easy,What is the GCD of 12 and 30?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_032,promotion_v1,numeral,easy,What is the decimal value of the binary number 001110?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_033,promotion_v1,numeral,easy,What is the decimal value of the binary number 101100?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_034,promotion_v1,numeral,easy,What is the decimal value of the binary number 011111?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_035,promotion_v1,numeral,easy,Convert 20 (base 10) to binary (base 2). Give the result without leading zeros.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_036,promotion_v1,numeral,easy,"Express 9/25 as a decimal. If it terminates, give the exact decimal. If repeating, write the repeating block in parentheses.",PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_037,promotion_v1,numeral,easy,Convert 92 (base 10) to binary (base 2). Give the result without leading zeros.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_038,promotion_v1,numeral,easy,What is the decimal value of the binary number 101000?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_039,promotion_v1,numeral,easy,What is the decimal value of the binary number 100000?,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_040,promotion_v1,numeral,easy,Convert 136 (decimal) to hexadecimal. Use uppercase letters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EXTRACTION_FAILURE,False,high_frequency_easy_category
+PR_041,promotion_v1,unit_conversion,easy,Convert 93.4 °C to Kelvin.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_042,promotion_v1,unit_conversion,easy,Convert 19 kg to grams.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_043,promotion_v1,unit_conversion,easy,Convert 9.84 liters to milliliters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_044,promotion_v1,unit_conversion,easy,Convert 5.37 feet to meters. (1 foot = 0.3048 m) Round to 3 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_045,promotion_v1,unit_conversion,easy,Convert 72 kg to grams.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_046,promotion_v1,unit_conversion,easy,Convert 24 kg to grams.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_047,promotion_v1,unit_conversion,easy,Convert 69.4 miles to kilometers. (1 mile = 1.60934 km) Round to 2 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_048,promotion_v1,unit_conversion,easy,Convert 40 kg to grams.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_049,promotion_v1,unit_conversion,easy,Convert 5.33 liters to milliliters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_050,promotion_v1,unit_conversion,easy,Convert 9.43 feet to meters. (1 foot = 0.3048 m) Round to 3 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_051,promotion_v1,unit_conversion,easy,Express 2560 seconds as minutes and seconds (format: M min S sec).,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_052,promotion_v1,unit_conversion,easy,Convert 111.0 km/h to m/s. Round to 2 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_053,promotion_v1,unit_conversion,easy,Convert 21 kg to grams.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_054,promotion_v1,unit_conversion,easy,Convert 70.2 miles to kilometers. (1 mile = 1.60934 km) Round to 2 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_055,promotion_v1,unit_conversion,easy,Convert 2.44 feet to meters. (1 foot = 0.3048 m) Round to 3 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_056,promotion_v1,unit_conversion,easy,Express 1396 seconds as minutes and seconds (format: M min S sec).,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_057,promotion_v1,unit_conversion,easy,Convert 78.3 miles to kilometers. (1 mile = 1.60934 km) Round to 2 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_058,promotion_v1,unit_conversion,easy,Convert 79.3 miles to kilometers. (1 mile = 1.60934 km) Round to 2 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_059,promotion_v1,unit_conversion,easy,Convert 0.79 feet to meters. (1 foot = 0.3048 m) Round to 3 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_060,promotion_v1,unit_conversion,easy,Convert -16.1 °C to Kelvin.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_061,promotion_v1,unit_conversion,easy,Express 1012 seconds as minutes and seconds (format: M min S sec).,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_062,promotion_v1,unit_conversion,easy,Convert 4.8 liters to milliliters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_063,promotion_v1,unit_conversion,easy,Convert 6.12 feet to meters. (1 foot = 0.3048 m) Round to 3 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_064,promotion_v1,unit_conversion,easy,Express 2079 seconds as minutes and seconds (format: M min S sec).,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_065,promotion_v1,unit_conversion,easy,Convert 7.12 liters to milliliters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_066,promotion_v1,unit_conversion,easy,Convert 73 kg to grams.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_067,promotion_v1,unit_conversion,easy,Convert 9.68 feet to meters. (1 foot = 0.3048 m) Round to 3 decimal places.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_068,promotion_v1,unit_conversion,easy,Convert 0.19 liters to milliliters.,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_069,promotion_v1,unit_conversion,easy,Express 2904 seconds as minutes and seconds (format: M min S sec).,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_070,promotion_v1,unit_conversion,easy,Express 2371 seconds as minutes and seconds (format: M min S sec).,PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_071,promotion_v1,gravity,easy,"An object falls from rest at height h = 68.3 m. What is its speed just before impact? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_072,promotion_v1,gravity,easy,"An object is dropped from h = 48.0 m. How long does it take to reach the ground? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_073,promotion_v1,gravity,easy,What is the gravitational potential energy of a 10 kg object at height 58.1 m? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_074,promotion_v1,gravity,easy,"An object is dropped from h = 51.3 m. How long does it take to reach the ground? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_075,promotion_v1,gravity,easy,What is the gravitational potential energy of a 10 kg object at height 8.1 m? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_076,promotion_v1,gravity,easy,"An object falls from rest at height h = 31.3 m. What is its speed just before impact? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_077,promotion_v1,gravity,easy,"An object is dropped from h = 33.2 m. How long does it take to reach the ground? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_078,promotion_v1,gravity,easy,A 5 kg object is dropped from 44.1 m. What is its kinetic energy just before impact? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_079,promotion_v1,gravity,easy,"An object falls from rest at height h = 21.5 m. What is its speed just before impact? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_080,promotion_v1,gravity,easy,"An object is dropped from h = 13.6 m. How long does it take to reach the ground? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_081,promotion_v1,gravity,easy,What is the gravitational potential energy of a 10 kg object at height 33.3 m? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_082,promotion_v1,gravity,easy,A 2 kg object is dropped from 47.0 m. What is its kinetic energy just before impact? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_083,promotion_v1,gravity,easy,"An object falls from rest at height h = 21.2 m. What is its speed just before impact? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_084,promotion_v1,gravity,easy,"An object falls from rest at height h = 29.5 m. What is its speed just before impact? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_085,promotion_v1,gravity,easy,What is the gravitational potential energy of a 20 kg object at height 77.6 m? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_086,promotion_v1,gravity,easy,"A 5 kg object is thrown upward at 10 m/s. How high does it reach? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_087,promotion_v1,gravity,easy,"An object is dropped from h = 5.4 m. How long does it take to reach the ground? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_088,promotion_v1,gravity,easy,"A 2 kg object is thrown upward at 5 m/s. How high does it reach? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_089,promotion_v1,gravity,easy,What is the gravitational potential energy of a 50 kg object at height 47.9 m? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_090,promotion_v1,gravity,easy,What is the gravitational potential energy of a 50 kg object at height 62.3 m? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_091,promotion_v1,gravity,easy,A 2 kg object is dropped from 11.5 m. What is its kinetic energy just before impact? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_092,promotion_v1,gravity,easy,"A 10 kg object is thrown upward at 15 m/s. How high does it reach? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_093,promotion_v1,gravity,easy,"An object falls from rest at height h = 32.2 m. What is its speed just before impact? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_094,promotion_v1,gravity,easy,A 50 kg object is dropped from 47.5 m. What is its kinetic energy just before impact? (g = 9.8 m/s²),PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_095,promotion_v1,gravity,easy,"An object falls from rest at height h = 59.9 m. What is its speed just before impact? (g = 9.8 m/s², round to 2 decimal places)",PENDING_BASELINE_RUN,FORMAT_FAILURE,EASY_TASK_REGRESSION,False,high_frequency_easy_category
+PR_096,promotion_v1,cipher,easy,Encode 'LAYER' using a Caesar cipher with shift 7. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_097,promotion_v1,cipher,easy,Decode 'JPWOLY' using a Caesar cipher with shift 7. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_098,promotion_v1,cipher,easy,Encode 'MODEL' using a Caesar cipher with shift 3. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_099,promotion_v1,cipher,easy,The string 'SHFLY' was Caesar-encoded with shift 7. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_100,promotion_v1,cipher,easy,Decode 'ORJLF' using a Caesar cipher with shift 3. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_101,promotion_v1,cipher,easy,Apply ROT13 to 'WORLD'. What is the result? Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_102,promotion_v1,cipher,easy,Encode 'CIPHER' using a Caesar cipher with shift 17. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_103,promotion_v1,cipher,easy,The string 'UHDVRQ' was Caesar-encoded with shift 3. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_104,promotion_v1,cipher,easy,Encode 'TOKEN' using a Caesar cipher with shift 11. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_105,promotion_v1,cipher,easy,The string 'NTRAG' was Caesar-encoded with shift 13. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_106,promotion_v1,cipher,easy,Encode 'LAYER' using a Caesar cipher with shift 11. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_107,promotion_v1,cipher,easy,The string 'NDJJOH' was Caesar-encoded with shift 3. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_108,promotion_v1,cipher,easy,The string 'XCVDI' was Caesar-encoded with shift 21. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_109,promotion_v1,cipher,easy,The string 'HNLUA' was Caesar-encoded with shift 7. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_110,promotion_v1,cipher,easy,Encode 'CHAIN' using a Caesar cipher with shift 17. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_111,promotion_v1,cipher,easy,Encode 'CHAIN' using a Caesar cipher with shift 13. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_112,promotion_v1,cipher,easy,The string 'GPKYFE' was Caesar-encoded with shift 17. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_113,promotion_v1,cipher,easy,Encode 'AGENT' using a Caesar cipher with shift 21. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_114,promotion_v1,cipher,easy,The string 'PUNVA' was Caesar-encoded with shift 13. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_115,promotion_v1,cipher,easy,The string 'CZGGJ' was Caesar-encoded with shift 21. Reverse it to get the original word.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_116,promotion_v1,cipher,easy,Apply ROT13 to 'TOKEN'. What is the result? Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_117,promotion_v1,cipher,easy,Decode 'IQDYDV' using a Caesar cipher with shift 21. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_118,promotion_v1,cipher,easy,Decode 'ZRUOG' using a Caesar cipher with shift 3. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_119,promotion_v1,cipher,easy,Encode 'HELLO' using a Caesar cipher with shift 3. Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_120,promotion_v1,cipher,easy,Apply ROT13 to 'REASON'. What is the result? Answer in uppercase.,PENDING_BASELINE_RUN,EXTRACTION_FAILURE,FORMAT_FAILURE,False,high_frequency_easy_category
+PR_121,promotion_v1,equation,medium,"Simplify: (3x² + -5x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_122,promotion_v1,equation,medium,"Solve: 1x² + -3x + 4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_123,promotion_v1,equation,medium,Solve for x: 1x + 5 = 10,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_124,promotion_v1,equation,medium,"If f(x) = 2x² + 3x + 8, evaluate f(0).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_125,promotion_v1,equation,medium,"Solve: 1x² + -6x + 6 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_126,promotion_v1,equation,medium,Factor completely: x² + 13x + 36. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_127,promotion_v1,equation,medium,"If f(x) = 2x² + 9x + 10, evaluate f(2).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_128,promotion_v1,equation,medium,"If 2x + 9 = 37, what is x?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_129,promotion_v1,equation,medium,Expand (x - 3)(x - -3).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_130,promotion_v1,equation,medium,"Solve: 3x² + -6x + 2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_131,promotion_v1,equation,medium,Factor completely: x² + 12x + 27. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_132,promotion_v1,equation,medium,Find x: log₂(32) = x,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_133,promotion_v1,equation,medium,"Solve: 2x² + 7x + -4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_134,promotion_v1,equation,medium,Expand (x - -1)(x - 6).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_135,promotion_v1,equation,medium,Factor completely: x² + 5x + 6. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_136,promotion_v1,equation,medium,Expand (x - -1)(x - 6).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_137,promotion_v1,equation,medium,Expand (x - 2)(x - 6).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_138,promotion_v1,equation,medium,"What is the slope of the line passing through (1, 2) and (5, 2)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_139,promotion_v1,equation,medium,"Solve: 3x² + 3x + -4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_140,promotion_v1,equation,medium,"If 3x + -1 = 35, what is x?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_141,promotion_v1,equation,medium,Expand (x - 2)(x - -3).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_142,promotion_v1,equation,medium,Factor completely: x² + 4x + 3. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_143,promotion_v1,equation,medium,"If f(x) = 1x² + -1x + 6, evaluate f(-1).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_144,promotion_v1,equation,medium,Expand (x - -1)(x - 4).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_145,promotion_v1,equation,medium,"Simplify: (5x² + 1x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_146,promotion_v1,equation,medium,Factor completely: x² + 1x + -12. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_147,promotion_v1,equation,medium,"What is the slope of the line passing through (1, 0) and (5, 1)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_148,promotion_v1,equation,medium,Factor completely: x² + 1x + -12. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_149,promotion_v1,equation,medium,"If 5x + -5 = 25, what is x?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_150,promotion_v1,equation,medium,"Solve: 3x² + -5x + 2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_151,promotion_v1,equation,medium,Factor completely: x² + 12x + 27. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_152,promotion_v1,equation,medium,Factor completely: x² + 7x + 12. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_153,promotion_v1,equation,medium,Expand (x - 1)(x - 6).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_154,promotion_v1,equation,medium,"Simplify: (4x² + 7x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_155,promotion_v1,equation,medium,"What is the slope of the line passing through (1, 3) and (4, 3)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_156,promotion_v1,equation,medium,Factor completely: x² + 4x + 3. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_157,promotion_v1,equation,medium,"Solve: 2x² + -6x + -2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_158,promotion_v1,equation,medium,"What is the slope of the line passing through (-1, 0) and (6, 3)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_159,promotion_v1,equation,medium,"Simplify: (3x² + 3x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_160,promotion_v1,equation,medium,Find x: log₂(8) = x,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_161,promotion_v1,equation,medium,"If f(x) = 4x² + 9x + 12, evaluate f(0).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_162,promotion_v1,equation,medium,Factor completely: x² + 0x + -1. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_163,promotion_v1,equation,medium,"Simplify: (3x² + -7x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_164,promotion_v1,equation,medium,"Simplify: (2x² + -3x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_165,promotion_v1,equation,medium,"Solve: 2x² + -5x + 4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_166,promotion_v1,equation,medium,Find x: log₂(16) = x,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_167,promotion_v1,equation,medium,Find x: log₂(16) = x,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_168,promotion_v1,equation,medium,"If f(x) = 4x² + 1x + 12, evaluate f(-1).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_169,promotion_v1,equation,medium,Solve for x: 5x + -1 = 12,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_170,promotion_v1,equation,medium,Expand (x - 3)(x - -3).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_171,promotion_v1,equation,medium,Expand (x - 1)(x - 4).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_172,promotion_v1,equation,medium,"Simplify: (3x² + 9x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_173,promotion_v1,equation,medium,Expand (x - -2)(x - -3).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_174,promotion_v1,equation,medium,Solve for x: 1x + 5 = 8,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_175,promotion_v1,equation,medium,Find x: log₂(64) = x,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_176,promotion_v1,equation,medium,Factor completely: x² + -1x + -6. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_177,promotion_v1,equation,medium,Solve for x: 2x + -5 = 16,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_178,promotion_v1,equation,medium,Find x: log₂(128) = x,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_179,promotion_v1,equation,medium,Factor completely: x² + 2x + -15. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_180,promotion_v1,equation,medium,Find x: log₂(4) = x,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_181,promotion_v1,equation,medium,"What is the slope of the line passing through (-1, 1) and (5, 4)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_182,promotion_v1,equation,medium,Factor completely: x² + 2x + -3. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_183,promotion_v1,equation,medium,"If f(x) = 4x² + 1x + 10, evaluate f(-1).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_184,promotion_v1,equation,medium,"If f(x) = 4x² + -3x + 4, evaluate f(3).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_185,promotion_v1,equation,medium,"Solve: 2x² + -3x + 4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_186,promotion_v1,equation,medium,Expand (x - 3)(x - -3).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_187,promotion_v1,equation,medium,Factor completely: x² + -3x + -28. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_188,promotion_v1,equation,medium,"Solve: 3x² + 1x + -2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_189,promotion_v1,equation,medium,Solve for x: 3x + -3 = 14,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_190,promotion_v1,equation,medium,"What is the slope of the line passing through (3, 0) and (3, 5)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_191,promotion_v1,equation,medium,"What is the slope of the line passing through (3, 1) and (6, 2)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_192,promotion_v1,equation,medium,Expand (x - 2)(x - 5).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_193,promotion_v1,equation,medium,Expand (x - 1)(x - 4).,PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_194,promotion_v1,equation,medium,"Simplify: (1x² + -1x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_195,promotion_v1,equation,medium,"If f(x) = 5x² + -3x + 10, evaluate f(-1).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_196,promotion_v1,equation,medium,Factor completely: x² + 12x + 35. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_197,promotion_v1,equation,medium,"What is the slope of the line passing through (-3, -1) and (4, 6)?",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_198,promotion_v1,equation,medium,"Solve: 2x² + -6x + -4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_199,promotion_v1,equation,medium,"If f(x) = 3x² + -5x + 10, evaluate f(0).",PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_200,promotion_v1,equation,medium,Factor completely: x² + 0x + -1. (Assume integer roots),PENDING_BASELINE_RUN,OPERATOR_CONFUSION,FORMAT_FAILURE,False,representative_symbolic_slice
+PR_201,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 1010 → 0101. Apply the same rule to 1001. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_202,promotion_v1,bit_manipulation,medium,What is 80 right-shifted by 2 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_203,promotion_v1,bit_manipulation,medium,Clear bit 3 of the 4-bit binary number 1100. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_204,promotion_v1,bit_manipulation,medium,What is 23 XOR 181? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_205,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 1010 → 0101. Apply the same rule to 1101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_206,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 0110 → 0110. Apply the same rule to 0111. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_207,promotion_v1,bit_manipulation,medium,What is 71 OR 147? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_208,promotion_v1,bit_manipulation,medium,What is 103 AND 37? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_209,promotion_v1,bit_manipulation,medium,What is 54 OR 193? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_210,promotion_v1,bit_manipulation,medium,Apply right circular rotation by 1 bit(s) to the 4-bit binary number 0101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_211,promotion_v1,bit_manipulation,medium,Apply right circular rotation by 1 bit(s) to the 4-bit binary number 1011. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_212,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 1000 → 0001. Apply the same rule to 0110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_213,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 2 bit(s) to the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_214,promotion_v1,bit_manipulation,medium,What is the bitwise NOT of 191 as an 8-bit unsigned integer?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_215,promotion_v1,bit_manipulation,medium,What is 110 AND 19? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_216,promotion_v1,bit_manipulation,medium,Clear bit 1 of the 4-bit binary number 0001. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_217,promotion_v1,bit_manipulation,medium,What is 158 left-shifted by 3 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_218,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 2 bit(s) to the 4-bit binary number 0111. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_219,promotion_v1,bit_manipulation,medium,What is 81 XOR 85? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_220,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 1000 → 0001. Apply the same rule to 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_221,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 0011 → 1100. Apply the same rule to 0101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_222,promotion_v1,bit_manipulation,medium,Clear bit 0 of the 4-bit binary number 1100. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_223,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 0111. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_224,promotion_v1,bit_manipulation,medium,Apply right circular rotation by 1 bit(s) to the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_225,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 0011. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_226,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 34?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_227,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 61?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_228,promotion_v1,bit_manipulation,medium,What is 94 right-shifted by 1 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_229,promotion_v1,bit_manipulation,medium,Clear bit 3 of the 4-bit binary number 1101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_230,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 1110 → 0111. Apply the same rule to 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_231,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 74?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_232,promotion_v1,bit_manipulation,medium,What is 184 left-shifted by 2 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_233,promotion_v1,bit_manipulation,medium,Set bit 1 of the 4-bit binary number 0101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_234,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 1011. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_235,promotion_v1,bit_manipulation,medium,Clear bit 1 of the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_236,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 2 bit(s) to the 4-bit binary number 1100. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_237,promotion_v1,bit_manipulation,medium,What is 63 XOR 15? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_238,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 1010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_239,promotion_v1,bit_manipulation,medium,Toggle bit 2 of the 4-bit binary number 0111. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_240,promotion_v1,bit_manipulation,medium,Is bit 5 set in 100? (bit 0 is the least significant bit) Answer YES or NO.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_241,promotion_v1,bit_manipulation,medium,What is 162 right-shifted by 2 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_242,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 1011. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_243,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 195?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_244,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 1000. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_245,promotion_v1,bit_manipulation,medium,What is 147 right-shifted by 3 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_246,promotion_v1,bit_manipulation,medium,Clear bit 0 of the 4-bit binary number 0001. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_247,promotion_v1,bit_manipulation,medium,Set bit 0 of the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_248,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 57?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_249,promotion_v1,bit_manipulation,medium,Clear bit 1 of the 4-bit binary number 1010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_250,promotion_v1,bit_manipulation,medium,Set bit 2 of the 4-bit binary number 0010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_251,promotion_v1,bit_manipulation,medium,What is 145 left-shifted by 1 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_252,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 1101 → 1011. Apply the same rule to 1010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_253,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 0111 → 1000. Apply the same rule to 0001. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_254,promotion_v1,bit_manipulation,medium,What is 97 left-shifted by 1 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_255,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 1011 → 0100. Apply the same rule to 0010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_256,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 0011 → 1100. Apply the same rule to 0101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_257,promotion_v1,bit_manipulation,medium,Toggle bit 2 of the 4-bit binary number 0110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_258,promotion_v1,bit_manipulation,medium,What is 68 right-shifted by 3 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_259,promotion_v1,bit_manipulation,medium,Set bit 2 of the 4-bit binary number 1010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_260,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 123?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_261,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 42?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_262,promotion_v1,bit_manipulation,medium,Is bit 4 set in 179? (bit 0 is the least significant bit) Answer YES or NO.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_263,promotion_v1,bit_manipulation,medium,What is 169 AND 76? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_264,promotion_v1,bit_manipulation,medium,Is bit 4 set in 51? (bit 0 is the least significant bit) Answer YES or NO.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_265,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 95?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_266,promotion_v1,bit_manipulation,medium,Apply right circular rotation by 1 bit(s) to the 4-bit binary number 1101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_267,promotion_v1,bit_manipulation,medium,What is 166 right-shifted by 3 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_268,promotion_v1,bit_manipulation,medium,What is 29 right-shifted by 2 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_269,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 129?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_270,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 0111 → 1000. Apply the same rule to 1011. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_271,promotion_v1,bit_manipulation,medium,Identify the transformation rule: 0100 → 1000. Apply the same rule to 0110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_272,promotion_v1,bit_manipulation,medium,Set bit 1 of the 4-bit binary number 0010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_273,promotion_v1,bit_manipulation,medium,What is 156 AND 162? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_274,promotion_v1,bit_manipulation,medium,How many 1-bits (popcount) are in the binary representation of 132?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_275,promotion_v1,bit_manipulation,medium,What is 158 AND 76? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_276,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_277,promotion_v1,bit_manipulation,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 0001. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_278,promotion_v1,bit_manipulation,medium,What is 168 left-shifted by 3 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_279,promotion_v1,bit_manipulation,medium,What is the bitwise NOT of 168 as an 8-bit unsigned integer?,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_280,promotion_v1,bit_manipulation,medium,Apply right circular rotation by 1 bit(s) to the 4-bit binary number 1100. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,BIT_RULE_FAILURE,POSITIONAL_MISMATCH,False,representative_bit_slice
+PR_281,promotion_v1,conversion_sensitive,medium,What is the bitwise NOT of 28 as an 8-bit unsigned integer?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_282,promotion_v1,conversion_sensitive,medium,Set bit 1 of the 4-bit binary number 1001. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_283,promotion_v1,conversion_sensitive,medium,Apply right circular rotation by 1 bit(s) to the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_284,promotion_v1,conversion_sensitive,medium,What is the bitwise NOT of 39 as an 8-bit unsigned integer?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_285,promotion_v1,conversion_sensitive,medium,What is 117 AND 133? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_286,promotion_v1,conversion_sensitive,medium,Is bit 4 set in 36? (bit 0 is the least significant bit) Answer YES or NO.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_287,promotion_v1,conversion_sensitive,medium,Clear bit 2 of the 4-bit binary number 1001. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_288,promotion_v1,conversion_sensitive,medium,What is 27 XOR 115? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_289,promotion_v1,conversion_sensitive,medium,What is 22 right-shifted by 2 bits (logical)? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_290,promotion_v1,conversion_sensitive,medium,Apply right circular rotation by 1 bit(s) to the 4-bit binary number 0101. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_291,promotion_v1,conversion_sensitive,medium,Apply left circular rotation by 1 bit(s) to the 4-bit binary number 0111. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_292,promotion_v1,conversion_sensitive,medium,What is 131 XOR 177? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_293,promotion_v1,conversion_sensitive,medium,What is 195 left-shifted by 2 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_294,promotion_v1,conversion_sensitive,medium,How many 1-bits (popcount) are in the binary representation of 29?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_295,promotion_v1,conversion_sensitive,medium,What is 113 AND 72? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_296,promotion_v1,conversion_sensitive,medium,Set bit 0 of the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_297,promotion_v1,conversion_sensitive,medium,What is the bitwise NOT of 85 as an 8-bit unsigned integer?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_298,promotion_v1,conversion_sensitive,medium,How many 1-bits (popcount) are in the binary representation of 118?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_299,promotion_v1,conversion_sensitive,medium,What is 173 XOR 76? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_300,promotion_v1,conversion_sensitive,medium,Identify the transformation rule: 0010 → 1101. Apply the same rule to 1000. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_301,promotion_v1,conversion_sensitive,medium,What is 164 AND 39? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_302,promotion_v1,conversion_sensitive,medium,Is bit 1 set in 173? (bit 0 is the least significant bit) Answer YES or NO.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_303,promotion_v1,conversion_sensitive,medium,Clear bit 1 of the 4-bit binary number 0100. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_304,promotion_v1,conversion_sensitive,medium,What is 70 AND 191? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_305,promotion_v1,conversion_sensitive,medium,Set bit 2 of the 4-bit binary number 1110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_306,promotion_v1,conversion_sensitive,medium,How many 1-bits (popcount) are in the binary representation of 56?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_307,promotion_v1,conversion_sensitive,medium,Identify the transformation rule: 0110 → 0110. Apply the same rule to 0100. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_308,promotion_v1,conversion_sensitive,medium,What is 23 left-shifted by 1 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_309,promotion_v1,conversion_sensitive,medium,Toggle bit 1 of the 4-bit binary number 1011. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_310,promotion_v1,conversion_sensitive,medium,How many 1-bits (popcount) are in the binary representation of 70?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_311,promotion_v1,conversion_sensitive,medium,Apply left circular rotation by 2 bit(s) to the 4-bit binary number 0010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_312,promotion_v1,conversion_sensitive,medium,Set bit 2 of the 4-bit binary number 0100. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_313,promotion_v1,conversion_sensitive,medium,What is 191 left-shifted by 1 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_314,promotion_v1,conversion_sensitive,medium,Apply left circular rotation by 2 bit(s) to the 4-bit binary number 1010. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_315,promotion_v1,conversion_sensitive,medium,What is the bitwise NOT of 45 as an 8-bit unsigned integer?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_316,promotion_v1,conversion_sensitive,medium,What is 175 left-shifted by 2 bits? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_317,promotion_v1,conversion_sensitive,medium,What is the bitwise NOT of 87 as an 8-bit unsigned integer?,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_318,promotion_v1,conversion_sensitive,medium,Clear bit 2 of the 4-bit binary number 0110. Give the result as a 4-bit binary string.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_319,promotion_v1,conversion_sensitive,medium,What is 79 AND 174? Give the answer in decimal.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_320,promotion_v1,conversion_sensitive,medium,Is bit 5 set in 82? (bit 0 is the least significant bit) Answer YES or NO.,PENDING_BASELINE_RUN,PREPOST_CONVERSION_REGRESSION,BIT_RULE_FAILURE,True,known_conversion_brittle_pattern
+PR_321,promotion_v1,low_logprob_suspect,hard,Expand (x - 1)(x - 5).,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_322,promotion_v1,low_logprob_suspect,hard,Find x: log₂(16) = x,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_323,promotion_v1,low_logprob_suspect,hard,Solve for x: 2x + 9 = 6,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_324,promotion_v1,low_logprob_suspect,hard,"If f(x) = 2x² + 7x + 6, evaluate f(1).",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_325,promotion_v1,low_logprob_suspect,hard,"Solve: 3x² + 1x + 2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_326,promotion_v1,low_logprob_suspect,hard,"If 1x + 7 = 19, what is x?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_327,promotion_v1,low_logprob_suspect,hard,Factor completely: x² + 2x + -15. (Assume integer roots),PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_328,promotion_v1,low_logprob_suspect,hard,"If 1x + 3 = 5, what is x?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_329,promotion_v1,low_logprob_suspect,hard,Expand (x - -1)(x - -4).,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_330,promotion_v1,low_logprob_suspect,hard,"If 4x + -5 = 3, what is x?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_331,promotion_v1,low_logprob_suspect,hard,"Solve: 3x² + -5x + -4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_332,promotion_v1,low_logprob_suspect,hard,"If 5x + 7 = 67, what is x?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_333,promotion_v1,low_logprob_suspect,hard,Solve for x: 3x + -3 = 12,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_334,promotion_v1,low_logprob_suspect,hard,Expand (x - -2)(x - 5).,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_335,promotion_v1,low_logprob_suspect,hard,Factor completely: x² + 13x + 36. (Assume integer roots),PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_336,promotion_v1,low_logprob_suspect,hard,"Simplify: (1x² + -5x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_337,promotion_v1,low_logprob_suspect,hard,Find x: log₂(128) = x,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_338,promotion_v1,low_logprob_suspect,hard,"Solve: 2x² + -3x + 4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_339,promotion_v1,low_logprob_suspect,hard,"Simplify: (4x² + -7x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_340,promotion_v1,low_logprob_suspect,hard,Expand (x - -1)(x - -3).,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_341,promotion_v1,low_logprob_suspect,hard,"Solve: 3x² + 7x + -2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_342,promotion_v1,low_logprob_suspect,hard,Factor completely: x² + 4x + -5. (Assume integer roots),PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_343,promotion_v1,low_logprob_suspect,hard,Expand (x - -1)(x - 5).,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_344,promotion_v1,low_logprob_suspect,hard,Factor completely: x² + -4x + -21. (Assume integer roots),PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_345,promotion_v1,low_logprob_suspect,hard,"If 2x + 1 = 9, what is x?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_346,promotion_v1,low_logprob_suspect,hard,Solve for x: 3x + 5 = 2,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_347,promotion_v1,low_logprob_suspect,hard,"Solve: 3x² + 7x + -4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_348,promotion_v1,low_logprob_suspect,hard,"Simplify: (2x² + 1x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_349,promotion_v1,low_logprob_suspect,hard,"If f(x) = 5x² + 3x + 16, evaluate f(3).",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_350,promotion_v1,low_logprob_suspect,hard,"What is the slope of the line passing through (-1, -1) and (1, 2)?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_351,promotion_v1,low_logprob_suspect,hard,"Simplify: (4x² + 7x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_352,promotion_v1,low_logprob_suspect,hard,Find x: log₂(8) = x,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_353,promotion_v1,low_logprob_suspect,hard,"If f(x) = 1x² + 5x + 10, evaluate f(1).",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_354,promotion_v1,low_logprob_suspect,hard,Solve for x: 4x + 5 = 10,PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_355,promotion_v1,low_logprob_suspect,hard,"Simplify: (3x² + -7x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_356,promotion_v1,low_logprob_suspect,hard,"If 1x + 9 = 13, what is x?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_357,promotion_v1,low_logprob_suspect,hard,"Solve: 3x² + -3x + 4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_358,promotion_v1,low_logprob_suspect,hard,"Solve: 3x² + -3x + 2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_359,promotion_v1,low_logprob_suspect,hard,"If 5x + 1 = 11, what is x?",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_360,promotion_v1,low_logprob_suspect,hard,"Simplify: (4x² + -7x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,LOW_LOGPROB_COLLAPSE,OPERATOR_CONFUSION,True,historical_low_logprob_sample
+PR_361,promotion_v1,hard,hard,Factor completely: x² + 2x + 1. (Assume integer roots),PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_362,promotion_v1,hard,hard,Solve for x: 3x + 9 = 16,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_363,promotion_v1,hard,hard,"Simplify: (4x² + 9x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_364,promotion_v1,hard,hard,Expand (x - 2)(x - 5).,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_365,promotion_v1,hard,hard,"Simplify: (5x² + -7x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_366,promotion_v1,hard,hard,"Solve: 2x² + 7x + 4 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_367,promotion_v1,hard,hard,Factor completely: x² + 1x + -12. (Assume integer roots),PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_368,promotion_v1,hard,hard,"If f(x) = 5x² + 1x + 16, evaluate f(2).",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_369,promotion_v1,hard,hard,"If 2x + -3 = 5, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_370,promotion_v1,hard,hard,"If 1x + 3 = 9, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_371,promotion_v1,hard,hard,"What is the slope of the line passing through (-1, 2) and (4, 5)?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_372,promotion_v1,hard,hard,"If 5x + 1 = 11, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_373,promotion_v1,hard,hard,"If 5x + -1 = 69, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_374,promotion_v1,hard,hard,"What is the slope of the line passing through (-3, 1) and (6, 6)?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_375,promotion_v1,hard,hard,"If f(x) = 1x² + 7x + 8, evaluate f(1).",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_376,promotion_v1,hard,hard,"Solve: 1x² + -5x + -2 = 0. List all real roots, separated by commas.",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_377,promotion_v1,hard,hard,Find x: log₂(2) = x,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_378,promotion_v1,hard,hard,Find x: log₂(16) = x,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_379,promotion_v1,hard,hard,"If 5x + 9 = 39, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_380,promotion_v1,hard,hard,"Simplify: (5x² + 9x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_381,promotion_v1,hard,hard,"If 1x + 5 = 17, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_382,promotion_v1,hard,hard,"If f(x) = 2x² + 5x + 8, evaluate f(3).",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_383,promotion_v1,hard,hard,"Simplify: (1x² + 1x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_384,promotion_v1,hard,hard,"If 4x + 5 = 69, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_385,promotion_v1,hard,hard,Expand (x - 3)(x - 5).,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_386,promotion_v1,hard,hard,"What is the slope of the line passing through (3, -2) and (6, 4)?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_387,promotion_v1,hard,hard,"If 3x + -7 = 17, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_388,promotion_v1,hard,hard,Factor completely: x² + 13x + 36. (Assume integer roots),PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_389,promotion_v1,hard,hard,"What is the slope of the line passing through (0, -1) and (4, 2)?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_390,promotion_v1,hard,hard,Solve for x: 4x + 7 = 16,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_391,promotion_v1,hard,hard,Expand (x - -2)(x - 5).,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_392,promotion_v1,hard,hard,"If 1x + -7 = 5, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_393,promotion_v1,hard,hard,Find x: log₂(16) = x,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_394,promotion_v1,hard,hard,"Simplify: (3x² + -1x) / x, for x ≠ 0.",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_395,promotion_v1,hard,hard,"What is the slope of the line passing through (3, 1) and (3, 8)?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_396,promotion_v1,hard,hard,Find x: log₂(16) = x,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_397,promotion_v1,hard,hard,Expand (x - 2)(x - -4).,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_398,promotion_v1,hard,hard,"What is the slope of the line passing through (-3, 0) and (6, 2)?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_399,promotion_v1,hard,hard,"If 4x + 3 = 51, what is x?",PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
+PR_400,promotion_v1,hard,hard,Solve for x: 1x + 9 = 10,PENDING_BASELINE_RUN,UNKNOWN,OPERATOR_CONFUSION,False,known_hard_unstable_case
