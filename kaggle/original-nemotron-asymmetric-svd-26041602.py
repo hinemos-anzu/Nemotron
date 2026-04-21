@@ -498,6 +498,34 @@ def _try_load_model() -> Tuple[Optional[object], Optional[object]]:
     if not adapter_dir.exists():
         print(f"[baseline] Adapter not found at {ADAPTER_PATH} — ANSWER_KEY_ONLY mode", flush=True)
         return None, None
+
+    # Fix ABI mismatch: the pre-compiled selective_scan_cuda.so from the Kaggle
+    # notebook utility (ryanholbrook/nvidia-utility-script) was built against a
+    # different PyTorch version.  Force-reinstall mamba-ssm so it compiles fresh
+    # against the current torch ABI, then clear any cached broken imports.
+    import subprocess as _sp
+    import sys as _sys
+    print("[baseline] Attempting mamba-ssm reinstall to resolve ABI mismatch...", flush=True)
+    try:
+        r = _sp.run(
+            [_sys.executable, "-m", "pip", "install", "--quiet",
+             "--force-reinstall", "--no-deps", "mamba-ssm"],
+            capture_output=True, text=True, timeout=600,
+        )
+        if r.returncode == 0:
+            print("[baseline] mamba-ssm reinstall OK", flush=True)
+        else:
+            print(f"[baseline] mamba-ssm reinstall failed (rc={r.returncode}): "
+                  f"{r.stderr[:300]}", flush=True)
+    except Exception as pip_exc:
+        print(f"[baseline] mamba-ssm reinstall skipped: {pip_exc}", flush=True)
+
+    # Evict any stale/broken mamba or selective_scan modules so the fresh
+    # wheel (or the system copy, if reinstall was skipped) is imported cleanly.
+    for _mod in list(_sys.modules.keys()):
+        if "mamba" in _mod or "selective_scan" in _mod:
+            del _sys.modules[_mod]
+
     try:
         import kagglehub
         import torch
