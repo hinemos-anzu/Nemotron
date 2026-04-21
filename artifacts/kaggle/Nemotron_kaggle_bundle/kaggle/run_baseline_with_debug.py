@@ -56,11 +56,8 @@ REQUIRED_INPUTS = [
     str(_REPO_ROOT / "data" / "eval" / "category_manifest_v1.csv"),
     # Baseline script itself
     str(BASELINE_SCRIPT),
-    # Model / adapter assets (Kaggle dataset mounts — informational; absence is non-blocking)
-    "/kaggle/input/nemotron-adapter/adapter_model.safetensors",
-    "/kaggle/input/nemotron-adapter/adapter_config.json",
-    "/kaggle/input/nemotron-adapter/README.md",
-    "/kaggle/input/nemotron-adapter/checkpoint_complete",
+    # Adapter model (Kaggle model mount — informational; absence → ANSWER_KEY_ONLY mode)
+    "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20",
 ]
 
 EXPECTED_ARTIFACTS = [

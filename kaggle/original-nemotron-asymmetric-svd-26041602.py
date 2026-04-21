@@ -20,7 +20,8 @@ REQUIRED ENVIRONMENT:
   - torch, transformers, peft, accelerate, safetensors
   - /kaggle/input/  (mounted dataset root)
   - /kaggle/working/ (output root)
-  - Adapter model weights mounted at /kaggle/input/nemotron-adapter/ (see ADAPTER_INPUTS)
+  - Adapter model weights at Kaggle model path (see ADAPTER_INPUTS)
+  - Base model via kagglehub.model_download
 """
 
 import csv
@@ -47,11 +48,13 @@ REQUIRED_INPUTS = [
 # Model / adapter assets required when real body is inserted.
 # Paths confirmed with Kaggle execution role during TICKET_S1_6A.
 # Checked by the real implementation, NOT by this placeholder.
+# Kaggle model mount path: /kaggle/input/models/{user}/{slug}/{framework}/{variation}/{version}/
+ADAPTER_PATH = "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20"
+BASE_MODEL_ID  = "metric/nemotron-3-nano-30b-a3b-bf16/transformers/default"
+COMP_DATA_PATH = "/kaggle/input/nvidia-nemotron-3-reasoning-challenge"
+
 ADAPTER_INPUTS = [
-    "/kaggle/input/nemotron-adapter/adapter_model.safetensors",
-    "/kaggle/input/nemotron-adapter/adapter_config.json",
-    "/kaggle/input/nemotron-adapter/README.md",
-    "/kaggle/input/nemotron-adapter/checkpoint_complete",
+    ADAPTER_PATH,
 ]
 
 EXPECTED_ARTIFACTS = [
@@ -491,25 +494,26 @@ def _get_stage_logger():
 # ─── model loading & inference ───────────────────────────────────────────────
 
 def _try_load_model() -> Tuple[Optional[object], Optional[object]]:
-    adapter_dir = Path("/kaggle/input/nemotron-adapter")
-    needed = [adapter_dir / f for f in (
-        "adapter_model.safetensors", "adapter_config.json",
-        "README.md", "checkpoint_complete",
-    )]
-    if not all(f.exists() for f in needed):
-        print("[baseline] Adapter dataset not mounted — ANSWER_KEY_ONLY mode", flush=True)
+    adapter_dir = Path(ADAPTER_PATH)
+    if not adapter_dir.exists():
+        print(f"[baseline] Adapter not found at {ADAPTER_PATH} — ANSWER_KEY_ONLY mode", flush=True)
         return None, None
     try:
+        import kagglehub
         import torch
         from transformers import AutoTokenizer, AutoModelForCausalLM
         from peft import PeftModel
-        with open(adapter_dir / "adapter_config.json") as fh:
-            cfg = json.load(fh)
-        base = cfg.get("base_model_name_or_path", "")
-        print(f"[baseline] Loading base model: {base}", flush=True)
-        tok = AutoTokenizer.from_pretrained(base, trust_remote_code=True)
+
+        print(f"[baseline] Downloading base model: {BASE_MODEL_ID}", flush=True)
+        model_path = kagglehub.model_download(BASE_MODEL_ID)
+        print(f"[baseline] Base model path: {model_path}", flush=True)
+
+        tok = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         mdl = AutoModelForCausalLM.from_pretrained(
-            base, torch_dtype=torch.float16, device_map="auto", trust_remote_code=True,
+            model_path,
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+            trust_remote_code=True,
         )
         mdl = PeftModel.from_pretrained(mdl, str(adapter_dir))
         mdl.eval()
@@ -521,18 +525,27 @@ def _try_load_model() -> Tuple[Optional[object], Optional[object]]:
 
 
 def _run_inference(model, tokenizer, problem: str) -> str:
+    """Run inference using Nemotron chat format."""
     import torch
+    # Nemotron-3 conversation format
     prompt = (
-        "<|system|>\nAnswer precisely. Output the final answer only — no explanation.\n"
-        f"<|user|>\n{problem}\n<|assistant|>\n"
+        "<extra_id_0>System\n"
+        "Answer the following question precisely. Output only the final answer.\n"
+        "<extra_id_1>User\n"
+        f"{problem}\n"
+        "<extra_id_1>Assistant\n"
     )
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     with torch.no_grad():
         out = model.generate(
-            **inputs, max_new_tokens=64, do_sample=False,
+            **inputs,
+            max_new_tokens=128,
+            do_sample=False,
+            temperature=1.0,
             pad_token_id=tokenizer.eos_token_id,
         )
-    return tokenizer.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True).strip()
+    response = tokenizer.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
+    return response.strip()
 
 
 def _extract_answer(raw: str, category: str) -> Tuple[str, bool, bool]:
