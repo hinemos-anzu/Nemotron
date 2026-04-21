@@ -20,7 +20,7 @@ REQUIRED ENVIRONMENT:
   - torch, transformers, peft, accelerate, safetensors
   - /kaggle/input/  (mounted dataset root)
   - /kaggle/working/ (output root)
-  - Model weights and adapter assets per REQUIRED_INPUTS below
+  - Adapter model weights mounted at /kaggle/input/nemotron-adapter/ (see ADAPTER_INPUTS)
 """
 
 import os
@@ -32,10 +32,15 @@ from pathlib import Path
 # ─── interface contract ───────────────────────────────────────────────────────
 
 REQUIRED_INPUTS = [
+    # Standard Kaggle environment roots — always present
     "/kaggle/input",
     "/kaggle/working",
-    "/kaggle/temp",
-    # model / adapter assets — paths to be confirmed in Kaggle dataset
+]
+
+# Model / adapter assets required when real body is inserted.
+# Paths confirmed with Kaggle execution role during TICKET_S1_6A.
+# Checked by the real implementation, NOT by this placeholder.
+ADAPTER_INPUTS = [
     "/kaggle/input/nemotron-adapter/adapter_model.safetensors",
     "/kaggle/input/nemotron-adapter/adapter_config.json",
     "/kaggle/input/nemotron-adapter/README.md",

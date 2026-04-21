@@ -147,17 +147,42 @@ overwrites the report files from the previous run.
 
 ---
 
+## Adapter Model Dataset — Required Separate Mount
+
+The baseline script requires the Nemotron adapter weights mounted at
+`/kaggle/input/nemotron-adapter/`. This is a **separate Kaggle Dataset** from
+the bundle itself. The following 4 files must be present:
+
+```
+/kaggle/input/nemotron-adapter/adapter_model.safetensors
+/kaggle/input/nemotron-adapter/adapter_config.json
+/kaggle/input/nemotron-adapter/README.md
+/kaggle/input/nemotron-adapter/checkpoint_complete
+```
+
+**How to mount:** In the Kaggle Notebook, click **Add Data** and attach the
+`nemotron-adapter` dataset (Kaggle dataset slug: `nemotron-adapter`).
+
+If this dataset is not attached, the script will reach the placeholder
+`NotImplementedError` (see below) — but will still produce all 9 debug reports.
+
+---
+
 ## Baseline Script Note
 
 The baseline script `kaggle/original-nemotron-asymmetric-svd-26041602.py`
 currently contains a **placeholder body** (raises `NotImplementedError` until
 the real notebook content is inserted).
 
-This means the first run will produce:
+This means the current run will produce:
 - A `FAILED` run summary
-- `error_report.md` with `DEPENDENCY_MISSING` or `FILE_NOT_FOUND` classification
+- `error_report.md` with `RUNTIME_CRASH` / `NotImplementedError` classification
 - A complete `stage_log.jsonl` up to the failure point
 - Full `stderr.log` with traceback
 
 This is expected. Return the debug reports to Generator for the next step
 (TICKET_S1_6A: inserting the real baseline execution body).
+
+**Note on `/kaggle/temp`:** Previous bundle versions incorrectly listed
+`/kaggle/temp` as a required path. This has been removed; `/kaggle/temp` is
+not a standard Kaggle notebook directory.

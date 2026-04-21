@@ -46,10 +46,9 @@ EVAL_SETS = {
 }
 
 REQUIRED_INPUTS = [
-    # Kaggle filesystem roots
+    # Kaggle filesystem roots (standard; /kaggle/temp is NOT standard — excluded)
     "/kaggle/input",
     "/kaggle/working",
-    "/kaggle/temp",
     # Frozen evaluation assets
     str(_REPO_ROOT / "data" / "eval" / "quick_gate_v1.jsonl"),
     str(_REPO_ROOT / "data" / "eval" / "diagnostic_v1.jsonl"),

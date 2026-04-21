@@ -139,7 +139,7 @@ class EnvironmentDumper:
     REQUIRED_PATHS = [
         "/kaggle/input",
         "/kaggle/working",
-        "/kaggle/temp",
+        # /kaggle/temp is NOT a standard Kaggle directory — excluded
     ]
 
     def __init__(self, script_path: str | Path, output_path: Path) -> None:
