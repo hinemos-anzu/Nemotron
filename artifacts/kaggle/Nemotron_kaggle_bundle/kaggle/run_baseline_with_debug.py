@@ -40,23 +40,23 @@ from debug_harness import KaggleRunHarness  # noqa: E402
 BASELINE_SCRIPT = _REPO_ROOT / "kaggle" / "original-nemotron-asymmetric-svd-26041602.py"
 
 EVAL_SETS = {
-    "quick_gate_v1": _REPO_ROOT / "data" / "eval" / "quick_gate_v1.jsonl",
-    "diagnostic_v1": _REPO_ROOT / "data" / "eval" / "diagnostic_v1.jsonl",
-    "promotion_v1":  _REPO_ROOT / "data" / "eval" / "promotion_v1.jsonl",
+    "quick_gate_v1": _REPO_ROOT / "data" / "eval" / "quick_gate_v1.csv",
+    "diagnostic_v1": _REPO_ROOT / "data" / "eval" / "diagnostic_v1.csv",
+    "promotion_v1":  _REPO_ROOT / "data" / "eval" / "promotion_v1.csv",
 }
 
 REQUIRED_INPUTS = [
     # Kaggle filesystem roots (standard; /kaggle/temp is NOT standard — excluded)
     "/kaggle/input",
     "/kaggle/working",
-    # Frozen evaluation assets
-    str(_REPO_ROOT / "data" / "eval" / "quick_gate_v1.jsonl"),
-    str(_REPO_ROOT / "data" / "eval" / "diagnostic_v1.jsonl"),
-    str(_REPO_ROOT / "data" / "eval" / "promotion_v1.jsonl"),
+    # Frozen evaluation assets (CSV — JSONL not required at runtime)
+    str(_REPO_ROOT / "data" / "eval" / "quick_gate_v1.csv"),
+    str(_REPO_ROOT / "data" / "eval" / "diagnostic_v1.csv"),
+    str(_REPO_ROOT / "data" / "eval" / "promotion_v1.csv"),
     str(_REPO_ROOT / "data" / "eval" / "category_manifest_v1.csv"),
     # Baseline script itself
     str(BASELINE_SCRIPT),
-    # Model / adapter assets (Kaggle dataset mounts)
+    # Model / adapter assets (Kaggle dataset mounts — informational; absence is non-blocking)
     "/kaggle/input/nemotron-adapter/adapter_model.safetensors",
     "/kaggle/input/nemotron-adapter/adapter_config.json",
     "/kaggle/input/nemotron-adapter/README.md",
@@ -100,7 +100,7 @@ def main() -> int:
         "NEMOTRON_REPO_ROOT": str(_REPO_ROOT),
     }
     if eval_set != "all":
-        extra_env["NEMOTRON_EVAL_JSONL"] = str(EVAL_SETS[eval_set])
+        extra_env["NEMOTRON_EVAL_CSV"] = str(EVAL_SETS[eval_set])
 
     print(f"[run_baseline_with_debug] eval_set={eval_set}", flush=True)
     print(f"[run_baseline_with_debug] report_dir={report_dir}", flush=True)
