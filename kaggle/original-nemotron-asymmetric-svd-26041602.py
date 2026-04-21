@@ -557,6 +557,70 @@ def _try_load_model() -> Tuple[object, object]:
         ) from exc
 
 
+# ─── S2: min logprob answer selection (N_CANDIDATES=4 beams) ─────────────────
+# Single main variable: beam search with logprob-ranked candidate selection.
+# Baseline used greedy (num_beams=1, do_sample=False).
+# S2 uses num_beams=4, num_return_sequences=4 and picks the beam with the
+# highest sequences_scores (= mean token log-prob, least negative = most likely).
+
+N_CANDIDATES = 4  # beam count; changing this is a scope-creep signal
+
+
+def _run_inference_minlogprob(
+    model, tokenizer, problem: str
+) -> Tuple[str, List[Dict]]:
+    """Beam-search inference with min-logprob candidate selection.
+
+    Returns
+    -------
+    best_raw : str
+        Raw model output of the highest-logprob beam.
+    candidates : list[dict]
+        Per-beam info: raw, mean_logprob, selected.
+    """
+    import torch
+
+    prompt = (
+        "<extra_id_0>System\n"
+        "Answer the following question precisely. Output only the final answer.\n"
+        "<extra_id_1>User\n"
+        f"{problem}\n"
+        "<extra_id_1>Assistant\n"
+    )
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    input_len = inputs["input_ids"].shape[1]
+
+    with torch.no_grad():
+        out = model.generate(
+            **inputs,
+            max_new_tokens=128,
+            num_beams=N_CANDIDATES,
+            num_return_sequences=N_CANDIDATES,
+            return_dict_in_generate=True,
+            output_scores=False,          # scores per step not needed
+            pad_token_id=tokenizer.eos_token_id,
+            early_stopping=True,
+        )
+
+    # sequences_scores: beam-search normalised log-prob for each returned seq.
+    # Higher = more likely.  Shape: (N_CANDIDATES,)
+    seq_scores = out.sequences_scores.tolist()  # available when num_beams > 1
+
+    candidates = []
+    best_idx, best_score = 0, float("-inf")
+    for idx in range(N_CANDIDATES):
+        raw = tokenizer.decode(
+            out.sequences[idx][input_len:], skip_special_tokens=True
+        ).strip()
+        score = seq_scores[idx]
+        candidates.append({"raw": raw, "mean_logprob": score, "selected": False})
+        if score > best_score:
+            best_score, best_idx = score, idx
+
+    candidates[best_idx]["selected"] = True
+    return candidates[best_idx]["raw"], candidates
+
+
 def _run_inference(model, tokenizer, problem: str) -> str:
     """Run inference using Nemotron chat format."""
     import torch
@@ -644,7 +708,11 @@ def _write_per_sample_csv(results: List[Dict], repo_root: Path, eval_set: str) -
         "sample_id", "split_name", "category", "difficulty_bucket",
         "computed_expected_answer", "baseline_prediction_status",
         "model_raw_output", "model_extracted_answer", "baseline_correctness",
-        "format_failure_flag", "extraction_failure_flag", "runtime_status", "notes",
+        "format_failure_flag", "extraction_failure_flag", "runtime_status",
+        # S2: min logprob selection columns
+        "s2_n_candidates", "s2_selected_idx", "s2_selected_mean_logprob",
+        "s2_selection_method",
+        "notes",
     ]
     with open(out, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=fields, extrasaction="ignore")
@@ -726,10 +794,16 @@ def main():
     model_mode = "INFERENCE"
     sl.log("model_load_end", f"mode={model_mode}")
 
-    # ── inference loop ────────────────────────────────────────────────
+    # ── S2: min logprob loop ──────────────────────────────────────────
+    # Single main variable: beam search candidate selection by max mean_logprob.
+    print(f"[S2] min_logprob selection active: N_CANDIDATES={N_CANDIDATES}", flush=True)
+    sl.log("s2_start", f"S2 min_logprob inference: n_candidates={N_CANDIDATES}")
+
     sl.log("eval_start", f"Running evaluation: {len(samples)} samples, mode={model_mode}")
     results = []
     predictions_jsonl = []
+    s2_selected_by_logprob = 0   # samples where beam[0] was NOT the highest-score beam
+    s2_total_inferred = 0
 
     for i, s in enumerate(samples, 1):
         if i % 25 == 0 or i == len(samples):
@@ -738,10 +812,22 @@ def main():
         raw_output, extracted, correctness = "", "", "N/A"
         fmt_fail, ext_fail = "N/A", "N/A"
         runtime_status = "OK"
+        s2_n_cands = N_CANDIDATES
+        s2_sel_idx = -1
+        s2_sel_logprob = float("nan")
+        s2_method = "minlogprob_beam"
 
         if model is not None:
             try:
-                raw_output = _run_inference(model, tokenizer, s["problem"])
+                raw_output, candidates = _run_inference_minlogprob(
+                    model, tokenizer, s["problem"]
+                )
+                s2_total_inferred += 1
+                s2_sel_idx = next(j for j, c in enumerate(candidates) if c["selected"])
+                s2_sel_logprob = round(candidates[s2_sel_idx]["mean_logprob"], 6)
+                if s2_sel_idx != 0:
+                    s2_selected_by_logprob += 1
+
                 extracted, ff, ef = _extract_answer(raw_output, s["category"])
                 fmt_fail = "YES" if ff else "NO"
                 ext_fail = "YES" if ef else "NO"
@@ -751,8 +837,10 @@ def main():
                 raw_output = f"INFERENCE_ERROR: {exc}"
                 runtime_status = "INFERENCE_ERROR"
                 correctness = "ERROR"
+                s2_method = "error"
         else:
             runtime_status = "MODEL_NOT_AVAILABLE"
+            s2_method = "skipped"
 
         row = {
             "sample_id": s["sample_id"],
@@ -767,6 +855,10 @@ def main():
             "format_failure_flag": fmt_fail,
             "extraction_failure_flag": ext_fail,
             "runtime_status": runtime_status,
+            "s2_n_candidates": s2_n_cands,
+            "s2_selected_idx": s2_sel_idx,
+            "s2_selected_mean_logprob": s2_sel_logprob,
+            "s2_selection_method": s2_method,
             "notes": "",
         }
         results.append(row)
@@ -778,6 +870,24 @@ def main():
             "correct": correctness,
         })
 
+    print(
+        f"[S2] logprob-selection summary: "
+        f"total_inferred={s2_total_inferred}, "
+        f"selected_non_beam0={s2_selected_by_logprob} "
+        f"({100*s2_selected_by_logprob/max(s2_total_inferred,1):.1f}%)",
+        flush=True,
+    )
+    sl.log(
+        "s2_end",
+        f"S2 complete: n_candidates={N_CANDIDATES}, "
+        f"total_inferred={s2_total_inferred}, "
+        f"selected_non_beam0={s2_selected_by_logprob}",
+        extra={
+            "n_candidates": N_CANDIDATES,
+            "total_inferred": s2_total_inferred,
+            "selected_non_beam0": s2_selected_by_logprob,
+        },
+    )
     sl.log("eval_end", f"Evaluation complete: {len(results)} rows")
 
     # ── write outputs ─────────────────────────────────────────────────
