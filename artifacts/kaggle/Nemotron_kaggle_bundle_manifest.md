@@ -1,9 +1,20 @@
-# Nemotron Kaggle Bundle — Manifest v1
-**Generated:** 2026-04-20
+# Nemotron Kaggle Bundle — Manifest v2
+**Generated:** 2026-04-21
 **Repository:** hinemos-anzu/Nemotron
 **Bundle root path:** `artifacts/kaggle/Nemotron_kaggle_bundle/`
 **ZIP path:** `artifacts/kaggle/Nemotron_kaggle_bundle.zip`
-**Working branch:** `planner/kaggle-bundle-materialization-v1`
+**Working branch:** `claude/nemotron-kaggle-baseline-BE6bY`
+**Based on:** `planner/kaggle-bundle-materialization-v1` (merged)
+
+**v2 changes (stabilize-kaggle-runtime):**
+- Added local `mamba_ssm` stub package (5 files) to bundle root
+- Patched `original-nemotron-asymmetric-svd-26041602.py`:
+  - `REPO_ROOT` inserted into `sys.path[0]` at module import time
+  - `transformers.utils.import_utils.is_mamba_2_ssm_available` patched to `lambda: False`
+  - local stub detection log added
+  - `_try_load_model()` changed to hard-fail on missing adapter or load error
+  - `ANSWER_KEY_ONLY` fallback disabled
+- ZIP rebuilt: 18 entries, 47,067 bytes
 
 ---
 
@@ -51,6 +62,11 @@ Run from the bundle root (`/kaggle/working/Nemotron/`).
 | 10 | `baseline_reference_v1_measured_kaggle.md` | `reports/eval/baseline_reference_v1_measured_kaggle.md` | `Nemotron_kaggle_bundle/reports/eval/baseline_reference_v1_measured_kaggle.md` | `planner/kaggle-bundle-materialization-v1` | *(placeholder — this branch)* | **YES (placeholder)** | NO |
 | 11 | `TICKET_S1_5_baseline_measured_reference_v1.md` | `tickets/TICKET_S1_5_baseline_measured_reference_v1.md` | `Nemotron_kaggle_bundle/tickets/TICKET_S1_5_baseline_measured_reference_v1.md` | `claude/nemotron-experiment-framework-7K8yG` | `6193e3eaa9214558b30306ceea0154ba270ae6d6` | **YES** | NO |
 | 12 | `TICKET_S1_6A_...md` | `tickets/TICKET_S1_6A_kaggle_runtime_execution_enablement_for_baseline_path.md` | `Nemotron_kaggle_bundle/tickets/TICKET_S1_6A_...md` | `claude/nemotron-experiment-framework-7K8yG` | `6e778d3263cd20b4c21a2b3d9a421323c9376689` | **YES** | NO |
+| 13 | `mamba_ssm/__init__.py` | `mamba_ssm/__init__.py` | `Nemotron_kaggle_bundle/mamba_ssm/__init__.py` | `claude/nemotron-kaggle-baseline-BE6bY` | *(this branch)* | **YES** | YES |
+| 14 | `mamba_ssm/ops/__init__.py` | `mamba_ssm/ops/__init__.py` | `Nemotron_kaggle_bundle/mamba_ssm/ops/__init__.py` | `claude/nemotron-kaggle-baseline-BE6bY` | *(this branch)* | **YES** | YES |
+| 15 | `mamba_ssm/ops/selective_scan_interface.py` | `mamba_ssm/ops/selective_scan_interface.py` | `Nemotron_kaggle_bundle/mamba_ssm/ops/selective_scan_interface.py` | `claude/nemotron-kaggle-baseline-BE6bY` | *(this branch)* | **YES** | YES |
+| 16 | `mamba_ssm/ops/triton/__init__.py` | `mamba_ssm/ops/triton/__init__.py` | `Nemotron_kaggle_bundle/mamba_ssm/ops/triton/__init__.py` | `claude/nemotron-kaggle-baseline-BE6bY` | *(this branch)* | **YES** | YES |
+| 17 | `mamba_ssm/ops/triton/layernorm_gated.py` | `mamba_ssm/ops/triton/layernorm_gated.py` | `Nemotron_kaggle_bundle/mamba_ssm/ops/triton/layernorm_gated.py` | `claude/nemotron-kaggle-baseline-BE6bY` | *(this branch)* | **YES** | YES |
 
 ---
 
@@ -70,5 +86,5 @@ this manifest.
 |---|---|
 | Root folder `Nemotron_kaggle_bundle/` present in ZIP | **YES** |
 | ZIP not flat (no files directly at zip root without subfolder) | **YES** |
-| ZIP entry count | 13 |
-| ZIP size | 38,091 bytes |
+| ZIP entry count | 18 |
+| ZIP size | 47,067 bytes |

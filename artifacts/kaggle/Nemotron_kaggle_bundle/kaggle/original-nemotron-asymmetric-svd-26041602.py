@@ -37,6 +37,34 @@ from math import gcd, sqrt
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+# ─── runtime bootstrap ────────────────────────────────────────────────────────
+# Insert repo root at the front of sys.path so that the local mamba_ssm stub
+# package is found before the ABI-incompatible Kaggle system package.
+_REPO_ROOT = Path(__file__).parent.parent.resolve()
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+    print(f"[baseline] REPO_ROOT inserted into sys.path: {_REPO_ROOT}", flush=True)
+
+# Patch availability check before any transformers model import so that the
+# mamba2 code paths in modeling_nemotron_h.py are never entered.
+try:
+    import transformers.utils.import_utils as _tiu
+    _tiu.is_mamba_2_ssm_available = lambda: False
+    print("[baseline] Patched is_mamba_2_ssm_available() -> False", flush=True)
+except Exception as _e:
+    print(f"[baseline] WARNING: could not patch is_mamba_2_ssm_available: {_e}", flush=True)
+
+# Verify local stub is on path.
+try:
+    import mamba_ssm as _mamba_stub
+    _stub_file = getattr(_mamba_stub, "__file__", "")
+    if str(_REPO_ROOT) in str(_stub_file):
+        print(f"[baseline] Local stub mamba_ssm package detected: {_stub_file}", flush=True)
+    else:
+        print(f"[baseline] WARNING: mamba_ssm loaded from non-stub path: {_stub_file}", flush=True)
+except ImportError as _e:
+    print(f"[baseline] WARNING: mamba_ssm stub import failed: {_e}", flush=True)
+
 # ─── interface contract ───────────────────────────────────────────────────────
 
 REQUIRED_INPUTS = [
@@ -493,11 +521,15 @@ def _get_stage_logger():
 
 # ─── model loading & inference ───────────────────────────────────────────────
 
-def _try_load_model() -> Tuple[Optional[object], Optional[object]]:
+def _try_load_model() -> Tuple[object, object]:
+    # ANSWER_KEY_ONLY fallback is disabled.  Missing adapter or any load
+    # error is a hard fail — caller must not continue without a real model.
     adapter_dir = Path(ADAPTER_PATH)
     if not adapter_dir.exists():
-        print(f"[baseline] Adapter not found at {ADAPTER_PATH} — ANSWER_KEY_ONLY mode", flush=True)
-        return None, None
+        raise RuntimeError(
+            f"[baseline] HARD FAIL: adapter not found at {ADAPTER_PATH}. "
+            "Mount the nemotron-adapter Kaggle model. ANSWER_KEY_ONLY mode is disabled."
+        )
     try:
         import kagglehub
         import torch
@@ -520,8 +552,9 @@ def _try_load_model() -> Tuple[Optional[object], Optional[object]]:
         print("[baseline] Model loaded OK", flush=True)
         return mdl, tok
     except Exception as exc:
-        print(f"[baseline] Model load failed: {type(exc).__name__}: {exc}", flush=True)
-        return None, None
+        raise RuntimeError(
+            f"[baseline] HARD FAIL: model load raised {type(exc).__name__}: {exc}"
+        ) from exc
 
 
 def _run_inference(model, tokenizer, problem: str) -> str:
@@ -689,8 +722,8 @@ def main():
 
     # ── load model ────────────────────────────────────────────────────
     sl.log("model_load_start", "Attempting to load Nemotron adapter model")
-    model, tokenizer = _try_load_model()
-    model_mode = "INFERENCE" if model is not None else "ANSWER_KEY_ONLY"
+    model, tokenizer = _try_load_model()  # raises on failure — hard fail policy
+    model_mode = "INFERENCE"
     sl.log("model_load_end", f"mode={model_mode}")
 
     # ── inference loop ────────────────────────────────────────────────
@@ -758,11 +791,8 @@ def main():
         for row in predictions_jsonl:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
 
-    if model is not None:
-        (working_dir / "run_complete.flag").write_text("OK\n")
-        print("[baseline] run_complete.flag written", flush=True)
-    else:
-        print("[baseline] ANSWER_KEY_ONLY — no model predictions (mount nemotron-adapter to enable)", flush=True)
+    (working_dir / "run_complete.flag").write_text("OK\n")
+    print("[baseline] run_complete.flag written", flush=True)
 
     sl.log("export_end", "All outputs written",
            extra={"eval_set": eval_set, "model_mode": model_mode, "n_samples": len(results)})
