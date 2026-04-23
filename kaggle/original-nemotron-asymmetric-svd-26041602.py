@@ -559,37 +559,40 @@ def _try_load_model() -> Tuple[object, object]:
         ) from exc
 
 
-# ─── S2: min logprob answer selection ────────────────────────────────────────
-# Single main variable: beam search with logprob-ranked candidate selection.
+# ─── S3: answer-consistency rerank ───────────────────────────────────────────
+# Single main variable: select final answer by candidate consensus.
 # Baseline used greedy (num_beams=1, do_sample=False).
-# S2 uses num_beams=N_CANDIDATES and picks the beam with the highest
-# sequences_scores (= mean token log-prob, least negative = most likely).
+# S2 selected by logprob — selected_non_beam0 was 0, no rerank signal.
+# S3 generates N_CANDIDATES_S3 beams, extracts the final answer from each,
+# and selects the most-frequent extracted answer (tie-break: beam index 0).
 #
-# N_CANDIDATES=2: evaluation mode — reduced from 4 to fit Kaggle time budget.
-# This is not the final production setting.
+# N_CANDIDATES_S3=2: evaluation mode to fit Kaggle time budget.
 
-N_CANDIDATES = 2  # evaluation mode: 2 beams (production target: 4)
+N_CANDIDATES_S3 = 2  # evaluation mode (production target: may increase)
 
 
-def _run_inference_minlogprob(
-    model, tokenizer, problem: str,
+def _run_inference_s3(
+    model, tokenizer, problem: str, category: str,
     _diag_label: Optional[str] = None,
-) -> Tuple[str, List[Dict]]:
-    """Beam-search inference with min-logprob candidate selection.
+) -> Tuple[str, str, List[Dict], Dict]:
+    """S3: answer-consistency rerank.
 
-    Parameters
-    ----------
-    _diag_label : str or None
-        When set (e.g. "sample_id=QG_001"), emit latency / warning diagnostics
-        to stdout.  Caller passes this only for the first N samples.
+    Generate N_CANDIDATES_S3 beam-search candidates, extract the final
+    answer from each, and select the most-frequent extracted answer.
+    Tie-break by beam index (lower = preferred).
 
     Returns
     -------
-    best_raw : str
-        Raw model output of the highest-logprob beam.
+    selected_raw : str
+        Raw model output of the selected candidate.
+    selected_answer : str
+        Extracted answer of the selected candidate (empty string on all_failed).
     candidates : list[dict]
-        Per-beam info: raw, mean_logprob, selected.
+        Per-candidate info: raw, extracted, valid.
+    sel_info : dict
+        method, unique_count, selected_votes, candidate_answers.
     """
+    from collections import Counter
     import torch
 
     _do_diag = _diag_label is not None
@@ -614,11 +617,10 @@ def _run_inference_minlogprob(
                 out = model.generate(
                     **inputs,
                     max_new_tokens=128,
-                    num_beams=N_CANDIDATES,
-                    num_return_sequences=N_CANDIDATES,
+                    num_beams=N_CANDIDATES_S3,
+                    num_return_sequences=N_CANDIDATES_S3,
                     return_dict_in_generate=True,
-                    output_scores=True,   # required: some transformers versions only
-                                          # populate sequences_scores when this is True
+                    output_scores=False,
                     pad_token_id=tokenizer.eos_token_id,
                     early_stopping=True,
                 )
@@ -627,65 +629,65 @@ def _run_inference_minlogprob(
 
         if _do_diag:
             print(
-                f"[S2][TIMING] {_diag_label} beam={N_CANDIDATES} "
+                f"[S3][TIMING] {_diag_label} beam={N_CANDIDATES_S3} "
                 f"prompt_tokens={input_len} generate_sec={_gen_sec:.2f}",
                 flush=True,
             )
-            for _wm in _caught_warnings[:5]:
-                print(f"[S2][WARN] {_diag_label} {_wm[:300]}", flush=True)
-
-        _step = "scores_access"
-        # sequences_scores: beam-search normalised log-prob per sequence.
-        # In some transformers versions this is None even with num_beams>1 when
-        # output_scores=False.  Fall back to compute_transition_scores if needed.
-        _seq_scores_t = getattr(out, "sequences_scores", None)
-        if _seq_scores_t is not None:
-            seq_scores = _seq_scores_t.tolist()
-            _scores_source = "sequences_scores"
-        else:
-            # Fallback: length-normalised mean log-prob from per-step logits.
-            try:
-                _beam_idx = getattr(out, "beam_indices", None)
-                _trans = model.compute_transition_scores(
-                    out.sequences, out.scores,
-                    beam_indices=_beam_idx,
-                    normalize_logits=True,
-                )  # (N_CANDIDATES, gen_len), per-token log-probs; -inf for padding
-                _valid = _trans > -1e8
-                _lengths = _valid.sum(-1).float().clamp(min=1)
-                seq_scores = (_trans.sum(-1) / _lengths).tolist()
-                _scores_source = "transition_scores"
-            except Exception:
-                # Final fallback: equal scores — beam 0 selected by default
-                seq_scores = [float(-i) for i in range(N_CANDIDATES)]
-                _scores_source = "fallback_equal"
-
-        if _do_diag:
-            print(
-                f"[S2][DIAG] {_diag_label} scores_source={_scores_source} "
-                f"scores={[round(v, 4) for v in seq_scores]}",
-                flush=True,
-            )
+            for _wm in _caught_warnings[:3]:
+                print(f"[S3][WARN] {_diag_label} {_wm[:300]}", flush=True)
 
         _step = "decode"
         candidates = []
-        best_idx, best_score = 0, float("-inf")
-        for idx in range(N_CANDIDATES):
+        for idx in range(N_CANDIDATES_S3):
             raw = tokenizer.decode(
                 out.sequences[idx][input_len:], skip_special_tokens=True
             ).strip()
-            score = seq_scores[idx]
-            candidates.append({"raw": raw, "mean_logprob": score, "selected": False})
-            if score > best_score:
-                best_score, best_idx = score, idx
+            candidates.append({"idx": idx, "raw": raw, "extracted": "", "valid": False})
 
-        _step = "select"
-        candidates[best_idx]["selected"] = True
-        return candidates[best_idx]["raw"], candidates
+        _step = "extract"
+        for c in candidates:
+            ext, ff, ef = _extract_answer(c["raw"], category)
+            c["extracted"] = ext
+            c["valid"] = not ff and not ef and ext != ""
+
+        _step = "rerank"
+        valid_cands = [c for c in candidates if c["valid"]]
+
+        if not valid_cands:
+            sel_info = {"method": "all_failed", "unique_count": 0, "selected_votes": 0,
+                        "candidate_answers": [c["extracted"] for c in candidates]}
+            return candidates[0]["raw"], "", candidates, sel_info
+
+        vote_counter = Counter(c["extracted"] for c in valid_cands)
+        best_answer, top_votes = vote_counter.most_common(1)[0]
+
+        # Tie-break: first valid candidate with best_answer (lowest beam index)
+        selected = next(c for c in candidates if c["valid"] and c["extracted"] == best_answer)
+        method = "consensus" if top_votes > 1 else "single_answer"
+
+        sel_info = {
+            "method": method,
+            "unique_count": len(vote_counter),
+            "selected_votes": top_votes,
+            "candidate_answers": [c["extracted"] if c["valid"] else "" for c in candidates],
+        }
+
+        if _do_diag:
+            print(
+                f"[S3][DIAG] {_diag_label} "
+                f"candidate_answers={[c['extracted'] if c['valid'] else 'FAILED' for c in candidates]} "
+                f"selected={best_answer!r} votes={top_votes}",
+                flush=True,
+            )
+
+        return selected["raw"], best_answer, candidates, sel_info
+
     except Exception as exc:
         raise RuntimeError(
             f"step={_step} {type(exc).__name__}: {exc}"
         ) from exc
+
+
 
 
 def _run_inference(model, tokenizer, problem: str) -> str:
@@ -776,9 +778,9 @@ def _write_per_sample_csv(results: List[Dict], repo_root: Path, eval_set: str) -
         "computed_expected_answer", "baseline_prediction_status",
         "model_raw_output", "model_extracted_answer", "baseline_correctness",
         "format_failure_flag", "extraction_failure_flag", "runtime_status",
-        # S2: min logprob selection columns
-        "s2_n_candidates", "s2_selected_idx", "s2_selected_mean_logprob",
-        "s2_selection_method",
+        # S3: answer-consistency rerank columns
+        "s3_n_candidates", "s3_candidate_answers", "s3_unique_answer_count",
+        "s3_selected_answer", "s3_selected_vote_count", "s3_selection_method",
         "notes",
     ]
     with open(out, "w", newline="", encoding="utf-8") as fh:
@@ -861,22 +863,24 @@ def main():
     model_mode = "INFERENCE"
     sl.log("model_load_end", f"mode={model_mode}")
 
-    # ── S2: min logprob loop ──────────────────────────────────────────
-    # Single main variable: beam search candidate selection by max mean_logprob.
+    # ── S3: answer-consistency rerank loop ───────────────────────────────
+    # Single main variable: select final answer by candidate consensus.
     print(
-        f"[S2] evaluation mode active: N_CANDIDATES={N_CANDIDATES} "
-        f"(beam=2 eval config; production target: 4)",
+        f"[S3] answer-consistency rerank active: N_CANDIDATES={N_CANDIDATES_S3}",
         flush=True,
     )
-    sl.log("s2_start", f"S2 min_logprob inference: n_candidates={N_CANDIDATES} (eval mode)")
+    sl.log("s3_start", f"S3 answer-consistency rerank: n_candidates={N_CANDIDATES_S3}",
+           extra={"n_candidates": N_CANDIDATES_S3})
 
     sl.log("eval_start", f"Running evaluation: {len(samples)} samples, mode={model_mode}")
     results = []
     predictions_jsonl = []
-    s2_selected_by_logprob = 0   # samples where beam[0] was NOT the highest-score beam
-    s2_total_inferred = 0
-    _s2_err_count = 0            # number of per-sample errors seen so far
-    _s2_diag_count = 0           # number of per-sample diagnostic lines emitted so far
+    s3_total_inferred = 0
+    s3_consensus_gt1 = 0
+    s3_single_answer_only = 0
+    s3_all_failed = 0
+    _s3_err_count = 0
+    _s3_diag_count = 0
 
     for i, s in enumerate(samples, 1):
         if i % 25 == 0 or i == len(samples):
@@ -885,32 +889,47 @@ def main():
         raw_output, extracted, correctness = "", "", "N/A"
         fmt_fail, ext_fail = "N/A", "N/A"
         runtime_status = "OK"
-        s2_n_cands = N_CANDIDATES
-        s2_sel_idx = -1
-        s2_sel_logprob = float("nan")
-        s2_method = "minlogprob_beam"
+        s3_n_cands = N_CANDIDATES_S3
+        s3_cand_answers: List[str] = []
+        s3_unique_count = 0
+        s3_selected = ""
+        s3_selected_votes = 0
+        s3_method = "pending"
 
         if model is not None:
             _diag_label = (
-                f"sample_id={s['sample_id']}" if _s2_diag_count < 3 else None
+                f"sample_id={s['sample_id']}" if _s3_diag_count < 3 else None
             )
             try:
-                raw_output, candidates = _run_inference_minlogprob(
-                    model, tokenizer, s["problem"], _diag_label=_diag_label
+                raw_output, selected_answer, candidates, sel_info = _run_inference_s3(
+                    model, tokenizer, s["problem"], s["category"],
+                    _diag_label=_diag_label,
                 )
                 if _diag_label:
-                    _s2_diag_count += 1
-                s2_total_inferred += 1
-                s2_sel_idx = next(j for j, c in enumerate(candidates) if c["selected"])
-                s2_sel_logprob = round(candidates[s2_sel_idx]["mean_logprob"], 6)
-                if s2_sel_idx != 0:
-                    s2_selected_by_logprob += 1
+                    _s3_diag_count += 1
 
-                extracted, ff, ef = _extract_answer(raw_output, s["category"])
-                fmt_fail = "YES" if ff else "NO"
-                ext_fail = "YES" if ef else "NO"
-                correct = _answers_match(extracted, s["computed_expected_answer"])
-                correctness = "YES" if correct else "NO"
+                s3_method = sel_info["method"]
+                s3_cand_answers = sel_info["candidate_answers"]
+                s3_unique_count = sel_info["unique_count"]
+                s3_selected_votes = sel_info["selected_votes"]
+
+                if s3_method == "all_failed":
+                    runtime_status = "EXTRACTION_FAILED"
+                    correctness = "ERROR"
+                    s3_all_failed += 1
+                else:
+                    extracted = selected_answer
+                    s3_selected = selected_answer
+                    fmt_fail = "NO"
+                    ext_fail = "NO"
+                    correct = _answers_match(extracted, s["computed_expected_answer"])
+                    correctness = "YES" if correct else "NO"
+                    s3_total_inferred += 1
+                    if s3_method == "consensus":
+                        s3_consensus_gt1 += 1
+                    else:
+                        s3_single_answer_only += 1
+
             except Exception as exc:
                 exc_str = str(exc)
                 _m = re.match(r"step=(\S+)\s+(.*)", exc_str, re.DOTALL)
@@ -919,26 +938,25 @@ def main():
                 else:
                     _step_str = "unknown"
                     _exc_detail = f"{type(exc).__name__}: {exc_str}"
-                if _s2_err_count < 3:
+                if _s3_err_count < 3:
                     print(
-                        f"[S2][ERROR] sample_id={s['sample_id']} "
-                        f"step={_step_str} "
-                        f"exception={_exc_detail}",
+                        f"[S3][ERROR] sample_id={s['sample_id']} "
+                        f"step={_step_str} exception={_exc_detail}",
                         flush=True,
                     )
                     if exc.__cause__ is not None:
                         tb_lines = traceback.format_tb(exc.__cause__.__traceback__)
                         print("".join(tb_lines[-3:]), flush=True)
-                _s2_err_count += 1
+                _s3_err_count += 1
                 if _diag_label:
-                    _s2_diag_count += 1
+                    _s3_diag_count += 1
                 raw_output = f"INFERENCE_ERROR: {exc_str}"
                 runtime_status = "INFERENCE_ERROR"
                 correctness = "ERROR"
-                s2_method = "error"
+                s3_method = "error"
         else:
             runtime_status = "MODEL_NOT_AVAILABLE"
-            s2_method = "skipped"
+            s3_method = "skipped"
 
         row = {
             "sample_id": s["sample_id"],
@@ -953,10 +971,12 @@ def main():
             "format_failure_flag": fmt_fail,
             "extraction_failure_flag": ext_fail,
             "runtime_status": runtime_status,
-            "s2_n_candidates": s2_n_cands,
-            "s2_selected_idx": s2_sel_idx,
-            "s2_selected_mean_logprob": s2_sel_logprob,
-            "s2_selection_method": s2_method,
+            "s3_n_candidates": s3_n_cands,
+            "s3_candidate_answers": json.dumps(s3_cand_answers, ensure_ascii=False),
+            "s3_unique_answer_count": s3_unique_count,
+            "s3_selected_answer": s3_selected,
+            "s3_selected_vote_count": s3_selected_votes,
+            "s3_selection_method": s3_method,
             "notes": "",
         }
         results.append(row)
@@ -969,21 +989,24 @@ def main():
         })
 
     print(
-        f"[S2] logprob-selection summary: "
-        f"total_inferred={s2_total_inferred}, "
-        f"selected_non_beam0={s2_selected_by_logprob} "
-        f"({100*s2_selected_by_logprob/max(s2_total_inferred,1):.1f}%)",
+        f"[S3] consistency summary: "
+        f"total_inferred={s3_total_inferred}, "
+        f"consensus_gt1={s3_consensus_gt1}, "
+        f"single_answer_only={s3_single_answer_only}, "
+        f"all_failed={s3_all_failed}",
         flush=True,
     )
     sl.log(
-        "s2_end",
-        f"S2 complete: n_candidates={N_CANDIDATES}, "
-        f"total_inferred={s2_total_inferred}, "
-        f"selected_non_beam0={s2_selected_by_logprob}",
+        "s3_end",
+        f"S3 complete: n_candidates={N_CANDIDATES_S3}, "
+        f"total_inferred={s3_total_inferred}, "
+        f"consensus_gt1={s3_consensus_gt1}",
         extra={
-            "n_candidates": N_CANDIDATES,
-            "total_inferred": s2_total_inferred,
-            "selected_non_beam0": s2_selected_by_logprob,
+            "n_candidates": N_CANDIDATES_S3,
+            "total_inferred": s3_total_inferred,
+            "consensus_gt1": s3_consensus_gt1,
+            "single_answer_only": s3_single_answer_only,
+            "all_failed": s3_all_failed,
         },
     )
     sl.log("eval_end", f"Evaluation complete: {len(results)} rows")
