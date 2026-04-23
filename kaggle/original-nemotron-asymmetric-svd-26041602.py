@@ -580,45 +580,55 @@ def _run_inference_minlogprob(
     """
     import torch
 
-    prompt = (
-        "<extra_id_0>System\n"
-        "Answer the following question precisely. Output only the final answer.\n"
-        "<extra_id_1>User\n"
-        f"{problem}\n"
-        "<extra_id_1>Assistant\n"
-    )
-    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-    input_len = inputs["input_ids"].shape[1]
-
-    with torch.no_grad():
-        out = model.generate(
-            **inputs,
-            max_new_tokens=128,
-            num_beams=N_CANDIDATES,
-            num_return_sequences=N_CANDIDATES,
-            return_dict_in_generate=True,
-            output_scores=False,          # scores per step not needed
-            pad_token_id=tokenizer.eos_token_id,
-            early_stopping=True,
+    _step = "tokenize"
+    try:
+        prompt = (
+            "<extra_id_0>System\n"
+            "Answer the following question precisely. Output only the final answer.\n"
+            "<extra_id_1>User\n"
+            f"{problem}\n"
+            "<extra_id_1>Assistant\n"
         )
+        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        input_len = inputs["input_ids"].shape[1]
 
-    # sequences_scores: beam-search normalised log-prob for each returned seq.
-    # Higher = more likely.  Shape: (N_CANDIDATES,)
-    seq_scores = out.sequences_scores.tolist()  # available when num_beams > 1
+        _step = "generate"
+        with torch.no_grad():
+            out = model.generate(
+                **inputs,
+                max_new_tokens=128,
+                num_beams=N_CANDIDATES,
+                num_return_sequences=N_CANDIDATES,
+                return_dict_in_generate=True,
+                output_scores=False,          # scores per step not needed
+                pad_token_id=tokenizer.eos_token_id,
+                early_stopping=True,
+            )
 
-    candidates = []
-    best_idx, best_score = 0, float("-inf")
-    for idx in range(N_CANDIDATES):
-        raw = tokenizer.decode(
-            out.sequences[idx][input_len:], skip_special_tokens=True
-        ).strip()
-        score = seq_scores[idx]
-        candidates.append({"raw": raw, "mean_logprob": score, "selected": False})
-        if score > best_score:
-            best_score, best_idx = score, idx
+        _step = "scores_access"
+        # sequences_scores: beam-search normalised log-prob for each returned seq.
+        # Higher = more likely.  Shape: (N_CANDIDATES,)
+        seq_scores = out.sequences_scores.tolist()  # available when num_beams > 1
 
-    candidates[best_idx]["selected"] = True
-    return candidates[best_idx]["raw"], candidates
+        _step = "decode"
+        candidates = []
+        best_idx, best_score = 0, float("-inf")
+        for idx in range(N_CANDIDATES):
+            raw = tokenizer.decode(
+                out.sequences[idx][input_len:], skip_special_tokens=True
+            ).strip()
+            score = seq_scores[idx]
+            candidates.append({"raw": raw, "mean_logprob": score, "selected": False})
+            if score > best_score:
+                best_score, best_idx = score, idx
+
+        _step = "select"
+        candidates[best_idx]["selected"] = True
+        return candidates[best_idx]["raw"], candidates
+    except Exception as exc:
+        raise RuntimeError(
+            f"step={_step} {type(exc).__name__}: {exc}"
+        ) from exc
 
 
 def _run_inference(model, tokenizer, problem: str) -> str:
@@ -804,6 +814,7 @@ def main():
     predictions_jsonl = []
     s2_selected_by_logprob = 0   # samples where beam[0] was NOT the highest-score beam
     s2_total_inferred = 0
+    _s2_err_count = 0            # number of per-sample errors seen so far
 
     for i, s in enumerate(samples, 1):
         if i % 25 == 0 or i == len(samples):
@@ -834,7 +845,25 @@ def main():
                 correct = _answers_match(extracted, s["computed_expected_answer"])
                 correctness = "YES" if correct else "NO"
             except Exception as exc:
-                raw_output = f"INFERENCE_ERROR: {exc}"
+                exc_str = str(exc)
+                _m = re.match(r"step=(\S+)\s+(.*)", exc_str, re.DOTALL)
+                if _m:
+                    _step_str, _exc_detail = _m.group(1), _m.group(2)
+                else:
+                    _step_str = "unknown"
+                    _exc_detail = f"{type(exc).__name__}: {exc_str}"
+                if _s2_err_count < 3:
+                    print(
+                        f"[S2][ERROR] sample_id={s['sample_id']} "
+                        f"step={_step_str} "
+                        f"exception={_exc_detail}",
+                        flush=True,
+                    )
+                    if exc.__cause__ is not None:
+                        tb_lines = traceback.format_tb(exc.__cause__.__traceback__)
+                        print("".join(tb_lines[-3:]), flush=True)
+                _s2_err_count += 1
+                raw_output = f"INFERENCE_ERROR: {exc_str}"
                 runtime_status = "INFERENCE_ERROR"
                 correctness = "ERROR"
                 s2_method = "error"
