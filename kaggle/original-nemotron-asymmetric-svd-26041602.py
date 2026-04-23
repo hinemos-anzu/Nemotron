@@ -30,7 +30,9 @@ import math
 import os
 import re
 import sys
+import time
 import traceback
+import warnings
 from decimal import Decimal, getcontext
 from fractions import Fraction
 from math import gcd, sqrt
@@ -567,9 +569,16 @@ N_CANDIDATES = 4  # beam count; changing this is a scope-creep signal
 
 
 def _run_inference_minlogprob(
-    model, tokenizer, problem: str
+    model, tokenizer, problem: str,
+    _diag_label: Optional[str] = None,
 ) -> Tuple[str, List[Dict]]:
     """Beam-search inference with min-logprob candidate selection.
+
+    Parameters
+    ----------
+    _diag_label : str or None
+        When set (e.g. "sample_id=QG_001"), emit latency / warning diagnostics
+        to stdout.  Caller passes this only for the first N samples.
 
     Returns
     -------
@@ -580,6 +589,7 @@ def _run_inference_minlogprob(
     """
     import torch
 
+    _do_diag = _diag_label is not None
     _step = "tokenize"
     try:
         prompt = (
@@ -593,18 +603,33 @@ def _run_inference_minlogprob(
         input_len = inputs["input_ids"].shape[1]
 
         _step = "generate"
-        with torch.no_grad():
-            out = model.generate(
-                **inputs,
-                max_new_tokens=128,
-                num_beams=N_CANDIDATES,
-                num_return_sequences=N_CANDIDATES,
-                return_dict_in_generate=True,
-                output_scores=True,   # required: some transformers versions only
-                                      # populate sequences_scores when this is True
-                pad_token_id=tokenizer.eos_token_id,
-                early_stopping=True,
+        _t_gen = time.time()
+        _caught_warnings = []
+        with warnings.catch_warnings(record=True) as _w:
+            warnings.simplefilter("always")
+            with torch.no_grad():
+                out = model.generate(
+                    **inputs,
+                    max_new_tokens=128,
+                    num_beams=N_CANDIDATES,
+                    num_return_sequences=N_CANDIDATES,
+                    return_dict_in_generate=True,
+                    output_scores=True,   # required: some transformers versions only
+                                          # populate sequences_scores when this is True
+                    pad_token_id=tokenizer.eos_token_id,
+                    early_stopping=True,
+                )
+            _caught_warnings = [str(w.message) for w in (_w or [])]
+        _gen_sec = time.time() - _t_gen
+
+        if _do_diag:
+            print(
+                f"[S2][TIMING] {_diag_label} beam={N_CANDIDATES} "
+                f"prompt_tokens={input_len} generate_sec={_gen_sec:.2f}",
+                flush=True,
             )
+            for _wm in _caught_warnings[:5]:
+                print(f"[S2][WARN] {_diag_label} {_wm[:300]}", flush=True)
 
         _step = "scores_access"
         # sequences_scores: beam-search normalised log-prob per sequence.
@@ -613,6 +638,7 @@ def _run_inference_minlogprob(
         _seq_scores_t = getattr(out, "sequences_scores", None)
         if _seq_scores_t is not None:
             seq_scores = _seq_scores_t.tolist()
+            _scores_source = "sequences_scores"
         else:
             # Fallback: length-normalised mean log-prob from per-step logits.
             try:
@@ -625,9 +651,18 @@ def _run_inference_minlogprob(
                 _valid = _trans > -1e8
                 _lengths = _valid.sum(-1).float().clamp(min=1)
                 seq_scores = (_trans.sum(-1) / _lengths).tolist()
+                _scores_source = "transition_scores"
             except Exception:
                 # Final fallback: equal scores — beam 0 selected by default
                 seq_scores = [float(-i) for i in range(N_CANDIDATES)]
+                _scores_source = "fallback_equal"
+
+        if _do_diag:
+            print(
+                f"[S2][DIAG] {_diag_label} scores_source={_scores_source} "
+                f"scores={[round(v, 4) for v in seq_scores]}",
+                flush=True,
+            )
 
         _step = "decode"
         candidates = []
@@ -834,6 +869,7 @@ def main():
     s2_selected_by_logprob = 0   # samples where beam[0] was NOT the highest-score beam
     s2_total_inferred = 0
     _s2_err_count = 0            # number of per-sample errors seen so far
+    _s2_diag_count = 0           # number of per-sample diagnostic lines emitted so far
 
     for i, s in enumerate(samples, 1):
         if i % 25 == 0 or i == len(samples):
@@ -848,10 +884,15 @@ def main():
         s2_method = "minlogprob_beam"
 
         if model is not None:
+            _diag_label = (
+                f"sample_id={s['sample_id']}" if _s2_diag_count < 3 else None
+            )
             try:
                 raw_output, candidates = _run_inference_minlogprob(
-                    model, tokenizer, s["problem"]
+                    model, tokenizer, s["problem"], _diag_label=_diag_label
                 )
+                if _diag_label:
+                    _s2_diag_count += 1
                 s2_total_inferred += 1
                 s2_sel_idx = next(j for j, c in enumerate(candidates) if c["selected"])
                 s2_sel_logprob = round(candidates[s2_sel_idx]["mean_logprob"], 6)
@@ -882,6 +923,8 @@ def main():
                         tb_lines = traceback.format_tb(exc.__cause__.__traceback__)
                         print("".join(tb_lines[-3:]), flush=True)
                 _s2_err_count += 1
+                if _diag_label:
+                    _s2_diag_count += 1
                 raw_output = f"INFERENCE_ERROR: {exc_str}"
                 runtime_status = "INFERENCE_ERROR"
                 correctness = "ERROR"
