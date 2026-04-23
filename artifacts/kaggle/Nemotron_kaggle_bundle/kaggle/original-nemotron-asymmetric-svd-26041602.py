@@ -600,15 +600,34 @@ def _run_inference_minlogprob(
                 num_beams=N_CANDIDATES,
                 num_return_sequences=N_CANDIDATES,
                 return_dict_in_generate=True,
-                output_scores=False,          # scores per step not needed
+                output_scores=True,   # required: some transformers versions only
+                                      # populate sequences_scores when this is True
                 pad_token_id=tokenizer.eos_token_id,
                 early_stopping=True,
             )
 
         _step = "scores_access"
-        # sequences_scores: beam-search normalised log-prob for each returned seq.
-        # Higher = more likely.  Shape: (N_CANDIDATES,)
-        seq_scores = out.sequences_scores.tolist()  # available when num_beams > 1
+        # sequences_scores: beam-search normalised log-prob per sequence.
+        # In some transformers versions this is None even with num_beams>1 when
+        # output_scores=False.  Fall back to compute_transition_scores if needed.
+        _seq_scores_t = getattr(out, "sequences_scores", None)
+        if _seq_scores_t is not None:
+            seq_scores = _seq_scores_t.tolist()
+        else:
+            # Fallback: length-normalised mean log-prob from per-step logits.
+            try:
+                _beam_idx = getattr(out, "beam_indices", None)
+                _trans = model.compute_transition_scores(
+                    out.sequences, out.scores,
+                    beam_indices=_beam_idx,
+                    normalize_logits=True,
+                )  # (N_CANDIDATES, gen_len), per-token log-probs; -inf for padding
+                _valid = _trans > -1e8
+                _lengths = _valid.sum(-1).float().clamp(min=1)
+                seq_scores = (_trans.sum(-1) / _lengths).tolist()
+            except Exception:
+                # Final fallback: equal scores — beam 0 selected by default
+                seq_scores = [float(-i) for i in range(N_CANDIDATES)]
 
         _step = "decode"
         candidates = []
