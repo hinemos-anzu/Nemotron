@@ -559,13 +559,16 @@ def _try_load_model() -> Tuple[object, object]:
         ) from exc
 
 
-# ─── S2: min logprob answer selection (N_CANDIDATES=4 beams) ─────────────────
+# ─── S2: min logprob answer selection ────────────────────────────────────────
 # Single main variable: beam search with logprob-ranked candidate selection.
 # Baseline used greedy (num_beams=1, do_sample=False).
-# S2 uses num_beams=4, num_return_sequences=4 and picks the beam with the
-# highest sequences_scores (= mean token log-prob, least negative = most likely).
+# S2 uses num_beams=N_CANDIDATES and picks the beam with the highest
+# sequences_scores (= mean token log-prob, least negative = most likely).
+#
+# N_CANDIDATES=2: evaluation mode — reduced from 4 to fit Kaggle time budget.
+# This is not the final production setting.
 
-N_CANDIDATES = 4  # beam count; changing this is a scope-creep signal
+N_CANDIDATES = 2  # evaluation mode: 2 beams (production target: 4)
 
 
 def _run_inference_minlogprob(
@@ -860,8 +863,12 @@ def main():
 
     # ── S2: min logprob loop ──────────────────────────────────────────
     # Single main variable: beam search candidate selection by max mean_logprob.
-    print(f"[S2] min_logprob selection active: N_CANDIDATES={N_CANDIDATES}", flush=True)
-    sl.log("s2_start", f"S2 min_logprob inference: n_candidates={N_CANDIDATES}")
+    print(
+        f"[S2] evaluation mode active: N_CANDIDATES={N_CANDIDATES} "
+        f"(beam=2 eval config; production target: 4)",
+        flush=True,
+    )
+    sl.log("s2_start", f"S2 min_logprob inference: n_candidates={N_CANDIDATES} (eval mode)")
 
     sl.log("eval_start", f"Running evaluation: {len(samples)} samples, mode={model_mode}")
     results = []
