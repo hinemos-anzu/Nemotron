@@ -1,0 +1,94 @@
+=====================================================================
+RUNTIME GOLD REFREEZE — KAGGLE EXECUTION LOG
+STATUS: PENDING_KAGGLE_EXECUTION
+Branch : claude/fix-mamba-stub-scynC
+Commit : 3b17c3d
+Base   : b1d54ce
+Date   : 2026-04-24
+=====================================================================
+
+[LOCAL ZIP VALIDATION — COMPLETED]
+--------------------------------------------
+ZIP path    : artifacts/kaggle/Nemotron_kaggle_bundle.zip
+ZIP size    : 47,475 bytes
+ZIP entries : 18
+
+Check                               Result
+--------------------------------------------
+stub_NotImplementedError_absent     OK
+stub_rmsnorm_fn_defined             OK
+stub_rms_norm_fn_alias              OK
+stub_RMSNorm_class                  OK
+stub_LayerNorm_class                OK
+kg_GENERATION_NUM_BEAMS_const       OK   (line 98: _GENERATION_NUM_BEAMS = 1)
+kg_num_beams_explicit               OK   (line 588: num_beams=_GENERATION_NUM_BEAMS)
+kg_hard_fail_guard                  OK   (line 569-573)
+kg_gen_policy_log                   OK   (line 744)
+kg_beam_search_ban_ref              OK
+kg_num_beams_2_absent               OK   (num_beams=2 not present — confirmed clean)
+kg_is_mamba_patch                   OK   (is_mamba_2_ssm_available lambda)
+kg_sys_path_insert                  OK   (sys.path.insert(0, REPO_ROOT))
+
+ALL LOCAL CHECKS: PASS
+
+[EXPECTED KAGGLE STARTUP LOG]
+--------------------------------------------
+The following lines are expected to appear at the start of Kaggle execution.
+Fill in actual values after Kaggle run.
+
+Expected:
+  [baseline] REPO_ROOT inserted into sys.path: <path>
+  [baseline] Patched is_mamba_2_ssm_available() -> False
+  [baseline] Local stub mamba_ssm package detected: <path>/mamba_ssm/__init__.py
+  [baseline][gen_policy] num_beams=1 do_sample=False max_new_tokens=128 temperature=1.0 — beam search BANNED
+
+Actual (fill after Kaggle run):
+  line 1: _______________
+  line 2: _______________
+  line 3: _______________
+  gen_policy line: _______________
+
+[EXPECTED KAGGLE INFERENCE LOG]
+--------------------------------------------
+Expected pattern per sample:
+  [baseline] {i}/{total} ...
+
+Expected end:
+  [baseline] run_complete.flag written
+  [baseline] Wrote per-sample results: baseline_measured_results_<eval_set>_kaggle.csv
+  [baseline] Wrote category summary: baseline_measured_category_summary_v1_kaggle.csv
+
+Actual (fill after Kaggle run):
+  total_samples  : _______________
+  completed      : _______________
+  runtime_errors : _______________
+  submission.zip : _______________  (generated: YES/NO)
+
+[GUARD TRIGGER CHECK]
+--------------------------------------------
+Question: Did "HARD FAIL: _GENERATION_NUM_BEAMS" appear in logs?
+Expected: NO (guard should not trigger if constant stays 1)
+Actual  : _______________
+
+Question: Did "NotImplementedError" appear in logs?
+Expected: NO
+Actual  : _______________
+
+Question: Did "NemotronHHybridDynamicCache ... None was provided" appear?
+Expected: NO (no beam search, no SSM branching)
+Actual  : _______________
+
+[LB SCORE]
+--------------------------------------------
+eval_set       : _______________
+LB score       : _______________
+baseline_ref   : 0.85
+reproduced     : _______________  (YES / NO / UNKNOWN)
+
+[KAGGLE EXECUTION METADATA]
+--------------------------------------------
+Execution date    : _______________
+Notebook version  : _______________
+GPU               : _______________
+Runtime duration  : _______________
+Internet          : OFF
