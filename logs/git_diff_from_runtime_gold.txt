@@ -1,0 +1,502 @@
+=== Git diff: runtime gold b1d54ce → HEAD (claude/exp-s3-answer-consistency-v1 @ 6190bb5) ===
+Generated: static analysis (pre-Kaggle execution)
+
+6190bb5 feat(s3): implement answer-consistency rerank v1 (N_CANDIDATES_S3=2)
+3533d1d config(s2): set N_CANDIDATES=2 for evaluation mode (beam=4 too slow on Kaggle)
+f84728a diag(s2): add per-sample generate latency and warning diagnostics
+4b493dd fix(s2): handle sequences_scores=None; add output_scores=True + transition_scores fallback
+f0ddb9c fix(stub): replace NotImplementedError stubs with PyTorch layernorm runtime impl
+e3655ef diag(s2): add per-sample error diagnostics to pinpoint all-error root cause
+1d2a990 fix(bundle): mirror S2 min logprob kaggle script into bundle and rebuild ZIP
+67e71ec fix(stub): add rmsnorm_fn to layernorm_gated stub; rebuild ZIP
+d2808af feat(s2): implement min logprob answer selection v1 (Option 1, N=4 beams)
+
+--- diff --stat ---
+ artifacts/kaggle/Nemotron_kaggle_bundle.zip        | Bin 47067 -> 50154 bytes
+ .../original-nemotron-asymmetric-svd-26041602.py   | 249 ++++++++++++++++++++-
+ .../mamba_ssm/ops/triton/layernorm_gated.py        | 146 +++++++++++-
+ .../original-nemotron-asymmetric-svd-26041602.py   | 249 ++++++++++++++++++++-
+ logs/experiments/day1_s2_minlogprob_v1.md          | 113 ++++++++++
+ mamba_ssm/ops/triton/layernorm_gated.py            | 146 +++++++++++-
+ 6 files changed, 875 insertions(+), 28 deletions(-)
+
+--- diff --name-only ---
+artifacts/kaggle/Nemotron_kaggle_bundle.zip
+artifacts/kaggle/Nemotron_kaggle_bundle/kaggle/original-nemotron-asymmetric-svd-26041602.py
+artifacts/kaggle/Nemotron_kaggle_bundle/mamba_ssm/ops/triton/layernorm_gated.py
+kaggle/original-nemotron-asymmetric-svd-26041602.py
+logs/experiments/day1_s2_minlogprob_v1.md
+mamba_ssm/ops/triton/layernorm_gated.py
+
+--- full diff (kaggle script only) ---
+diff --git a/kaggle/original-nemotron-asymmetric-svd-26041602.py b/kaggle/original-nemotron-asymmetric-svd-26041602.py
+index ea9615a..72781f1 100644
+--- a/kaggle/original-nemotron-asymmetric-svd-26041602.py
++++ b/kaggle/original-nemotron-asymmetric-svd-26041602.py
+@@ -30,7 +30,9 @@ import math
+ import os
+ import re
+ import sys
++import time
+ import traceback
++import warnings
+ from decimal import Decimal, getcontext
+ from fractions import Fraction
+ from math import gcd, sqrt
+@@ -557,6 +559,137 @@ def _try_load_model() -> Tuple[object, object]:
+         ) from exc
+ 
+ 
++# ─── S3: answer-consistency rerank ───────────────────────────────────────────
++# Single main variable: select final answer by candidate consensus.
++# Baseline used greedy (num_beams=1, do_sample=False).
++# S2 selected by logprob — selected_non_beam0 was 0, no rerank signal.
++# S3 generates N_CANDIDATES_S3 beams, extracts the final answer from each,
++# and selects the most-frequent extracted answer (tie-break: beam index 0).
++#
++# N_CANDIDATES_S3=2: evaluation mode to fit Kaggle time budget.
++
++N_CANDIDATES_S3 = 2  # evaluation mode (production target: may increase)
++
++
++def _run_inference_s3(
++    model, tokenizer, problem: str, category: str,
++    _diag_label: Optional[str] = None,
++) -> Tuple[str, str, List[Dict], Dict]:
++    """S3: answer-consistency rerank.
++
++    Generate N_CANDIDATES_S3 beam-search candidates, extract the final
++    answer from each, and select the most-frequent extracted answer.
++    Tie-break by beam index (lower = preferred).
++
++    Returns
++    -------
++    selected_raw : str
++        Raw model output of the selected candidate.
++    selected_answer : str
++        Extracted answer of the selected candidate (empty string on all_failed).
++    candidates : list[dict]
++        Per-candidate info: raw, extracted, valid.
++    sel_info : dict
++        method, unique_count, selected_votes, candidate_answers.
++    """
++    from collections import Counter
++    import torch
++
++    _do_diag = _diag_label is not None
++    _step = "tokenize"
++    try:
++        prompt = (
++            "<extra_id_0>System\n"
++            "Answer the following question precisely. Output only the final answer.\n"
++            "<extra_id_1>User\n"
++            f"{problem}\n"
++            "<extra_id_1>Assistant\n"
++        )
++        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
++        input_len = inputs["input_ids"].shape[1]
++
++        _step = "generate"
++        _t_gen = time.time()
++        _caught_warnings = []
++        with warnings.catch_warnings(record=True) as _w:
++            warnings.simplefilter("always")
++            with torch.no_grad():
++                out = model.generate(
++                    **inputs,
++                    max_new_tokens=128,
++                    num_beams=N_CANDIDATES_S3,
++                    num_return_sequences=N_CANDIDATES_S3,
++                    return_dict_in_generate=True,
++                    output_scores=False,
++                    pad_token_id=tokenizer.eos_token_id,
++                    early_stopping=True,
++                )
++            _caught_warnings = [str(w.message) for w in (_w or [])]
++        _gen_sec = time.time() - _t_gen
++
++        if _do_diag:
++            print(
++                f"[S3][TIMING] {_diag_label} beam={N_CANDIDATES_S3} "
++                f"prompt_tokens={input_len} generate_sec={_gen_sec:.2f}",
++                flush=True,
++            )
++            for _wm in _caught_warnings[:3]:
++                print(f"[S3][WARN] {_diag_label} {_wm[:300]}", flush=True)
++
++        _step = "decode"
++        candidates = []
++        for idx in range(N_CANDIDATES_S3):
++            raw = tokenizer.decode(
++                out.sequences[idx][input_len:], skip_special_tokens=True
++            ).strip()
++            candidates.append({"idx": idx, "raw": raw, "extracted": "", "valid": False})
++
++        _step = "extract"
++        for c in candidates:
++            ext, ff, ef = _extract_answer(c["raw"], category)
++            c["extracted"] = ext
++            c["valid"] = not ff and not ef and ext != ""
++
++        _step = "rerank"
++        valid_cands = [c for c in candidates if c["valid"]]
++
++        if not valid_cands:
++            sel_info = {"method": "all_failed", "unique_count": 0, "selected_votes": 0,
++                        "candidate_answers": [c["extracted"] for c in candidates]}
++            return candidates[0]["raw"], "", candidates, sel_info
++
++        vote_counter = Counter(c["extracted"] for c in valid_cands)
++        best_answer, top_votes = vote_counter.most_common(1)[0]
++
++        # Tie-break: first valid candidate with best_answer (lowest beam index)
++        selected = next(c for c in candidates if c["valid"] and c["extracted"] == best_answer)
++        method = "consensus" if top_votes > 1 else "single_answer"
++
++        sel_info = {
++            "method": method,
++            "unique_count": len(vote_counter),
++            "selected_votes": top_votes,
++            "candidate_answers": [c["extracted"] if c["valid"] else "" for c in candidates],
++        }
++
++        if _do_diag:
++            print(
++                f"[S3][DIAG] {_diag_label} "
++                f"candidate_answers={[c['extracted'] if c['valid'] else 'FAILED' for c in candidates]} "
++                f"selected={best_answer!r} votes={top_votes}",
++                flush=True,
++            )
++
++        return selected["raw"], best_answer, candidates, sel_info
++
++    except Exception as exc:
++        raise RuntimeError(
++            f"step={_step} {type(exc).__name__}: {exc}"
++        ) from exc
++
++
++
++
+ def _run_inference(model, tokenizer, problem: str) -> str:
+     """Run inference using Nemotron chat format."""
+     import torch
+@@ -644,7 +777,11 @@ def _write_per_sample_csv(results: List[Dict], repo_root: Path, eval_set: str) -
+         "sample_id", "split_name", "category", "difficulty_bucket",
+         "computed_expected_answer", "baseline_prediction_status",
+         "model_raw_output", "model_extracted_answer", "baseline_correctness",
+-        "format_failure_flag", "extraction_failure_flag", "runtime_status", "notes",
++        "format_failure_flag", "extraction_failure_flag", "runtime_status",
++        # S3: answer-consistency rerank columns
++        "s3_n_candidates", "s3_candidate_answers", "s3_unique_answer_count",
++        "s3_selected_answer", "s3_selected_vote_count", "s3_selection_method",
++        "notes",
+     ]
+     with open(out, "w", newline="", encoding="utf-8") as fh:
+         w = csv.DictWriter(fh, fieldnames=fields, extrasaction="ignore")
+@@ -726,10 +863,24 @@ def main():
+     model_mode = "INFERENCE"
+     sl.log("model_load_end", f"mode={model_mode}")
+ 
+-    # ── inference loop ────────────────────────────────────────────────
++    # ── S3: answer-consistency rerank loop ───────────────────────────────
++    # Single main variable: select final answer by candidate consensus.
++    print(
++        f"[S3] answer-consistency rerank active: N_CANDIDATES={N_CANDIDATES_S3}",
++        flush=True,
++    )
++    sl.log("s3_start", f"S3 answer-consistency rerank: n_candidates={N_CANDIDATES_S3}",
++           extra={"n_candidates": N_CANDIDATES_S3})
++
+     sl.log("eval_start", f"Running evaluation: {len(samples)} samples, mode={model_mode}")
+     results = []
+     predictions_jsonl = []
++    s3_total_inferred = 0
++    s3_consensus_gt1 = 0
++    s3_single_answer_only = 0
++    s3_all_failed = 0
++    _s3_err_count = 0
++    _s3_diag_count = 0
+ 
+     for i, s in enumerate(samples, 1):
+         if i % 25 == 0 or i == len(samples):
+@@ -738,21 +889,74 @@ def main():
+         raw_output, extracted, correctness = "", "", "N/A"
+         fmt_fail, ext_fail = "N/A", "N/A"
+         runtime_status = "OK"
++        s3_n_cands = N_CANDIDATES_S3
++        s3_cand_answers: List[str] = []
++        s3_unique_count = 0
++        s3_selected = ""
++        s3_selected_votes = 0
++        s3_method = "pending"
+ 
+         if model is not None:
++            _diag_label = (
++                f"sample_id={s['sample_id']}" if _s3_diag_count < 3 else None
++            )
+             try:
+-                raw_output = _run_inference(model, tokenizer, s["problem"])
+-                extracted, ff, ef = _extract_answer(raw_output, s["category"])
+-                fmt_fail = "YES" if ff else "NO"
+-                ext_fail = "YES" if ef else "NO"
+-                correct = _answers_match(extracted, s["computed_expected_answer"])
+-                correctness = "YES" if correct else "NO"
++                raw_output, selected_answer, candidates, sel_info = _run_inference_s3(
++                    model, tokenizer, s["problem"], s["category"],
++                    _diag_label=_diag_label,
++                )
++                if _diag_label:
++                    _s3_diag_count += 1
++
++                s3_method = sel_info["method"]
++                s3_cand_answers = sel_info["candidate_answers"]
++                s3_unique_count = sel_info["unique_count"]
++                s3_selected_votes = sel_info["selected_votes"]
++
++                if s3_method == "all_failed":
++                    runtime_status = "EXTRACTION_FAILED"
++                    correctness = "ERROR"
++                    s3_all_failed += 1
++                else:
++                    extracted = selected_answer
++                    s3_selected = selected_answer
++                    fmt_fail = "NO"
++                    ext_fail = "NO"
++                    correct = _answers_match(extracted, s["computed_expected_answer"])
++                    correctness = "YES" if correct else "NO"
++                    s3_total_inferred += 1
++                    if s3_method == "consensus":
++                        s3_consensus_gt1 += 1
++                    else:
++                        s3_single_answer_only += 1
++
+             except Exception as exc:
+-                raw_output = f"INFERENCE_ERROR: {exc}"
++                exc_str = str(exc)
++                _m = re.match(r"step=(\S+)\s+(.*)", exc_str, re.DOTALL)
++                if _m:
++                    _step_str, _exc_detail = _m.group(1), _m.group(2)
++                else:
++                    _step_str = "unknown"
++                    _exc_detail = f"{type(exc).__name__}: {exc_str}"
++                if _s3_err_count < 3:
++                    print(
++                        f"[S3][ERROR] sample_id={s['sample_id']} "
++                        f"step={_step_str} exception={_exc_detail}",
++                        flush=True,
++                    )
++                    if exc.__cause__ is not None:
++                        tb_lines = traceback.format_tb(exc.__cause__.__traceback__)
++                        print("".join(tb_lines[-3:]), flush=True)
++                _s3_err_count += 1
++                if _diag_label:
++                    _s3_diag_count += 1
++                raw_output = f"INFERENCE_ERROR: {exc_str}"
+                 runtime_status = "INFERENCE_ERROR"
+                 correctness = "ERROR"
++                s3_method = "error"
+         else:
+             runtime_status = "MODEL_NOT_AVAILABLE"
++            s3_method = "skipped"
+ 
+         row = {
+             "sample_id": s["sample_id"],
+@@ -767,6 +971,12 @@ def main():
+             "format_failure_flag": fmt_fail,
+             "extraction_failure_flag": ext_fail,
+             "runtime_status": runtime_status,
++            "s3_n_candidates": s3_n_cands,
++            "s3_candidate_answers": json.dumps(s3_cand_answers, ensure_ascii=False),
++            "s3_unique_answer_count": s3_unique_count,
++            "s3_selected_answer": s3_selected,
++            "s3_selected_vote_count": s3_selected_votes,
++            "s3_selection_method": s3_method,
+             "notes": "",
+         }
+         results.append(row)
+@@ -778,6 +988,27 @@ def main():
+             "correct": correctness,
+         })
+ 
++    print(
++        f"[S3] consistency summary: "
++        f"total_inferred={s3_total_inferred}, "
++        f"consensus_gt1={s3_consensus_gt1}, "
++        f"single_answer_only={s3_single_answer_only}, "
++        f"all_failed={s3_all_failed}",
++        flush=True,
++    )
++    sl.log(
++        "s3_end",
++        f"S3 complete: n_candidates={N_CANDIDATES_S3}, "
++        f"total_inferred={s3_total_inferred}, "
++        f"consensus_gt1={s3_consensus_gt1}",
++        extra={
++            "n_candidates": N_CANDIDATES_S3,
++            "total_inferred": s3_total_inferred,
++            "consensus_gt1": s3_consensus_gt1,
++            "single_answer_only": s3_single_answer_only,
++            "all_failed": s3_all_failed,
++        },
++    )
+     sl.log("eval_end", f"Evaluation complete: {len(results)} rows")
+ 
+     # ── write outputs ─────────────────────────────────────────────────
+
+--- full diff (mamba stub only) ---
+diff --git a/mamba_ssm/ops/triton/layernorm_gated.py b/mamba_ssm/ops/triton/layernorm_gated.py
+index 4a8fedb..d992c5a 100644
+--- a/mamba_ssm/ops/triton/layernorm_gated.py
++++ b/mamba_ssm/ops/triton/layernorm_gated.py
+@@ -1,9 +1,145 @@
+-# Stub: triton layernorm_gated kernel — not called when use_mamba_kernels=False.
++# Pure-PyTorch fallback for mamba_ssm layernorm_gated symbols.
++#
++# The real mamba_ssm package implements these via Triton fused kernels which
++# are ABI-incompatible with the Kaggle environment.  This module provides
++# numerically correct but un-fused PyTorch equivalents so that
++# modeling_nemotron_h.py can complete a forward pass without the Triton kernel.
++#
++# Signature matches mamba_ssm 2.2.x:
++#   rmsnorm_fn / rms_norm_fn / layer_norm_fn
++#   RMSNorm / LayerNorm
++#
++# Key semantics preserved:
++#   - residual addition before normalisation (when residual is not None)
++#   - prenorm=True returns (normed_output, residual_for_next_layer)
++#   - residual_in_fp32 upcasts the residual accumulator to float32
++#   - return_dropout_mask returns None mask (dropout always 0 at inference)
+ 
++import torch
++import torch.nn.functional as F
+ 
+-def rms_norm_fn(*args, **kwargs):
+-    raise NotImplementedError("rms_norm_fn: stub only — should not be called")
+ 
++def _rms_norm(x, weight, bias, eps):
++    orig_dtype = x.dtype
++    x_f = x.float()
++    variance = x_f.pow(2).mean(-1, keepdim=True)
++    x_normed = (x_f * torch.rsqrt(variance + eps)).to(orig_dtype)
++    out = x_normed * weight
++    if bias is not None:
++        out = out + bias
++    return out
+ 
+-def layer_norm_fn(*args, **kwargs):
+-    raise NotImplementedError("layer_norm_fn: stub only — should not be called")
++
++def _layer_norm(x, weight, bias, eps):
++    return F.layer_norm(x, x.shape[-1:], weight, bias, eps)
++
++
++def rmsnorm_fn(
++    x,
++    weight,
++    bias=None,
++    residual=None,
++    x1=None,
++    weight1=None,
++    bias1=None,
++    eps=1e-6,
++    dropout_p=0.0,
++    rowscale=None,
++    layerscale=None,
++    prenorm=False,
++    residual_in_fp32=False,
++    return_dropout_mask=False,
++    **kwargs,
++):
++    if residual is not None:
++        x = x + residual.to(x.dtype)
++    residual_out = x.float() if residual_in_fp32 else x
++
++    out = _rms_norm(x, weight, bias, eps)
++
++    if prenorm and return_dropout_mask:
++        return out, residual_out, None
++    if prenorm:
++        return out, residual_out
++    if return_dropout_mask:
++        return out, None
++    return out
++
++
++# mamba_ssm exports both spellings; some model files import one, some the other
++rms_norm_fn = rmsnorm_fn
++
++
++def layer_norm_fn(
++    x,
++    weight,
++    bias=None,
++    residual=None,
++    x1=None,
++    weight1=None,
++    bias1=None,
++    eps=1e-6,
++    dropout_p=0.0,
++    rowscale=None,
++    layerscale=None,
++    prenorm=False,
++    residual_in_fp32=False,
++    return_dropout_mask=False,
++    **kwargs,
++):
++    if residual is not None:
++        x = x + residual.to(x.dtype)
++    residual_out = x.float() if residual_in_fp32 else x
++
++    out = _layer_norm(x, weight, bias, eps)
++
++    if prenorm and return_dropout_mask:
++        return out, residual_out, None
++    if prenorm:
++        return out, residual_out
++    if return_dropout_mask:
++        return out, None
++    return out
++
++
++class RMSNorm(torch.nn.Module):
++    def __init__(self, hidden_size, eps=1e-6, device=None, dtype=None, **kwargs):
++        super().__init__()
++        self.weight = torch.nn.Parameter(
++            torch.ones(hidden_size, device=device, dtype=dtype)
++        )
++        self.variance_epsilon = eps
++
++    def forward(self, x, residual=None, prenorm=False, residual_in_fp32=False):
++        return rmsnorm_fn(
++            x,
++            self.weight,
++            bias=None,
++            residual=residual,
++            eps=self.variance_epsilon,
++            prenorm=prenorm,
++            residual_in_fp32=residual_in_fp32,
++        )
++
++
++class LayerNorm(torch.nn.Module):
++    def __init__(self, hidden_size, eps=1e-5, device=None, dtype=None, **kwargs):
++        super().__init__()
++        self.weight = torch.nn.Parameter(
++            torch.ones(hidden_size, device=device, dtype=dtype)
++        )
++        self.bias = torch.nn.Parameter(
++            torch.zeros(hidden_size, device=device, dtype=dtype)
++        )
++        self.variance_epsilon = eps
++
++    def forward(self, x, residual=None, prenorm=False, residual_in_fp32=False):
++        return layer_norm_fn(
++            x,
++            self.weight,
++            self.bias,
++            residual=residual,
++            eps=self.variance_epsilon,
++            prenorm=prenorm,
++            residual_in_fp32=residual_in_fp32,
++        )

@@ -1,0 +1,110 @@
+=====================================================================
+QG_001 GENERATION DEBUG LOG
+STATUS: PENDING_KAGGLE_EXECUTION
+This file is a diagnostic script + placeholder.
+Actual values must be filled in by Kaggle execution role.
+=====================================================================
+
+[PROBLEM]
+sample_id : QG_001
+problem   : "Convert 255 (decimal) to hexadecimal. Use uppercase letters."
+category  : numeral
+expected  : FF
+
+[DIAGNOSTIC SCRIPT TO RUN IN KAGGLE]
+--------------------------------------------
+# Paste this into the Kaggle notebook after model load
+
+import torch
+
+problem = "Convert 255 (decimal) to hexadecimal. Use uppercase letters."
+prompt = (
+    "<extra_id_0>System\n"
+    "Answer the following question precisely. Output only the final answer.\n"
+    "<extra_id_1>User\n"
+    f"{problem}\n"
+    "<extra_id_1>Assistant\n"
+)
+inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+input_ids = inputs["input_ids"]
+
+print("=== PROMPT ===")
+print(prompt)
+print()
+print("=== INPUT_IDS ===")
+print(f"  shape         : {input_ids.shape}")
+print(f"  first 20 ids  : {input_ids[0, :20].tolist()}")
+print(f"  last  20 ids  : {input_ids[0, -20:].tolist()}")
+print(f"  first 20 toks : {tokenizer.convert_ids_to_tokens(input_ids[0, :20].tolist())}")
+print()
+print("=== GENERATION CONFIG ===")
+print(f"  eos_token_id  : {tokenizer.eos_token_id}")
+print(f"  pad_token_id  : {tokenizer.pad_token_id}")
+
+# --- Greedy (baseline-style) ---
+with torch.no_grad():
+    out_greedy = model.generate(
+        **inputs,
+        max_new_tokens=128,
+        do_sample=False,
+        temperature=1.0,
+        pad_token_id=tokenizer.eos_token_id,
+    )
+greedy_ids = out_greedy[0, input_ids.shape[1]:].tolist()
+greedy_text = tokenizer.decode(greedy_ids, skip_special_tokens=True)
+print()
+print("=== GREEDY GENERATION (baseline config) ===")
+print(f"  generated_token_ids (first 50): {greedy_ids[:50]}")
+print(f"  decoded_output: {greedy_text!r}")
+
+# --- Beam=2 (S3 config) ---
+with torch.no_grad():
+    out_beam = model.generate(
+        **inputs,
+        max_new_tokens=128,
+        num_beams=2,
+        num_return_sequences=2,
+        return_dict_in_generate=True,
+        output_scores=False,
+        pad_token_id=tokenizer.eos_token_id,
+        early_stopping=True,
+    )
+for idx in range(2):
+    beam_ids = out_beam.sequences[idx, input_ids.shape[1]:].tolist()
+    beam_text = tokenizer.decode(beam_ids, skip_special_tokens=True)
+    print()
+    print(f"=== BEAM={idx} (S3 config) ===")
+    print(f"  generated_token_ids (first 50): {beam_ids[:50]}")
+    print(f"  decoded_output: {beam_text!r}")
+
+# --- Adapter config ---
+try:
+    print()
+    print("=== ADAPTER CONFIG ===")
+    print(model.peft_config)
+except Exception as e:
+    print(f"  peft_config not available: {e}")
+
+# --- Model generation_config ---
+print()
+print("=== MODEL GENERATION_CONFIG ===")
+try:
+    print(model.generation_config)
+except Exception as e:
+    print(f"  not available: {e}")
+--------------------------------------------
+
+[EXPECTED OBSERVATIONS IF BEAM IS THE CAUSE]
+  Greedy output  : "FF" or "0xFF" (correct, extractable)
+  Beam output    : "and ,,,..." or repetitive garbage
+
+[EXPECTED OBSERVATIONS IF CAUSE IS ELSEWHERE]
+  Both greedy and beam produce garbage
+  → Investigate tokenizer / adapter / model weights
+
+[FILL IN AFTER KAGGLE RUN]
+greedy_decoded_output   : _______________
+beam0_decoded_output    : _______________
+beam1_decoded_output    : _______________
+eos_token_id            : _______________
+pad_token_id            : _______________

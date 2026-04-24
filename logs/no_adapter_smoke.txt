@@ -1,0 +1,123 @@
+=====================================================================
+NO-ADAPTER SMOKE TEST
+STATUS: PENDING_KAGGLE_EXECUTION
+Purpose: Rule out adapter weight corruption as a cause of generation
+         collapse. Tests base model (no PEFT adapter) with both
+         greedy and beam=2 for QG_001.
+Run this ONLY if logs/s3_off_smoke.txt shows greedy is also broken.
+=====================================================================
+
+[PROBLEM]
+sample_id : QG_001
+problem   : "Convert 255 (decimal) to hexadecimal. Use uppercase letters."
+category  : numeral
+expected  : FF
+
+[PREREQUISITE]
+This test requires loading the base model WITHOUT applying the
+LoRA/PEFT adapter. Two approaches depending on how the notebook loads:
+
+Approach A — if model is loaded with from_pretrained + PeftModel.from_pretrained:
+  Load only base model, skip PeftModel.from_pretrained step.
+
+Approach B — if adapter is merged:
+  Not applicable; load a fresh base model instance.
+
+[DIAGNOSTIC SCRIPT TO RUN IN KAGGLE]
+--------------------------------------------
+# Approach A: Load base model only (skip adapter)
+# Adjust MODEL_PATH to match your notebook's variable
+
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# --- Load base model without adapter ---
+# Replace MODEL_PATH with your actual base model path
+MODEL_PATH = "/kaggle/input/nvidia-minitron-8b-base"  # adjust as needed
+TOKENIZER_PATH = MODEL_PATH
+
+print("=== Loading base model (no adapter) ===")
+base_tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_PATH)
+base_model = AutoModelForCausalLM.from_pretrained(
+    MODEL_PATH,
+    torch_dtype=torch.bfloat16,
+    device_map="auto",
+)
+base_model.eval()
+print(f"  model class : {type(base_model).__name__}")
+print()
+
+problem = "Convert 255 (decimal) to hexadecimal. Use uppercase letters."
+prompt = (
+    "<extra_id_0>System\n"
+    "Answer the following question precisely. Output only the final answer.\n"
+    "<extra_id_1>User\n"
+    f"{problem}\n"
+    "<extra_id_1>Assistant\n"
+)
+inputs = base_tokenizer(prompt, return_tensors="pt").to(base_model.device)
+input_ids = inputs["input_ids"]
+
+# --- Greedy (base model, no adapter) ---
+with torch.no_grad():
+    out_greedy = base_model.generate(
+        **inputs,
+        max_new_tokens=128,
+        do_sample=False,
+        temperature=1.0,
+        pad_token_id=base_tokenizer.eos_token_id,
+    )
+greedy_ids = out_greedy[0, input_ids.shape[1]:].tolist()
+greedy_text = base_tokenizer.decode(greedy_ids, skip_special_tokens=True)
+
+print("=== BASE MODEL GREEDY (no adapter) ===")
+print(f"  token_ids : {greedy_ids[:30]}")
+print(f"  decoded   : {greedy_text!r}")
+print()
+
+# --- Beam=2 (base model, no adapter) ---
+with torch.no_grad():
+    out_beam = base_model.generate(
+        **inputs,
+        max_new_tokens=128,
+        num_beams=2,
+        num_return_sequences=2,
+        return_dict_in_generate=True,
+        output_scores=False,
+        pad_token_id=base_tokenizer.eos_token_id,
+        early_stopping=True,
+    )
+for idx in range(2):
+    beam_ids = out_beam.sequences[idx, input_ids.shape[1]:].tolist()
+    beam_text = base_tokenizer.decode(beam_ids, skip_special_tokens=True)
+    print(f"=== BASE MODEL BEAM={idx} (no adapter) ===")
+    print(f"  token_ids : {beam_ids[:30]}")
+    print(f"  decoded   : {beam_text!r}")
+    print()
+
+# --- Check for SSM cache warning ---
+print("=== SSM CACHE CHECK ===")
+print("Watch for: 'NemotronHHybridDynamicCache ... None was provided'")
+print("If present above, SSM branching is confirmed broken with num_beams>1")
+--------------------------------------------
+
+[FILL IN AFTER KAGGLE RUN]
+base_greedy_decoded      : _______________
+base_beam0_decoded       : _______________
+base_beam1_decoded       : _______________
+ssm_cache_warning_seen   : _______________  (YES/NO)
+
+[INTERPRETATION MATRIX]
+
+| adapter_greedy | base_greedy | Conclusion                                    |
+|----------------|-------------|-----------------------------------------------|
+| CORRECT        | CORRECT     | Adapter OK; beam search is the only culprit   |
+| BROKEN         | CORRECT     | Adapter corrupted or prompt format mismatch   |
+| BROKEN         | BROKEN      | Base model issue or tokenizer/prompt problem  |
+| CORRECT        | BROKEN      | Should not happen; re-check base model load   |
+
+| base_greedy | base_beam | Conclusion                                         |
+|-------------|-----------|--------------------------------------------------- |
+| CORRECT     | BROKEN    | SSM+beam incompatibility confirmed at base level   |
+| CORRECT     | CORRECT   | Adapter interferes with beam; investigate peft cfg |
+| BROKEN      | BROKEN    | Model load or prompt format is wrong               |

@@ -1,0 +1,117 @@
+=====================================================================
+S3-OFF SMOKE TEST
+STATUS: PENDING_KAGGLE_EXECUTION
+Purpose: Verify that greedy (N_CANDIDATES=1, no beams) produces
+         correct output for QG_001, confirming beam search is the
+         root cause of generation collapse.
+=====================================================================
+
+[PROBLEM]
+sample_id : QG_001
+problem   : "Convert 255 (decimal) to hexadecimal. Use uppercase letters."
+category  : numeral
+expected  : FF
+
+[HYPOTHESIS]
+  num_beams=2 (S3 current) → "and ,,,..." (generation collapse)
+  num_beams=1 / greedy     → "FF" or extractable correct answer
+
+[DIAGNOSTIC SCRIPT TO RUN IN KAGGLE]
+--------------------------------------------
+# Paste this into the Kaggle notebook after model load
+# This reproduces the BASELINE generation config (b1d54ce)
+
+import torch
+
+problem = "Convert 255 (decimal) to hexadecimal. Use uppercase letters."
+prompt = (
+    "<extra_id_0>System\n"
+    "Answer the following question precisely. Output only the final answer.\n"
+    "<extra_id_1>User\n"
+    f"{problem}\n"
+    "<extra_id_1>Assistant\n"
+)
+inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+input_ids = inputs["input_ids"]
+
+print("=== S3-OFF SMOKE TEST ===")
+print(f"prompt length (tokens): {input_ids.shape[1]}")
+print()
+
+# --- Greedy N=1 (baseline config, S3-OFF) ---
+with torch.no_grad():
+    out_greedy = model.generate(
+        **inputs,
+        max_new_tokens=128,
+        do_sample=False,
+        temperature=1.0,
+        pad_token_id=tokenizer.eos_token_id,
+    )
+greedy_ids = out_greedy[0, input_ids.shape[1]:].tolist()
+greedy_text = tokenizer.decode(greedy_ids, skip_special_tokens=True)
+
+print("=== GREEDY N=1 (S3-OFF / baseline config) ===")
+print(f"  token_ids : {greedy_ids[:30]}")
+print(f"  decoded   : {greedy_text!r}")
+print()
+
+# --- Sampled N=1 (temperature=0.7 alternative) ---
+with torch.no_grad():
+    out_sampled = model.generate(
+        **inputs,
+        max_new_tokens=128,
+        do_sample=True,
+        temperature=0.7,
+        top_p=0.9,
+        pad_token_id=tokenizer.eos_token_id,
+    )
+sampled_ids = out_sampled[0, input_ids.shape[1]:].tolist()
+sampled_text = tokenizer.decode(sampled_ids, skip_special_tokens=True)
+
+print("=== SAMPLED N=1 (temperature=0.7, top_p=0.9) ===")
+print(f"  token_ids : {sampled_ids[:30]}")
+print(f"  decoded   : {sampled_text!r}")
+print()
+
+# --- Beam N=2 (S3 current — expected to collapse) ---
+with torch.no_grad():
+    out_beam = model.generate(
+        **inputs,
+        max_new_tokens=128,
+        num_beams=2,
+        num_return_sequences=2,
+        return_dict_in_generate=True,
+        output_scores=False,
+        pad_token_id=tokenizer.eos_token_id,
+        early_stopping=True,
+    )
+for idx in range(2):
+    beam_ids = out_beam.sequences[idx, input_ids.shape[1]:].tolist()
+    beam_text = tokenizer.decode(beam_ids, skip_special_tokens=True)
+    print(f"=== BEAM={idx} (S3 current — expected collapse) ===")
+    print(f"  token_ids : {beam_ids[:30]}")
+    print(f"  decoded   : {beam_text!r}")
+    print()
+
+print("=== CONCLUSION ===")
+print(f"  greedy correct?  : {'YES' if 'FF' in greedy_text.upper() else 'NO'} ({greedy_text!r})")
+print(f"  sampled correct? : {'YES' if 'FF' in sampled_text.upper() else 'NO'} ({sampled_text!r})")
+--------------------------------------------
+
+[FILL IN AFTER KAGGLE RUN]
+greedy_decoded_output    : _______________
+sampled_decoded_output   : _______________
+beam0_decoded_output     : _______________
+beam1_decoded_output     : _______________
+greedy_correct           : _______________  (YES/NO)
+sampled_correct          : _______________  (YES/NO)
+
+[INTERPRETATION]
+  If greedy_correct=YES and beam_correct=NO:
+    → Confirmed: beam search is the sole cause of generation collapse
+    → Fix: replace beam search with sequential independent runs in _run_inference_s3()
+
+  If greedy_correct=NO:
+    → Collapse is not caused by beam search alone
+    → Investigate: adapter weights, tokenizer, model load path
+    → Run logs/no_adapter_smoke.txt next
