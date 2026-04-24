@@ -91,6 +91,12 @@ EXPECTED_ARTIFACTS = [
     "/kaggle/working/predictions.jsonl",
 ]
 
+# ─── generation policy ────────────────────────────────────────────────────────
+# NemotronH is a hybrid SSM/Transformer model. SSM state cannot be branched
+# across multiple beams, causing generation collapse ("and ,,,..." garbage).
+# num_beams MUST remain 1. See reports/beam_search_ban_policy.md for analysis.
+_GENERATION_NUM_BEAMS = 1  # FROZEN — do not change
+
 # ─── answer key solvers ───────────────────────────────────────────────────────
 
 def _num(x: float) -> str:
@@ -560,6 +566,12 @@ def _try_load_model() -> Tuple[object, object]:
 def _run_inference(model, tokenizer, problem: str) -> str:
     """Run inference using Nemotron chat format."""
     import torch
+    if _GENERATION_NUM_BEAMS != 1:
+        raise RuntimeError(
+            f"[baseline] HARD FAIL: _GENERATION_NUM_BEAMS={_GENERATION_NUM_BEAMS} — "
+            "beam search is banned on NemotronH (SSM state cannot branch). "
+            "See reports/beam_search_ban_policy.md"
+        )
     # Nemotron-3 conversation format
     prompt = (
         "<extra_id_0>System\n"
@@ -573,6 +585,7 @@ def _run_inference(model, tokenizer, problem: str) -> str:
         out = model.generate(
             **inputs,
             max_new_tokens=128,
+            num_beams=_GENERATION_NUM_BEAMS,  # 1 — beam search banned, see beam_search_ban_policy.md
             do_sample=False,
             temperature=1.0,
             pad_token_id=tokenizer.eos_token_id,
@@ -727,6 +740,11 @@ def main():
     sl.log("model_load_end", f"mode={model_mode}")
 
     # ── inference loop ────────────────────────────────────────────────
+    print(
+        f"[baseline][gen_policy] num_beams={_GENERATION_NUM_BEAMS} do_sample=False "
+        "max_new_tokens=128 temperature=1.0 — beam search BANNED",
+        flush=True,
+    )
     sl.log("eval_start", f"Running evaluation: {len(samples)} samples, mode={model_mode}")
     results = []
     predictions_jsonl = []

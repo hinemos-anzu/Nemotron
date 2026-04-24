@@ -1,0 +1,60 @@
+=====================================================================
+GENERATION CONFIG GUARD — VERIFICATION LOG
+Branch : claude/fix-mamba-stub-scynC
+Base   : b1d54ce (runtime gold)
+Date   : 2026-04-24
+=====================================================================
+
+[POLICY CONSTANTS]
+_GENERATION_NUM_BEAMS = 1   (FROZEN)
+
+[GUARD LOCATION]
+File : kaggle/original-nemotron-asymmetric-svd-26041602.py
+       artifacts/kaggle/Nemotron_kaggle_bundle/kaggle/original-nemotron-asymmetric-svd-26041602.py
+
+[GUARD CODE]
+  _run_inference() raises RuntimeError immediately if _GENERATION_NUM_BEAMS != 1:
+
+    if _GENERATION_NUM_BEAMS != 1:
+        raise RuntimeError(
+            f"[baseline] HARD FAIL: _GENERATION_NUM_BEAMS={_GENERATION_NUM_BEAMS} — "
+            "beam search is banned on NemotronH (SSM state cannot branch). "
+            "See reports/beam_search_ban_policy.md"
+        )
+
+[STARTUP LOG LINE]
+  Printed once per run before the inference loop:
+
+    [baseline][gen_policy] num_beams=1 do_sample=False max_new_tokens=128 temperature=1.0 — beam search BANNED
+
+[GENERATE CALL]
+  Explicit num_beams argument in model.generate():
+
+    out = model.generate(
+        **inputs,
+        max_new_tokens=128,
+        num_beams=_GENERATION_NUM_BEAMS,  # 1 — beam search banned, see beam_search_ban_policy.md
+        do_sample=False,
+        temperature=1.0,
+        pad_token_id=tokenizer.eos_token_id,
+    )
+
+[ZIP VERIFICATION]
+  File : artifacts/kaggle/Nemotron_kaggle_bundle.zip
+  Size : 47,475 bytes
+  Entries : 18
+
+  Checks (all must be True):
+    stub NotImplementedError absent : True
+    stub rmsnorm_fn defined         : True
+    stub rms_norm_fn alias          : True
+    kg _GENERATION_NUM_BEAMS        : True
+    kg num_beams=_GENERATION_NUM_BEAMS : True
+    kg HARD FAIL present            : True
+    kg gen_policy log present       : True
+    kg num_beams=2 absent (BAD)     : True  (num_beams=2 NOT found — good)
+    kg beam_search_ban_policy ref   : True
+
+[STATUS]
+  VERIFIED — all checks pass
+  Awaiting Kaggle execution to confirm baseline 0.85 reproduction
