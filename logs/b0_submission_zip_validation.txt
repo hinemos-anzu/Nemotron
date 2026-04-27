@@ -1,0 +1,108 @@
+B0 Reproduction Run — Submission ZIP Validation Log
+====================================================
+Date prepared: 2026-04-27
+Status: HOLD — awaiting Kaggle execution
+Reference commit: fbb6621 (Recovered Baseline 0.85 freeze)
+
+------------------------------------------------------------------------
+SECTION 1: PURPOSE
+------------------------------------------------------------------------
+
+This log will record the submission asset validation for B0.
+B0 is a zero-change reproduction run.
+Expected result: identical to fbb6621 validation + LB 0.85.
+
+Baseline validation reference (from fbb6621):
+  base_model.model.model    absent   : PASS (count = 0)
+  base_model.model.backbone present  : PASS
+  .experts.w1               count    : 0
+  .experts.w2               count    : 0
+  .experts.w3               count    : 0
+  .gate_proj                count    : 0
+  .x_proj                   count    : 0
+  .in_proj                  count    : 46
+  .up_proj                  count    : 5934
+  .down_proj                count    : 5934
+  zero-shape tensors        count    : 0
+  total output tensors               : 12010
+
+------------------------------------------------------------------------
+SECTION 2: B0 KAGGLE EXECUTION LOG (TO BE FILLED)
+------------------------------------------------------------------------
+
+Run date:             — (fill after Kaggle run)
+Notebook / job ID:    — (fill after Kaggle run)
+submission.zip path:  /kaggle/working/submission.zip
+submission.zip size:  — (fill after Kaggle run)
+
+------------------------------------------------------------------------
+SECTION 3: B0 VALIDATION RESULTS (TO BE FILLED)
+------------------------------------------------------------------------
+
+Key prefix checks:
+  base_model.model.model    absent   : — (PASS / FAIL)
+  base_model.model.backbone present  : — (PASS / FAIL)
+
+Expert tensor checks:
+  .experts.w1               count    : —
+  .experts.w2               count    : —
+  .experts.w3               count    : —
+
+Projection checks:
+  .gate_proj                count    : —
+  .x_proj                   count    : —
+  .in_proj                  count    : —
+
+Unfused expert projections:
+  .up_proj                  count    : —
+  .down_proj                count    : —
+
+Shape checks:
+  zero-shape tensors        count    : —
+
+Output summary:
+  total output tensors               : —
+  submission.zip                     : — (generated / not generated)
+
+Surgery diff vs fbb6621:             : — (identical / DIFF DETECTED)
+
+------------------------------------------------------------------------
+SECTION 4: VALIDATION GATE (TO BE FILLED)
+------------------------------------------------------------------------
+
+[ ] base_model.model.model absent
+[ ] base_model.model.backbone present
+[ ] experts.w1 absent
+[ ] experts.w2 absent
+[ ] experts.w3 absent
+[ ] gate_proj absent
+[ ] x_proj absent
+[ ] in_proj present (expected: 46)
+[ ] zero-shape tensors = 0
+[ ] total tensor count = 12010
+[ ] surgery identical to fbb6621
+
+Overall gate: PENDING
+
+------------------------------------------------------------------------
+SECTION 5: KAGGLE LB RESULT (TO BE FILLED)
+------------------------------------------------------------------------
+
+Metric error:  — (YES / NO)
+LB score:      —
+Reproduced:    — (0.85 YES / NO)
+
+------------------------------------------------------------------------
+SECTION 6: DECISION (TO BE FILLED)
+------------------------------------------------------------------------
+
+Decision:  HOLD (pending execution)
+Criteria:
+  PASS  = LB 0.85 + metric error NO + all gate PASS
+  HOLD  = not yet executed
+  FAIL  = metric error OR LB < 0.85 OR any gate FAIL
+
+Next action:
+  if PASS:  proceed to B2 (up_proj: 16 → 24)
+  if HOLD:  complete Kaggle execution and update this log
+  if FAIL:  rollback to fbb6621 baseline path and diagnose
