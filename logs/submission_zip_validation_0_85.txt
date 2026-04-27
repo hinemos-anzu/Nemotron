@@ -1,0 +1,84 @@
+Submission ZIP Validation Log — Recovered Baseline 0.85
+========================================================
+Date: 2026-04-27
+Branch: claude/freeze-baseline-prep-P49Z3
+
+------------------------------------------------------------------------
+SECTION 1: KAGGLE EXECUTION SUMMARY
+------------------------------------------------------------------------
+
+Submission path:  surgery-processed adapter → submission.zip → Kaggle LB
+Baseline LB:      0.85
+Metric error:     RESOLVED (was: "Evaluation metric raised an unexpected error")
+
+Previous failure:
+  submission type: raw adapter → submission.zip
+  result:          Evaluation metric raised an unexpected error
+  root cause:      incompatible key schema (base_model.model.model, w1/w2/w3, gate_proj/x_proj)
+
+Current success:
+  submission type: surgery-processed adapter → submission.zip
+  result:          LB 0.85 — processed without error
+
+------------------------------------------------------------------------
+SECTION 2: ADAPTER SURGERY VALIDATION RESULTS
+------------------------------------------------------------------------
+
+Key prefix checks:
+  base_model.model.model    absent   : PASS  (count = 0)
+  base_model.model.backbone present  : PASS  (count > 0)
+
+Expert tensor checks:
+  .experts.w1               count    : 0     PASS
+  .experts.w2               count    : 0     PASS
+  .experts.w3               count    : 0     PASS
+
+Projection checks:
+  .gate_proj                count    : 0     PASS
+  .x_proj                   count    : 0     PASS
+  .in_proj                  count    : 46    PASS
+
+Unfused expert projections:
+  .up_proj                  count    : 5934  PASS
+  .down_proj                count    : 5934  PASS
+
+Shape checks:
+  zero-shape tensors        count    : 0     PASS
+
+Output summary:
+  total output tensors               : 12010
+  submission.zip                     : generated
+
+------------------------------------------------------------------------
+SECTION 3: VALIDATION GATE RESULT
+------------------------------------------------------------------------
+
+[ PASS ] base_model.model.model absent
+[ PASS ] base_model.model.backbone present
+[ PASS ] experts.w1 absent
+[ PASS ] experts.w2 absent
+[ PASS ] experts.w3 absent
+[ PASS ] gate_proj absent
+[ PASS ] x_proj absent
+[ PASS ] in_proj present (46 tensors)
+[ PASS ] zero-shape tensors = 0
+[ PASS ] total tensor count = 12010
+
+ALL VALIDATION CHECKS PASSED
+submission.zip approved for Kaggle submission
+
+------------------------------------------------------------------------
+SECTION 4: KAGGLE LB RESULT
+------------------------------------------------------------------------
+
+LB score:  0.85
+Status:    SUCCESS — metric error resolved
+Decision:  ADOPT_AS_RECOVERED_BASELINE
+
+------------------------------------------------------------------------
+SECTION 5: FROZEN STATUS
+------------------------------------------------------------------------
+
+This log is frozen as of 2026-04-27.
+It records the definitive validation state of Recovered Baseline 0.85.
+Do not modify this file after the freeze date.
