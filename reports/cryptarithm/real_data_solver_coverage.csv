@@ -1,0 +1,1556 @@
+problem_id,category,solver_rule,solver_predicted,solver_correct,solver_parse_ok,answer,solver_explanation
+00457d26,equation,unknown_operator_fallback,,False,False,@&,parse_error: no examples extracted from question text.
+00c032a8,equation,unknown_operator_fallback,,False,False,\^?,parse_error: no examples extracted from question text.
+00d8b3db,equation,unknown_operator_fallback,,False,True,17/,No rule matched all 3 example(s). Test case: 69 / 52 = ?
+012cab1f,equation,unknown_operator_fallback,,False,False,|@{,parse_error: no examples extracted from question text.
+0133bcec,equation,unknown_operator_fallback,,False,False,\([#,parse_error: no examples extracted from question text.
+017a871e,equation,unknown_operator_fallback,,False,False,\:,parse_error: no examples extracted from question text.
+01b2aa67,equation,unknown_operator_fallback,,False,False,+},parse_error: no examples extracted from question text.
+01cd504a,equation,unknown_operator_fallback,,False,True,6644,No rule matched all 3 example(s). Test case: 85 / 77 = ?
+01ef1e3e,equation,unknown_operator_fallback,,False,False,[](,parse_error: no examples extracted from question text.
+022c4d73,equation,unknown_operator_fallback,,False,False,!',parse_error: no examples extracted from question text.
+026106f5,equation,unknown_operator_fallback,,False,True,631,No rule matched all 1 example(s). Test case: 75 * 97 = ?
+02664ad5,equation,unknown_operator_fallback,,False,False,:}',parse_error: no examples extracted from question text.
+02902eb3,equation,unknown_operator_fallback,,False,False,>/,parse_error: no examples extracted from question text.
+02a04b59,equation,unknown_operator_fallback,,False,False,#>]#,parse_error: no examples extracted from question text.
+02b8d816,equation,unknown_operator_fallback,,False,False,>$$>,parse_error: no examples extracted from question text.
+02c15453,equation,unknown_operator_fallback,,False,False,(,parse_error: no examples extracted from question text.
+02e871e4,equation,unknown_operator_fallback,,False,False,$',parse_error: no examples extracted from question text.
+035c4c40,equation,unknown_operator_fallback,,False,False,??,parse_error: no examples extracted from question text.
+03a3437f,equation,unknown_operator_fallback,,False,False,-!,parse_error: no examples extracted from question text.
+03f07b43,equation,unknown_operator_fallback,,False,False,61,parse_error: no examples extracted from question text.
+04171e29,equation,unknown_operator_fallback,,False,True,32,No rule matched all 5 example(s). Test case: 97 - 65 = ?
+042f1e53,equation,unknown_operator_fallback,,False,False,-},parse_error: no examples extracted from question text.
+04322d27,equation,unknown_operator_fallback,,False,True,2891,No rule matched all 4 example(s). Test case: 59 $ 49 = ?
+0454705a,equation,unknown_operator_fallback,,False,False,%}|,parse_error: no examples extracted from question text.
+047c4111,equation,forward_concat,2596,True,True,2596,examples_parsed=1; rule=forward_concat; input=(25 $ 96); predicted=2596; expected=2596; match=YES
+0505ab22,equation,unknown_operator_fallback,,False,True,1499,No rule matched all 3 example(s). Test case: 20 - 75 = ?
+05109055,equation,unknown_operator_fallback,,False,False,`>%/,parse_error: no examples extracted from question text.
+053b4c86,equation,unknown_operator_fallback,,False,False,(@(],parse_error: no examples extracted from question text.
+053f4545,equation,unknown_operator_fallback,,False,True,731,No rule matched all 3 example(s). Test case: 06 @ 77 = ?
+055a8b01,equation,unknown_operator_fallback,,False,False,',parse_error: no examples extracted from question text.
+05bd2dab,equation,unknown_operator_fallback,,False,False,[)),parse_error: no examples extracted from question text.
+05c36467,equation,unknown_operator_fallback,,False,False,%%\,parse_error: no examples extracted from question text.
+06083e68,equation,unknown_operator_fallback,,False,False,:::,parse_error: no examples extracted from question text.
+0625f633,equation,unknown_operator_fallback,,False,False,@@//,parse_error: no examples extracted from question text.
+0641ef58,equation,unknown_operator_fallback,,False,True,-35,No rule matched all 2 example(s). Test case: 54 - 89 = ?
+065abaf6,equation,unknown_operator_fallback,,False,False,&/:\,parse_error: no examples extracted from question text.
+065f9dea,equation,unknown_operator_fallback,,False,False,*53,parse_error: no examples extracted from question text.
+078df00e,equation,unknown_operator_fallback,,False,True,1031,No rule matched all 2 example(s). Test case: 56 * 02 = ?
+07aef27f,equation,unknown_operator_fallback,,False,True,-62,No rule matched all 3 example(s). Test case: 22 - 84 = ?
+07b440f0,equation,unknown_operator_fallback,,False,False,@$^$,parse_error: no examples extracted from question text.
+07cbed38,equation,unknown_operator_fallback,,False,False,93,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+08111d57,equation,unknown_operator_fallback,,False,False,")""",parse_error: no examples extracted from question text.
+0819520a,equation,unknown_operator_fallback,,False,True,401,No rule matched all 5 example(s). Test case: 57 + 82 = ?
+083ed8fe,equation,unknown_operator_fallback,,False,False,<#):,parse_error: no examples extracted from question text.
+08d8d7e1,equation,unknown_operator_fallback,,False,True,88,No rule matched all 4 example(s). Test case: 65 + 23 = ?
+08f6216d,equation,unknown_operator_fallback,,False,False,|>>>,parse_error: no examples extracted from question text.
+09302769,equation,unknown_operator_fallback,,False,False,182,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+094bf548,equation,unknown_operator_fallback,,False,False,48,parse_error: no examples extracted from question text.
+09d5ee68,equation,unknown_operator_fallback,,False,False,!?'!,parse_error: no examples extracted from question text.
+0a15c5c7,equation,unknown_operator_fallback,,False,True,43,No rule matched all 2 example(s). Test case: 79 - 36 = ?
+0a2b9109,equation,unknown_operator_fallback,,False,False,-?:,parse_error: no examples extracted from question text.
+0a3ee7c7,equation,unknown_operator_fallback,,False,False,\@)],parse_error: no examples extracted from question text.
+0a94b2de,equation,unknown_operator_fallback,,False,False,@}`@,parse_error: no examples extracted from question text.
+0b0a3643,equation,unknown_operator_fallback,,False,False,"""""",parse_error: no examples extracted from question text.
+0babcba2,equation,unknown_operator_fallback,,False,False,"?""""",parse_error: no examples extracted from question text.
+0bb591e6,equation,unknown_operator_fallback,,False,False,%?<,parse_error: no examples extracted from question text.
+0bcffccd,equation,unknown_operator_fallback,,False,False,10,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+0c0683c3,equation,unknown_operator_fallback,,False,False,138,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+0c0c6320,equation,unknown_operator_fallback,,False,False,""":!|",parse_error: no examples extracted from question text.
+0c30f561,equation,unknown_operator_fallback,,False,False,-],parse_error: no examples extracted from question text.
+0c8a8a16,equation,unknown_operator_fallback,,False,False,{17,parse_error: no examples extracted from question text.
+0cd170a0,equation,forward_concat,9814,True,True,9814,examples_parsed=2; rule=forward_concat; input=(98 ^ 14); predicted=9814; expected=9814; match=YES
+0cdb0aae,equation,unknown_operator_fallback,,False,False,:::,parse_error: no examples extracted from question text.
+0cf301cf,equation,unknown_operator_fallback,,False,False,{<,parse_error: no examples extracted from question text.
+0d2e94ff,equation,unknown_operator_fallback,,False,False,}}^,parse_error: no examples extracted from question text.
+0d4b2baa,equation,unknown_operator_fallback,,False,False,:(|#,parse_error: no examples extracted from question text.
+0d542478,equation,unknown_operator_fallback,,False,False,}<,parse_error: no examples extracted from question text.
+0d90736f,equation,unknown_operator_fallback,,False,False,:,parse_error: no examples extracted from question text.
+0da1841f,equation,unknown_operator_fallback,,False,False,(\#%,parse_error: no examples extracted from question text.
+0dce4039,equation,unknown_operator_fallback,,False,False,-@/,parse_error: no examples extracted from question text.
+0dcfd566,equation,unknown_operator_fallback,,False,False,)@\{,parse_error: no examples extracted from question text.
+0df82d52,equation,unknown_operator_fallback,,False,False,"""!!",parse_error: no examples extracted from question text.
+0e009c6d,equation,unknown_operator_fallback,,False,False,`?\!,parse_error: no examples extracted from question text.
+0e2d6796,equation,unknown_operator_fallback,,False,False,|)],parse_error: no examples extracted from question text.
+0e3307ba,equation,unknown_operator_fallback,,False,False,:$,parse_error: no examples extracted from question text.
+0e375364,equation,unknown_operator_fallback,,False,False,}/@,parse_error: no examples extracted from question text.
+0f01cece,equation,unknown_operator_fallback,,False,False,@^,parse_error: no examples extracted from question text.
+0f0536de,equation,unknown_operator_fallback,,False,False,2376,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+0f6436da,equation,unknown_operator_fallback,,False,False,$?,parse_error: no examples extracted from question text.
+0f8452df,equation,unknown_operator_fallback,,False,False,159,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+0fcf912a,equation,unknown_operator_fallback,,False,False,|#&!,parse_error: no examples extracted from question text.
+0fe53bac,equation,unknown_operator_fallback,,False,False,"(""",parse_error: no examples extracted from question text.
+1019ee55,equation,unknown_operator_fallback,,False,False,1162,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+10552d46,equation,unknown_operator_fallback,,False,False,?',parse_error: no examples extracted from question text.
+108067c3,equation,unknown_operator_fallback,,False,False,$$`,parse_error: no examples extracted from question text.
+10a94678,equation,unknown_operator_fallback,,False,False,"""""\}",parse_error: no examples extracted from question text.
+10b71e8a,equation,unknown_operator_fallback,,False,False,#}:,parse_error: no examples extracted from question text.
+10d7bd1b,equation,unknown_operator_fallback,,False,True,77,No rule matched all 2 example(s). Test case: 59 - 81 = ?
+10fdae00,equation,unknown_operator_fallback,,False,True,-47,No rule matched all 3 example(s). Test case: 52 - 99 = ?
+10ff9431,equation,unknown_operator_fallback,,False,False,0271,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+111e3b8e,equation,unknown_operator_fallback,,False,True,41,No rule matched all 4 example(s). Test case: 32 ^ 10 = ?
+114a8d85,equation,unknown_operator_fallback,,False,False,221,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+1153ce4a,equation,unknown_operator_fallback,,False,False,>|>,parse_error: no examples extracted from question text.
+118889da,equation,unknown_operator_fallback,,False,False,10,parse_error: no examples extracted from question text.
+118f8c86,equation,unknown_operator_fallback,,False,False,1,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+11e77bf9,equation,unknown_operator_fallback,,False,False,@',parse_error: no examples extracted from question text.
+11f62c83,equation,unknown_operator_fallback,,False,True,951,No rule matched all 1 example(s). Test case: 98 $ 07 = ?
+11fee43b,equation,unknown_operator_fallback,,False,False,]&'[,parse_error: no examples extracted from question text.
+124db55f,equation,unknown_operator_fallback,,False,False,4447,parse_error: no examples extracted from question text.
+12734c90,equation,unknown_operator_fallback,,False,False,]@>[,parse_error: no examples extracted from question text.
+12d4a2df,equation,unknown_operator_fallback,,False,True,-6,No rule matched all 3 example(s). Test case: 68 - 08 = ?
+1322241b,equation,unknown_operator_fallback,,False,False,61,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+1342687b,equation,unknown_operator_fallback,,False,False,<%#<,parse_error: no examples extracted from question text.
+13892a7c,equation,unknown_operator_fallback,,False,True,-85,No rule matched all 4 example(s). Test case: 61 - 47 = ?
+13ad7bce,equation,unknown_operator_fallback,,False,True,-73,No rule matched all 4 example(s). Test case: 71 - 45 = ?
+141a881e,equation,unknown_operator_fallback,,False,False,//%',parse_error: no examples extracted from question text.
+144a3e31,equation,unknown_operator_fallback,,False,True,582,No rule matched all 2 example(s). Test case: 51 - 91 = ?
+1450fbc4,equation,unknown_operator_fallback,,False,False,96,parse_error: no examples extracted from question text.
+14905278,equation,unknown_operator_fallback,,False,False,5935,parse_error: no examples extracted from question text.
+1497f970,equation,unknown_operator_fallback,,False,True,671,No rule matched all 3 example(s). Test case: 28 + 49 = ?
+14d4d68e,equation,unknown_operator_fallback,,False,False,-$',parse_error: no examples extracted from question text.
+1520013c,equation,unknown_operator_fallback,,False,False,[[,parse_error: no examples extracted from question text.
+1526c35d,equation,unknown_operator_fallback,,False,False,2475,parse_error: no examples extracted from question text.
+1545b8f1,equation,unknown_operator_fallback,,False,False,!)>,parse_error: no examples extracted from question text.
+155b4694,equation,unknown_operator_fallback,,False,True,2322,No rule matched all 1 example(s). Test case: 92 + 77 = ?
+156e8c2c,equation,unknown_operator_fallback,,False,False,{[#,parse_error: no examples extracted from question text.
+157228d7,equation,unknown_operator_fallback,,False,False,35,parse_error: no examples extracted from question text.
+1580f498,equation,unknown_operator_fallback,,False,True,1554,No rule matched all 5 example(s). Test case: 05 * 19 = ?
+15950a46,equation,unknown_operator_fallback,,False,False,}@<[,parse_error: no examples extracted from question text.
+15a1d279,equation,unknown_operator_fallback,,False,True,0782,No rule matched all 3 example(s). Test case: 07 * 14 = ?
+162ff61a,equation,unknown_operator_fallback,,False,False,?!,parse_error: no examples extracted from question text.
+163db2d8,equation,unknown_operator_fallback,,False,True,851,No rule matched all 4 example(s). Test case: 58 + 37 = ?
+164b3241,equation,unknown_operator_fallback,,False,True,52,No rule matched all 3 example(s). Test case: 12 & 41 = ?
+16699d43,equation,unknown_operator_fallback,,False,True,10,No rule matched all 2 example(s). Test case: 67 + 57 = ?
+16cf827a,equation,unknown_operator_fallback,,False,False,"""[``",parse_error: no examples extracted from question text.
+16ddcf94,equation,unknown_operator_fallback,,False,False,"""^",parse_error: no examples extracted from question text.
+17093b07,equation,unknown_operator_fallback,,False,False,>{{,parse_error: no examples extracted from question text.
+175fc78a,equation,unknown_operator_fallback,,False,False,!)(',parse_error: no examples extracted from question text.
+1779c616,equation,unknown_operator_fallback,,False,False,134,parse_error: no examples extracted from question text.
+177f0c22,equation,unknown_operator_fallback,,False,False,/>,parse_error: no examples extracted from question text.
+1785b35e,equation,unknown_operator_fallback,,False,False,:^:/,parse_error: no examples extracted from question text.
+17c98340,equation,unknown_operator_fallback,,False,False,731,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+17d40290,equation,unknown_operator_fallback,,False,False,$:,parse_error: no examples extracted from question text.
+17d62f7a,equation,unknown_operator_fallback,,False,False,?|:|,parse_error: no examples extracted from question text.
+17fe003b,equation,unknown_operator_fallback,,False,False,"))""",parse_error: no examples extracted from question text.
+180ddd62,equation,unknown_operator_fallback,,False,False,]/,parse_error: no examples extracted from question text.
+18268687,equation,forward_concat,,False,False,0,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+1861c08f,equation,unknown_operator_fallback,,False,False,3001,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+18a4d39d,equation,unknown_operator_fallback,,False,False,"#$""/",parse_error: no examples extracted from question text.
+18bce168,equation,unknown_operator_fallback,,False,False,@&`{,parse_error: no examples extracted from question text.
+191ac967,equation,unknown_operator_fallback,,False,False,!>,parse_error: no examples extracted from question text.
+193c21d5,equation,unknown_operator_fallback,,False,False,}>[[,parse_error: no examples extracted from question text.
+194695e8,equation,unknown_operator_fallback,,False,False,%,parse_error: no examples extracted from question text.
+196ff375,equation,unknown_operator_fallback,,False,False,@@@,parse_error: no examples extracted from question text.
+19968602,equation,unknown_operator_fallback,,False,False,"""!`|",parse_error: no examples extracted from question text.
+19ab8087,equation,unknown_operator_fallback,,False,False,^)],parse_error: no examples extracted from question text.
+1a112a8f,equation,unknown_operator_fallback,,False,False,>?,parse_error: no examples extracted from question text.
+1a28140b,equation,unknown_operator_fallback,,False,False,%`&,parse_error: no examples extracted from question text.
+1a493b13,equation,unknown_operator_fallback,,False,False,-],parse_error: no examples extracted from question text.
+1ab54795,equation,unknown_operator_fallback,,False,False,%,parse_error: no examples extracted from question text.
+1ac66163,equation,unknown_operator_fallback,,False,False,#'[,parse_error: no examples extracted from question text.
+1b019515,equation,unknown_operator_fallback,,False,False,134,parse_error: no examples extracted from question text.
+1b3beb8f,equation,unknown_operator_fallback,,False,True,108,No rule matched all 2 example(s). Test case: 87 | 22 = ?
+1b6366af,equation,unknown_operator_fallback,,False,False,03!,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+1bc85bd9,equation,unknown_operator_fallback,,False,True,93,No rule matched all 3 example(s). Test case: 16 - 22 = ?
+1c2e9814,equation,unknown_operator_fallback,,False,False,'?},parse_error: no examples extracted from question text.
+1c4861e6,equation,unknown_operator_fallback,,False,True,993,No rule matched all 4 example(s). Test case: 12 * 91 = ?
+1c48f9aa,equation,unknown_operator_fallback,,False,False,8610,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+1c7a0091,equation,unknown_operator_fallback,,False,False,)`<@,parse_error: no examples extracted from question text.
+1cb4d524,equation,unknown_operator_fallback,,False,False,6314,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+1cce5949,equation,unknown_operator_fallback,,False,False,[?},parse_error: no examples extracted from question text.
+1d10ccaf,equation,unknown_operator_fallback,,False,False,<({&,parse_error: no examples extracted from question text.
+1d15b7e6,equation,unknown_operator_fallback,,False,False,|['{,parse_error: no examples extracted from question text.
+1d6c587d,equation,unknown_operator_fallback,,False,False,6163,parse_error: no examples extracted from question text.
+1d92ba5d,equation,unknown_operator_fallback,,False,True,511,No rule matched all 1 example(s). Test case: 59 & 02 = ?
+1da822f1,equation,unknown_operator_fallback,,False,False,598,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+1db0c6fe,equation,unknown_operator_fallback,,False,True,72,No rule matched all 3 example(s). Test case: 48 @ 23 = ?
+1e0f6678,equation,unknown_operator_fallback,,False,True,1332,No rule matched all 1 example(s). Test case: 37 * 36 = ?
+1e248995,equation,unknown_operator_fallback,,False,True,31,No rule matched all 4 example(s). Test case: 13 ^ 18 = ?
+1eaf6228,equation,unknown_operator_fallback,,False,True,483,No rule matched all 4 example(s). Test case: 42 * 61 = ?
+1ee54412,equation,unknown_operator_fallback,,False,True,72,No rule matched all 2 example(s). Test case: 58 - 85 = ?
+1ef51442,equation,unknown_operator_fallback,,False,True,8002,No rule matched all 4 example(s). Test case: 94 * 14 = ?
+1f0674b0,equation,unknown_operator_fallback,,False,True,401,No rule matched all 4 example(s). Test case: 54 + 95 = ?
+1f0fbe5f,equation,unknown_operator_fallback,,False,True,14,No rule matched all 3 example(s). Test case: 54 - 68 = ?
+1f445c5e,equation,unknown_operator_fallback,,False,False,1564,parse_error: no examples extracted from question text.
+1f4c8169,equation,unknown_operator_fallback,,False,True,051,No rule matched all 4 example(s). Test case: 86 + 28 = ?
+1f64478c,equation,unknown_operator_fallback,,False,False,:{,parse_error: no examples extracted from question text.
+1f7cf3b9,equation,unknown_operator_fallback,,False,False,\@:],parse_error: no examples extracted from question text.
+1fb37a08,equation,unknown_operator_fallback,,False,False,$!:,parse_error: no examples extracted from question text.
+2049f01d,equation,unknown_operator_fallback,,False,True,23,No rule matched all 5 example(s). Test case: 52 - 75 = ?
+207ab66f,equation,unknown_operator_fallback,,False,False,2815,parse_error: no examples extracted from question text.
+208d7838,equation,unknown_operator_fallback,,False,False,[:,parse_error: no examples extracted from question text.
+209c43f0,equation,unknown_operator_fallback,,False,True,101,No rule matched all 2 example(s). Test case: 18 ^ 84 = ?
+209d28ca,equation,unknown_operator_fallback,,False,False,171,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+20e6b2d1,equation,unknown_operator_fallback,,False,False,'',parse_error: no examples extracted from question text.
+20f0fac9,equation,unknown_operator_fallback,,False,False,2976,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+21261dc6,equation,unknown_operator_fallback,,False,True,-25,No rule matched all 1 example(s). Test case: 02 - 27 = ?
+212e792d,equation,unknown_operator_fallback,,False,False,)//,parse_error: no examples extracted from question text.
+21519be7,equation,unknown_operator_fallback,,False,True,35,No rule matched all 1 example(s). Test case: 82 @ 52 = ?
+21b90d9f,equation,unknown_operator_fallback,,False,False,){?{,parse_error: no examples extracted from question text.
+21dff465,equation,unknown_operator_fallback,,False,False,@9,parse_error: no examples extracted from question text.
+21ee162c,equation,unknown_operator_fallback,,False,False,'&{,parse_error: no examples extracted from question text.
+22288152,equation,unknown_operator_fallback,,False,False,081,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+223b2899,equation,unknown_operator_fallback,,False,False,<[{?,parse_error: no examples extracted from question text.
+224efda1,equation,forward_concat,,False,False,7,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+226cbdf8,equation,unknown_operator_fallback,,False,False,#[`,parse_error: no examples extracted from question text.
+228bd26b,equation,unknown_operator_fallback,,False,True,4012,No rule matched all 2 example(s). Test case: 40 / 12 = ?
+234e5b9e,equation,unknown_operator_fallback,,False,False,$]|&,parse_error: no examples extracted from question text.
+236a2204,equation,unknown_operator_fallback,,False,False,`>,parse_error: no examples extracted from question text.
+23800316,equation,unknown_operator_fallback,,False,False,79,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+239771fb,equation,unknown_operator_fallback,,False,False,|)},parse_error: no examples extracted from question text.
+23b0eb54,equation,unknown_operator_fallback,,False,False,]/:),parse_error: no examples extracted from question text.
+23c59364,equation,unknown_operator_fallback,,False,False,>/,parse_error: no examples extracted from question text.
+23f98595,equation,unknown_operator_fallback,,False,False,03,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+2423926d,equation,unknown_operator_fallback,,False,True,48,No rule matched all 5 example(s). Test case: 33 + 25 = ?
+24750c4a,equation,unknown_operator_fallback,,False,False,?)/{,parse_error: no examples extracted from question text.
+24b2d8eb,equation,unknown_operator_fallback,,False,False,/[:`,parse_error: no examples extracted from question text.
+24e1f1d5,equation,unknown_operator_fallback,,False,False,^#(!,parse_error: no examples extracted from question text.
+252d0997,equation,unknown_operator_fallback,,False,False,-/@,parse_error: no examples extracted from question text.
+258b796b,equation,unknown_operator_fallback,,False,False,`]|[,parse_error: no examples extracted from question text.
+25e89624,equation,unknown_operator_fallback,,False,False,"[""$",parse_error: no examples extracted from question text.
+25eb7b03,equation,unknown_operator_fallback,,False,False,23,parse_error: no examples extracted from question text.
+25ee72c3,equation,unknown_operator_fallback,,False,False,"#""<<",parse_error: no examples extracted from question text.
+25f2f2cd,equation,unknown_operator_fallback,,False,True,901,No rule matched all 3 example(s). Test case: 15 + 75 = ?
+260f20c1,equation,unknown_operator_fallback,,False,False,43,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+2613a77b,equation,unknown_operator_fallback,,False,False,"""|%<",parse_error: no examples extracted from question text.
+26168be6,equation,unknown_operator_fallback,,False,True,99,No rule matched all 2 example(s). Test case: 23 + 76 = ?
+26258d8a,equation,unknown_operator_fallback,,False,False,^,parse_error: no examples extracted from question text.
+26a2a1b8,equation,unknown_operator_fallback,,False,False,(:,parse_error: no examples extracted from question text.
+26b716ed,equation,unknown_operator_fallback,,False,False,36,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+26dbd20d,equation,unknown_operator_fallback,,False,True,0374,No rule matched all 3 example(s). Test case: 55 * 68 = ?
+26e48e98,equation,unknown_operator_fallback,,False,False,){|,parse_error: no examples extracted from question text.
+2701a005,equation,unknown_operator_fallback,,False,False,140,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+271a867c,equation,unknown_operator_fallback,,False,False,:,parse_error: no examples extracted from question text.
+272bde97,equation,reverse_concat,3114,False,True,55,examples_parsed=1; rule=reverse_concat; input=(14 + 31); predicted=3114; expected=55; match=NO
+274def88,equation,unknown_operator_fallback,,False,True,92,No rule matched all 3 example(s). Test case: 85 - 92 = ?
+275b0f39,equation,unknown_operator_fallback,,False,False,[%[<,parse_error: no examples extracted from question text.
+275db7d4,equation,unknown_operator_fallback,,False,False,6221,parse_error: no examples extracted from question text.
+27661a37,equation,unknown_operator_fallback,,False,True,741,No rule matched all 4 example(s). Test case: 96 + 77 = ?
+27cec7a9,equation,unknown_operator_fallback,,False,False,3341,parse_error: no examples extracted from question text.
+27fdca03,equation,unknown_operator_fallback,,False,False,@!,parse_error: no examples extracted from question text.
+286135d3,equation,unknown_operator_fallback,,False,True,835,No rule matched all 5 example(s). Test case: 11 @ 94 = ?
+28827821,equation,unknown_operator_fallback,,False,False,}|^,parse_error: no examples extracted from question text.
+289602f1,equation,unknown_operator_fallback,,False,False,?!,parse_error: no examples extracted from question text.
+28b0ff48,equation,unknown_operator_fallback,,False,False,'],parse_error: no examples extracted from question text.
+28f7012c,equation,unknown_operator_fallback,,False,True,7541,No rule matched all 3 example(s). Test case: 41 + 75 = ?
+294453b5,equation,unknown_operator_fallback,,False,False,&(,parse_error: no examples extracted from question text.
+2995c179,equation,unknown_operator_fallback,,False,False,(^,parse_error: no examples extracted from question text.
+2a204590,equation,unknown_operator_fallback,,False,False,&<^#,parse_error: no examples extracted from question text.
+2a25de27,equation,unknown_operator_fallback,,False,False,^^',parse_error: no examples extracted from question text.
+2a5e45a4,equation,unknown_operator_fallback,,False,False,`@},parse_error: no examples extracted from question text.
+2a73a462,equation,unknown_operator_fallback,,False,False,9302,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+2aeb5265,equation,unknown_operator_fallback,,False,True,75,No rule matched all 3 example(s). Test case: 28 - 52 = ?
+2af7134e,equation,unknown_operator_fallback,,False,True,20,No rule matched all 3 example(s). Test case: 61 + 41 = ?
+2afebbc3,equation,unknown_operator_fallback,,False,True,16,No rule matched all 4 example(s). Test case: 18 / 52 = ?
+2affe39c,equation,unknown_operator_fallback,,False,False,(],parse_error: no examples extracted from question text.
+2b1a109a,equation,unknown_operator_fallback,,False,False,-/),parse_error: no examples extracted from question text.
+2b3540d8,equation,unknown_operator_fallback,,False,False,""":$""",parse_error: no examples extracted from question text.
+2ba4b99f,equation,unknown_operator_fallback,,False,False,@:%>,parse_error: no examples extracted from question text.
+2bc2a65a,equation,unknown_operator_fallback,,False,True,701,No rule matched all 5 example(s). Test case: 14 + 66 = ?
+2bca5e57,equation,unknown_operator_fallback,,False,False,\}},parse_error: no examples extracted from question text.
+2beb5851,equation,unknown_operator_fallback,,False,False,23,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+2c017f70,equation,unknown_operator_fallback,,False,False,>/%(,parse_error: no examples extracted from question text.
+2c1cace4,equation,unknown_operator_fallback,,False,False,!},parse_error: no examples extracted from question text.
+2c8e2e06,equation,unknown_operator_fallback,,False,True,&52,No rule matched all 1 example(s). Test case: 38 & 90 = ?
+2c9a8df6,equation,unknown_operator_fallback,,False,False,-]\,parse_error: no examples extracted from question text.
+2cc274cb,equation,unknown_operator_fallback,,False,True,6821,No rule matched all 2 example(s). Test case: 21 + 68 = ?
+2cf042b9,equation,unknown_operator_fallback,,False,False,?^,parse_error: no examples extracted from question text.
+2cf587f6,equation,unknown_operator_fallback,,False,False,159,parse_error: no examples extracted from question text.
+2d3547af,equation,unknown_operator_fallback,,False,False,))^),parse_error: no examples extracted from question text.
+2d3e809c,equation,unknown_operator_fallback,,False,True,9264,No rule matched all 1 example(s). Test case: 25 * 98 = ?
+2d624cab,equation,unknown_operator_fallback,,False,False,![)],parse_error: no examples extracted from question text.
+2d7edafd,equation,unknown_operator_fallback,,False,False,:{&,parse_error: no examples extracted from question text.
+2d89386e,equation,unknown_operator_fallback,,False,False,:,parse_error: no examples extracted from question text.
+2db53c85,equation,unknown_operator_fallback,,False,False,)//:,parse_error: no examples extracted from question text.
+2dd48cac,equation,unknown_operator_fallback,,False,True,-05,No rule matched all 3 example(s). Test case: 22 - 27 = ?
+2de43f9f,equation,unknown_operator_fallback,,False,False,'%,parse_error: no examples extracted from question text.
+2e044d8e,equation,unknown_operator_fallback,,False,True,5233,No rule matched all 2 example(s). Test case: 53 @ 59 = ?
+2e1b9d84,equation,unknown_operator_fallback,,False,False,"]>""",parse_error: no examples extracted from question text.
+2e2d60b2,equation,unknown_operator_fallback,,False,True,07,No rule matched all 4 example(s). Test case: 85 + 11 = ?
+2e37e963,equation,unknown_operator_fallback,,False,True,-15,No rule matched all 4 example(s). Test case: 71 - 86 = ?
+2e550436,equation,unknown_operator_fallback,,False,False,?){,parse_error: no examples extracted from question text.
+2e8fc884,equation,unknown_operator_fallback,,False,False,<[$,parse_error: no examples extracted from question text.
+2e9639de,equation,unknown_operator_fallback,,False,True,3585,No rule matched all 3 example(s). Test case: 64 & 56 = ?
+2e9973b7,equation,unknown_operator_fallback,,False,False,)\?%,parse_error: no examples extracted from question text.
+2e9b1b9d,equation,unknown_operator_fallback,,False,False,<),parse_error: no examples extracted from question text.
+2ee39f5f,equation,unknown_operator_fallback,,False,True,0621,No rule matched all 4 example(s). Test case: 63 * 53 = ?
+2f46a715,equation,unknown_operator_fallback,,False,False,]]&|,parse_error: no examples extracted from question text.
+2f485a40,equation,forward_concat,1867,True,True,1867,examples_parsed=2; rule=forward_concat; input=(18 + 67); predicted=1867; expected=1867; match=YES
+2f5959c9,equation,unknown_operator_fallback,,False,False,7141,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+2f6531cb,equation,unknown_operator_fallback,,False,False,@::',parse_error: no examples extracted from question text.
+2f7e0e78,equation,unknown_operator_fallback,,False,True,01,No rule matched all 3 example(s). Test case: 98 - 99 = ?
+2fb20366,equation,unknown_operator_fallback,,False,False,147,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+2fc5ef5b,equation,unknown_operator_fallback,,False,False,/&\%,parse_error: no examples extracted from question text.
+2ff200fb,equation,unknown_operator_fallback,,False,False,)^,parse_error: no examples extracted from question text.
+3013265c,equation,unknown_operator_fallback,,False,True,36,No rule matched all 3 example(s). Test case: 92 + 43 = ?
+303c84ea,equation,unknown_operator_fallback,,False,False,#$$,parse_error: no examples extracted from question text.
+303fc16b,equation,unknown_operator_fallback,,False,False,'?,parse_error: no examples extracted from question text.
+305a3436,equation,unknown_operator_fallback,,False,False,&{',parse_error: no examples extracted from question text.
+30763ac0,equation,unknown_operator_fallback,,False,True,041,No rule matched all 4 example(s). Test case: 79 + 44 = ?
+30ac5c8e,equation,unknown_operator_fallback,,False,False,)#?,parse_error: no examples extracted from question text.
+30c0d5a2,equation,unknown_operator_fallback,,False,True,76,No rule matched all 3 example(s). Test case: 22 + 44 = ?
+30e4b199,equation,unknown_operator_fallback,,False,False,|:|,parse_error: no examples extracted from question text.
+31028506,equation,unknown_operator_fallback,,False,False,!\,parse_error: no examples extracted from question text.
+31051ff2,equation,unknown_operator_fallback,,False,False,||,parse_error: no examples extracted from question text.
+31678582,equation,unknown_operator_fallback,,False,False,<:),parse_error: no examples extracted from question text.
+317ec3e6,equation,unknown_operator_fallback,,False,True,14,No rule matched all 2 example(s). Test case: 18 - 86 = ?
+3185fdeb,equation,unknown_operator_fallback,,False,False,(%|[,parse_error: no examples extracted from question text.
+31b8db52,equation,unknown_operator_fallback,,False,False,<{|?,parse_error: no examples extracted from question text.
+31eb8247,equation,unknown_operator_fallback,,False,False,"""12",parse_error: no examples extracted from question text.
+320d8d2b,equation,unknown_operator_fallback,,False,False,3913,parse_error: no examples extracted from question text.
+321ef6ba,equation,unknown_operator_fallback,,False,False,"""""::",parse_error: no examples extracted from question text.
+324f918b,equation,unknown_operator_fallback,,False,True,108,No rule matched all 1 example(s). Test case: 62 - 47 = ?
+32815b79,equation,unknown_operator_fallback,,False,False,96,parse_error: no examples extracted from question text.
+32a31236,equation,unknown_operator_fallback,,False,False,44,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+32a812cd,equation,unknown_operator_fallback,,False,True,444,No rule matched all 1 example(s). Test case: 12 - 37 = ?
+32bb8ff5,equation,unknown_operator_fallback,,False,False,`&,parse_error: no examples extracted from question text.
+32e9a308,equation,unknown_operator_fallback,,False,False,124,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+33093ed0,equation,unknown_operator_fallback,,False,True,-72,No rule matched all 4 example(s). Test case: 07 - 79 = ?
+330d5ef1,equation,unknown_operator_fallback,,False,True,0864,No rule matched all 4 example(s). Test case: 27 * 56 = ?
+333d93ec,equation,unknown_operator_fallback,,False,True,7,No rule matched all 5 example(s). Test case: 44 - 73 = ?
+3383d4ec,equation,unknown_operator_fallback,,False,True,66,No rule matched all 3 example(s). Test case: 39 - 72 = ?
+339149c9,equation,unknown_operator_fallback,,False,True,3,No rule matched all 5 example(s). Test case: 32 - 62 = ?
+339c28e1,equation,unknown_operator_fallback,,False,False,&:&,parse_error: no examples extracted from question text.
+340321c8,equation,unknown_operator_fallback,,False,False,-!:,parse_error: no examples extracted from question text.
+3424f037,equation,unknown_operator_fallback,,False,False,{{|:,parse_error: no examples extracted from question text.
+347477c5,equation,unknown_operator_fallback,,False,False,1171,parse_error: no examples extracted from question text.
+348d6225,equation,unknown_operator_fallback,,False,True,98,No rule matched all 2 example(s). Test case: 55 + 43 = ?
+34b4cf96,equation,unknown_operator_fallback,,False,False,"""""^^",parse_error: no examples extracted from question text.
+34c563c5,equation,unknown_operator_fallback,,False,False,04`,parse_error: no examples extracted from question text.
+34d1d16f,equation,unknown_operator_fallback,,False,False,^|!,parse_error: no examples extracted from question text.
+3559dfc9,equation,unknown_operator_fallback,,False,False,[%[,parse_error: no examples extracted from question text.
+35658269,equation,unknown_operator_fallback,,False,False,":""#",parse_error: no examples extracted from question text.
+35661801,equation,unknown_operator_fallback,,False,False,128,parse_error: no examples extracted from question text.
+35672155,equation,unknown_operator_fallback,,False,False,4284,parse_error: no examples extracted from question text.
+356e927c,equation,unknown_operator_fallback,,False,True,421,No rule matched all 2 example(s). Test case: 24 # 28 = ?
+3580648f,equation,forward_concat,2640,True,True,2640,examples_parsed=2; rule=forward_concat; input=(26 - 40); predicted=2640; expected=2640; match=YES
+35a562bd,equation,unknown_operator_fallback,,False,False,(%(?,parse_error: no examples extracted from question text.
+35a89469,equation,unknown_operator_fallback,,False,False,9525,parse_error: no examples extracted from question text.
+35e12b34,equation,unknown_operator_fallback,,False,False,041,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+36557a2e,equation,unknown_operator_fallback,,False,False,!{}?,parse_error: no examples extracted from question text.
+3687b4bb,equation,unknown_operator_fallback,,False,False,4602,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+3687bc41,equation,forward_concat,,False,False,121,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+36b5df1b,equation,unknown_operator_fallback,,False,False,%\/,parse_error: no examples extracted from question text.
+36d2d728,equation,unknown_operator_fallback,,False,False,"""(](",parse_error: no examples extracted from question text.
+372bb422,equation,unknown_operator_fallback,,False,False,7560,parse_error: no examples extracted from question text.
+379d18b7,equation,unknown_operator_fallback,,False,False,2101,parse_error: no examples extracted from question text.
+37a2a7ff,equation,unknown_operator_fallback,,False,True,8483,No rule matched all 4 example(s). Test case: 84 / 83 = ?
+37f04e3e,equation,unknown_operator_fallback,,False,False,0092,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+3831c67a,equation,unknown_operator_fallback,,False,True,5146,No rule matched all 2 example(s). Test case: 46 * 51 = ?
+383889e1,equation,unknown_operator_fallback,,False,False,5185,parse_error: no examples extracted from question text.
+38489191,equation,unknown_operator_fallback,,False,False,/19,parse_error: no examples extracted from question text.
+386b6d03,equation,unknown_operator_fallback,,False,False,671,parse_error: no examples extracted from question text.
+38a49ff0,equation,unknown_operator_fallback,,False,False,&/>?,parse_error: no examples extracted from question text.
+38c7aca1,equation,unknown_operator_fallback,,False,False,!!]{,parse_error: no examples extracted from question text.
+38e98135,equation,unknown_operator_fallback,,False,True,5017,No rule matched all 1 example(s). Test case: 88 ^ 57 = ?
+3937cbf8,equation,unknown_operator_fallback,,False,True,46,No rule matched all 3 example(s). Test case: 84 + 61 = ?
+398478f6,equation,unknown_operator_fallback,,False,False,:[,parse_error: no examples extracted from question text.
+39a1f5e9,equation,unknown_operator_fallback,,False,False,"<"">[",parse_error: no examples extracted from question text.
+39c237c7,equation,unknown_operator_fallback,,False,False,{]``,parse_error: no examples extracted from question text.
+39fd934f,equation,unknown_operator_fallback,,False,True,-9,No rule matched all 5 example(s). Test case: 32 - 23 = ?
+3a6286e9,equation,unknown_operator_fallback,,False,False,!{!$,parse_error: no examples extracted from question text.
+3a7fe2a6,equation,unknown_operator_fallback,,False,False,&)!,parse_error: no examples extracted from question text.
+3a8a4ebc,equation,unknown_operator_fallback,,False,False,'54,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+3acfa7a4,equation,unknown_operator_fallback,,False,False,6651,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+3b206148,equation,unknown_operator_fallback,,False,False,!>?,parse_error: no examples extracted from question text.
+3b2e0cc3,equation,unknown_operator_fallback,,False,True,8,No rule matched all 5 example(s). Test case: 57 - 38 = ?
+3b51288b,equation,unknown_operator_fallback,,False,False,0592,parse_error: no examples extracted from question text.
+3b7148f6,equation,unknown_operator_fallback,,False,False,&&$,parse_error: no examples extracted from question text.
+3b7e71b2,equation,unknown_operator_fallback,,False,False,3285,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+3b97e6f6,equation,unknown_operator_fallback,,False,False,<,parse_error: no examples extracted from question text.
+3b9e33f6,equation,unknown_operator_fallback,,False,True,501,No rule matched all 2 example(s). Test case: 31 + 39 = ?
+3bf05c35,equation,unknown_operator_fallback,,False,True,641,No rule matched all 3 example(s). Test case: 86 + 87 = ?
+3bf0875d,equation,unknown_operator_fallback,,False,True,1065,No rule matched all 1 example(s). Test case: 28 / 38 = ?
+3c12aeb9,equation,unknown_operator_fallback,,False,True,321,No rule matched all 5 example(s). Test case: 27 $ 15 = ?
+3c424916,equation,unknown_operator_fallback,,False,True,9351,No rule matched all 3 example(s). Test case: 82 * 55 = ?
+3c8a4e7c,equation,unknown_operator_fallback,,False,False,615,parse_error: no examples extracted from question text.
+3cb3fd89,equation,unknown_operator_fallback,,False,False,[[&],parse_error: no examples extracted from question text.
+3cc03e36,equation,unknown_operator_fallback,,False,False,}|(#,parse_error: no examples extracted from question text.
+3cf0f8cc,equation,unknown_operator_fallback,,False,False,%,parse_error: no examples extracted from question text.
+3d2cb38a,equation,unknown_operator_fallback,,False,False,}{,parse_error: no examples extracted from question text.
+3d40a271,equation,unknown_operator_fallback,,False,False,:/>{,parse_error: no examples extracted from question text.
+3e42c4f9,equation,unknown_operator_fallback,,False,True,2,No rule matched all 5 example(s). Test case: 45 - 65 = ?
+3e5c7d9b,equation,unknown_operator_fallback,,False,False,-(|,parse_error: no examples extracted from question text.
+3ec77e36,equation,unknown_operator_fallback,,False,True,601,No rule matched all 4 example(s). Test case: 86 + 83 = ?
+3ee36e0a,equation,unknown_operator_fallback,,False,False,-51,parse_error: no examples extracted from question text.
+3ef9ab02,equation,unknown_operator_fallback,,False,False,-%],parse_error: no examples extracted from question text.
+3efc46c1,equation,unknown_operator_fallback,,False,False,3964,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+3f67321d,equation,unknown_operator_fallback,,False,False,"}""[}",parse_error: no examples extracted from question text.
+3f8d5299,equation,unknown_operator_fallback,,False,False,^\>,parse_error: no examples extracted from question text.
+3fa49035,equation,unknown_operator_fallback,,False,False,696,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+4011d4e5,equation,unknown_operator_fallback,,False,False,1483,parse_error: no examples extracted from question text.
+40ba1b6f,equation,unknown_operator_fallback,,False,False,$(,parse_error: no examples extracted from question text.
+40c53743,equation,unknown_operator_fallback,,False,True,7963,No rule matched all 4 example(s). Test case: 24 * 88 = ?
+412a209f,equation,unknown_operator_fallback,,False,False,3032,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+41554020,equation,unknown_operator_fallback,,False,False,?:,parse_error: no examples extracted from question text.
+4179c322,equation,unknown_operator_fallback,,False,True,-6,No rule matched all 4 example(s). Test case: 15 - 75 = ?
+418895f5,equation,unknown_operator_fallback,,False,True,1243,No rule matched all 3 example(s). Test case: 85 * 95 = ?
+41a8a9f0,equation,unknown_operator_fallback,,False,False,"|""`>",parse_error: no examples extracted from question text.
+41babefd,equation,unknown_operator_fallback,,False,True,127,No rule matched all 4 example(s). Test case: 41 / 85 = ?
+41e6cbfc,equation,reverse_concat,9318,True,True,9318,examples_parsed=4; rule=reverse_concat; input=(18 + 93); predicted=9318; expected=9318; match=YES
+420d5352,equation,unknown_operator_fallback,,False,False,&?,parse_error: no examples extracted from question text.
+422bc5b4,equation,unknown_operator_fallback,,False,True,7,No rule matched all 1 example(s). Test case: 80 & 87 = ?
+4245e455,equation,unknown_operator_fallback,,False,True,-92,No rule matched all 1 example(s). Test case: 49 - 56 = ?
+424b50d1,equation,unknown_operator_fallback,,False,False,/]|&,parse_error: no examples extracted from question text.
+42553fde,equation,unknown_operator_fallback,,False,False,77,parse_error: no examples extracted from question text.
+427ba852,equation,unknown_operator_fallback,,False,True,2214,No rule matched all 5 example(s). Test case: 14 * 22 = ?
+42bde66c,equation,unknown_operator_fallback,,False,False,>),parse_error: no examples extracted from question text.
+42cb233d,equation,unknown_operator_fallback,,False,True,881,No rule matched all 2 example(s). Test case: 59 + 29 = ?
+42d4dcf7,equation,unknown_operator_fallback,,False,True,91,No rule matched all 4 example(s). Test case: 65 - 57 = ?
+432b1110,equation,unknown_operator_fallback,,False,False,%[:?,parse_error: no examples extracted from question text.
+434ca68a,equation,unknown_operator_fallback,,False,False,%&&,parse_error: no examples extracted from question text.
+4350015c,equation,unknown_operator_fallback,,False,True,6461,No rule matched all 3 example(s). Test case: 16 * 72 = ?
+43674aea,equation,unknown_operator_fallback,,False,False,}#>,parse_error: no examples extracted from question text.
+43837c5b,equation,unknown_operator_fallback,,False,True,4572,No rule matched all 3 example(s). Test case: 45 * 72 = ?
+43980e72,equation,unknown_operator_fallback,,False,False,64,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+43ac121f,equation,unknown_operator_fallback,,False,False,-!],parse_error: no examples extracted from question text.
+44398869,equation,unknown_operator_fallback,,False,True,5913,No rule matched all 5 example(s). Test case: 54 ^ 17 = ?
+44a57762,equation,unknown_operator_fallback,,False,False,5011,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+44e69b7e,equation,unknown_operator_fallback,,False,False,119,parse_error: no examples extracted from question text.
+45076dc9,equation,unknown_operator_fallback,,False,False,6,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+4530aff6,equation,unknown_operator_fallback,,False,True,111,No rule matched all 1 example(s). Test case: 12 & 99 = ?
+45582be0,equation,unknown_operator_fallback,,False,True,104,No rule matched all 5 example(s). Test case: 68 / 36 = ?
+45dbc1cc,equation,unknown_operator_fallback,,False,True,-35,No rule matched all 2 example(s). Test case: 98 - 63 = ?
+45df54db,equation,unknown_operator_fallback,,False,True,64,No rule matched all 3 example(s). Test case: 56 - 91 = ?
+4612258e,equation,unknown_operator_fallback,,False,False,-[!,parse_error: no examples extracted from question text.
+4626d641,equation,unknown_operator_fallback,,False,False,"@>"")",parse_error: no examples extracted from question text.
+465a990c,equation,unknown_operator_fallback,,False,False,:,parse_error: no examples extracted from question text.
+466ad340,equation,unknown_operator_fallback,,False,False,-#$,parse_error: no examples extracted from question text.
+4684abe0,equation,unknown_operator_fallback,,False,True,-12,No rule matched all 3 example(s). Test case: 74 - 86 = ?
+468bf9fc,equation,unknown_operator_fallback,,False,False,>!%,parse_error: no examples extracted from question text.
+46c0e367,equation,unknown_operator_fallback,,False,False,##[,parse_error: no examples extracted from question text.
+46fcfa9c,equation,unknown_operator_fallback,,False,False,-@?,parse_error: no examples extracted from question text.
+47524987,equation,unknown_operator_fallback,,False,False,]?:,parse_error: no examples extracted from question text.
+47c1d8f5,equation,unknown_operator_fallback,,False,False,]%],parse_error: no examples extracted from question text.
+47c368d8,equation,unknown_operator_fallback,,False,False,851,parse_error: no examples extracted from question text.
+47dc6570,equation,unknown_operator_fallback,,False,True,22,No rule matched all 4 example(s). Test case: 48 # 26 = ?
+48194d70,equation,unknown_operator_fallback,,False,False,^[#|,parse_error: no examples extracted from question text.
+48817fa0,equation,unknown_operator_fallback,,False,False,##:%,parse_error: no examples extracted from question text.
+4895b955,equation,unknown_operator_fallback,,False,False,4796,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+48ae115d,equation,unknown_operator_fallback,,False,False,\[@`,parse_error: no examples extracted from question text.
+48c25e0e,equation,unknown_operator_fallback,,False,True,53,No rule matched all 2 example(s). Test case: 43 & 11 = ?
+491b8ea5,equation,unknown_operator_fallback,,False,False,)!,parse_error: no examples extracted from question text.
+49578b02,equation,unknown_operator_fallback,,False,True,39,No rule matched all 3 example(s). Test case: 07 + 22 = ?
+49699136,equation,forward_concat,7725,False,True,#52,examples_parsed=2; rule=forward_concat; input=(77 # 25); predicted=7725; expected=#52; match=NO
+49743645,equation,unknown_operator_fallback,,False,True,1396,No rule matched all 5 example(s). Test case: 99 * 07 = ?
+49919931,equation,unknown_operator_fallback,,False,True,32,No rule matched all 1 example(s). Test case: 42 * 59 = ?
+49ac9daf,equation,unknown_operator_fallback,,False,True,27,No rule matched all 3 example(s). Test case: 64 * 52 = ?
+49bc1b7b,equation,unknown_operator_fallback,,False,False,681,parse_error: no examples extracted from question text.
+49f6ba46,equation,unknown_operator_fallback,,False,False,``,parse_error: no examples extracted from question text.
+4a02017f,equation,unknown_operator_fallback,,False,False,'&},parse_error: no examples extracted from question text.
+4a569495,equation,unknown_operator_fallback,,False,True,47,No rule matched all 2 example(s). Test case: 53 + 04 = ?
+4a8eafe3,equation,unknown_operator_fallback,,False,True,5705,No rule matched all 4 example(s). Test case: 95 * 68 = ?
+4aabfc3b,equation,unknown_operator_fallback,,False,True,17,No rule matched all 2 example(s). Test case: 31 * 85 = ?
+4aeed935,equation,reverse_concat,1455,True,True,1455,examples_parsed=3; rule=reverse_concat; input=(55 * 14); predicted=1455; expected=1455; match=YES
+4b70414e,equation,unknown_operator_fallback,,False,True,1913,No rule matched all 4 example(s). Test case: 48 # 83 = ?
+4b7c076e,equation,unknown_operator_fallback,,False,False,#{$,parse_error: no examples extracted from question text.
+4bb8c6cd,equation,unknown_operator_fallback,,False,False,]}\!,parse_error: no examples extracted from question text.
+4bc6e6b5,equation,unknown_operator_fallback,,False,True,67,No rule matched all 5 example(s). Test case: 31 + 36 = ?
+4bfd095a,equation,unknown_operator_fallback,,False,False,{<<<,parse_error: no examples extracted from question text.
+4c19c1cb,equation,forward_concat,,False,False,0774,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+4c57a53f,equation,unknown_operator_fallback,,False,False,[4,parse_error: no examples extracted from question text.
+4c6cf9d9,equation,unknown_operator_fallback,,False,True,63,No rule matched all 2 example(s). Test case: 29 * 65 = ?
+4cb5e927,equation,unknown_operator_fallback,,False,True,-20,No rule matched all 1 example(s). Test case: 69 - 49 = ?
+4cf073bf,equation,unknown_operator_fallback,,False,True,08,No rule matched all 3 example(s). Test case: 02 + 06 = ?
+4d04ce0c,equation,unknown_operator_fallback,,False,False,&:?,parse_error: no examples extracted from question text.
+4d1ae327,equation,unknown_operator_fallback,,False,True,&42,No rule matched all 3 example(s). Test case: 22 & 64 = ?
+4d39d098,equation,unknown_operator_fallback,,False,True,7434,No rule matched all 4 example(s). Test case: 96 * 36 = ?
+4d714623,equation,unknown_operator_fallback,,False,False,107,parse_error: no examples extracted from question text.
+4d8df95b,equation,unknown_operator_fallback,,False,False,),parse_error: no examples extracted from question text.
+4d8f8111,equation,unknown_operator_fallback,,False,True,7601,No rule matched all 5 example(s). Test case: 01 + 76 = ?
+4d92de08,equation,unknown_operator_fallback,,False,True,819,No rule matched all 1 example(s). Test case: 15 # 81 = ?
+4dbec546,equation,unknown_operator_fallback,,False,True,611,No rule matched all 4 example(s). Test case: 06 + 65 = ?
+4dcc1844,equation,unknown_operator_fallback,,False,True,83,No rule matched all 4 example(s). Test case: 63 * 21 = ?
+4dcd1b40,equation,unknown_operator_fallback,,False,False,`:{,parse_error: no examples extracted from question text.
+4de466bf,equation,unknown_operator_fallback,,False,False,^[,parse_error: no examples extracted from question text.
+4df01584,equation,unknown_operator_fallback,,False,True,1935,No rule matched all 3 example(s). Test case: 35 + 19 = ?
+4e28b132,equation,unknown_operator_fallback,,False,False,:},parse_error: no examples extracted from question text.
+4e5fa95b,equation,unknown_operator_fallback,,False,False,86,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+4e67b066,equation,unknown_operator_fallback,,False,False,-{^,parse_error: no examples extracted from question text.
+4e7d1773,equation,unknown_operator_fallback,,False,False,^:?:,parse_error: no examples extracted from question text.
+4e7e64a2,equation,unknown_operator_fallback,,False,False,?&?%,parse_error: no examples extracted from question text.
+4e840a1a,equation,unknown_operator_fallback,,False,True,38,No rule matched all 3 example(s). Test case: 15 + 53 = ?
+4e8982d6,equation,unknown_operator_fallback,,False,False,/@:,parse_error: no examples extracted from question text.
+4ed6b56f,equation,unknown_operator_fallback,,False,False,"(""/""",parse_error: no examples extracted from question text.
+4f06e1c0,equation,reverse_concat,3807,False,True,351,examples_parsed=3; rule=reverse_concat; input=(07 + 38); predicted=3807; expected=351; match=NO
+4f0e0273,equation,unknown_operator_fallback,,False,True,5022,No rule matched all 2 example(s). Test case: 36 * 53 = ?
+4f2351e5,equation,unknown_operator_fallback,,False,False,<`,parse_error: no examples extracted from question text.
+4f660f4b,equation,unknown_operator_fallback,,False,False,6554,parse_error: no examples extracted from question text.
+4f8da43f,equation,unknown_operator_fallback,,False,False,46,parse_error: no examples extracted from question text.
+4fd29059,equation,unknown_operator_fallback,,False,False,'%%[,parse_error: no examples extracted from question text.
+4ff92c73,equation,unknown_operator_fallback,,False,True,62,No rule matched all 4 example(s). Test case: 75 - 38 = ?
+5039d1a0,equation,unknown_operator_fallback,,False,True,041,No rule matched all 4 example(s). Test case: 06 + 08 = ?
+50630ad8,equation,unknown_operator_fallback,,False,True,$85,No rule matched all 2 example(s). Test case: 51 $ 37 = ?
+50a694de,equation,unknown_operator_fallback,,False,False,%],parse_error: no examples extracted from question text.
+50adc396,equation,unknown_operator_fallback,,False,True,931,No rule matched all 3 example(s). Test case: 15 + 88 = ?
+50adfd54,equation,unknown_operator_fallback,,False,True,-75,No rule matched all 3 example(s). Test case: 42 - 18 = ?
+50ba5396,equation,unknown_operator_fallback,,False,False,\]]@,parse_error: no examples extracted from question text.
+50c0b6f8,equation,unknown_operator_fallback,,False,True,921,No rule matched all 5 example(s). Test case: 96 + 06 = ?
+50f8e2c0,equation,unknown_operator_fallback,,False,True,-22,No rule matched all 2 example(s). Test case: 31 - 53 = ?
+51174a9d,equation,unknown_operator_fallback,,False,False,[/<,parse_error: no examples extracted from question text.
+51181706,equation,unknown_operator_fallback,,False,False,'[)\,parse_error: no examples extracted from question text.
+5128831c,equation,unknown_operator_fallback,,False,False,&[$,parse_error: no examples extracted from question text.
+51352792,equation,unknown_operator_fallback,,False,False,"`""<`",parse_error: no examples extracted from question text.
+5144897d,equation,unknown_operator_fallback,,False,False,0,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+5186f2d7,equation,unknown_operator_fallback,,False,False,\?!$,parse_error: no examples extracted from question text.
+518d8529,equation,unknown_operator_fallback,,False,True,@75,No rule matched all 2 example(s). Test case: 91 @ 67 = ?
+518deb39,equation,unknown_operator_fallback,,False,False,$,parse_error: no examples extracted from question text.
+51da0ee1,equation,unknown_operator_fallback,,False,False,:]:,parse_error: no examples extracted from question text.
+51dafb5b,equation,unknown_operator_fallback,,False,True,9732,No rule matched all 5 example(s). Test case: 86 * 53 = ?
+52395e9a,equation,unknown_operator_fallback,,False,False,#!%\,parse_error: no examples extracted from question text.
+524cb5c6,equation,unknown_operator_fallback,,False,False,$>>\,parse_error: no examples extracted from question text.
+528b694b,equation,unknown_operator_fallback,,False,False,"""'",parse_error: no examples extracted from question text.
+528ec0d8,equation,unknown_operator_fallback,,False,True,-39,No rule matched all 1 example(s). Test case: 11 - 50 = ?
+52be4988,equation,unknown_operator_fallback,,False,False,'!,parse_error: no examples extracted from question text.
+52c62a3e,equation,reverse_concat,1292,True,True,1292,examples_parsed=3; rule=reverse_concat; input=(92 * 12); predicted=1292; expected=1292; match=YES
+52f499f4,equation,unknown_operator_fallback,,False,False,$[^%,parse_error: no examples extracted from question text.
+536d9cca,equation,unknown_operator_fallback,,False,False,&',parse_error: no examples extracted from question text.
+53b48918,equation,unknown_operator_fallback,,False,True,81,No rule matched all 4 example(s). Test case: 91 + 10 = ?
+544f0433,equation,unknown_operator_fallback,,False,False,/>)&,parse_error: no examples extracted from question text.
+54818142,equation,unknown_operator_fallback,,False,False,-<,parse_error: no examples extracted from question text.
+549f5220,equation,unknown_operator_fallback,,False,True,5548,No rule matched all 5 example(s). Test case: 48 * 55 = ?
+54c9bde5,equation,forward_concat,3064,True,True,3064,examples_parsed=2; rule=forward_concat; input=(30 - 64); predicted=3064; expected=3064; match=YES
+54dbab41,equation,unknown_operator_fallback,,False,False,|$,parse_error: no examples extracted from question text.
+54e8c553,equation,unknown_operator_fallback,,False,False,$$<<,parse_error: no examples extracted from question text.
+5501c054,equation,unknown_operator_fallback,,False,False,[#>#,parse_error: no examples extracted from question text.
+552e14d7,equation,reverse_concat,1756,True,True,1756,examples_parsed=4; rule=reverse_concat; input=(56 + 17); predicted=1756; expected=1756; match=YES
+553b3af9,equation,unknown_operator_fallback,,False,False,61%,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+5541d35c,equation,unknown_operator_fallback,,False,True,2803,No rule matched all 1 example(s). Test case: 97 * 93 = ?
+55954e3c,equation,unknown_operator_fallback,,False,True,0685,No rule matched all 3 example(s). Test case: 39 * 36 = ?
+55bc449c,equation,unknown_operator_fallback,,False,False,:<,parse_error: no examples extracted from question text.
+55f19327,equation,unknown_operator_fallback,,False,False,1,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+55f4fa64,equation,unknown_operator_fallback,,False,False,{{!?,parse_error: no examples extracted from question text.
+56343b77,equation,unknown_operator_fallback,,False,True,711,No rule matched all 4 example(s). Test case: 17 + 74 = ?
+563bf8f9,equation,unknown_operator_fallback,,False,False,-'/,parse_error: no examples extracted from question text.
+564916b5,equation,unknown_operator_fallback,,False,False,$,parse_error: no examples extracted from question text.
+5690981d,equation,unknown_operator_fallback,,False,False,-](,parse_error: no examples extracted from question text.
+56ac76c6,equation,unknown_operator_fallback,,False,False,>&{,parse_error: no examples extracted from question text.
+56c59dfd,equation,forward_concat,9674,False,True,22,examples_parsed=3; rule=forward_concat; input=(96 - 74); predicted=9674; expected=22; match=NO
+56efc838,equation,unknown_operator_fallback,,False,False,}$?(,parse_error: no examples extracted from question text.
+57712d01,equation,unknown_operator_fallback,,False,False,-/<,parse_error: no examples extracted from question text.
+5787c3d0,equation,unknown_operator_fallback,,False,True,^1,No rule matched all 1 example(s). Test case: 85 ^ 86 = ?
+579b4607,equation,unknown_operator_fallback,,False,False,16,parse_error: no examples extracted from question text.
+57c845a6,equation,unknown_operator_fallback,,False,False,]|,parse_error: no examples extracted from question text.
+57f6878e,equation,unknown_operator_fallback,,False,False,%{{,parse_error: no examples extracted from question text.
+585b3442,equation,unknown_operator_fallback,,False,True,3104,No rule matched all 2 example(s). Test case: 32 $ 97 = ?
+58b9492e,equation,unknown_operator_fallback,,False,False,1,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+58c099d2,equation,unknown_operator_fallback,,False,False,-)\,parse_error: no examples extracted from question text.
+58c4ced1,equation,unknown_operator_fallback,,False,False,9,parse_error: no examples extracted from question text.
+58eadc55,equation,unknown_operator_fallback,,False,False,!#,parse_error: no examples extracted from question text.
+58f63e94,equation,unknown_operator_fallback,,False,True,501,No rule matched all 3 example(s). Test case: 85 + 74 = ?
+58fed63a,equation,unknown_operator_fallback,,False,True,5,No rule matched all 3 example(s). Test case: 11 - 39 = ?
+592107c3,equation,forward_concat,7562,False,True,/13,examples_parsed=1; rule=forward_concat; input=(75 / 62); predicted=7562; expected=/13; match=NO
+5968bf6c,equation,unknown_operator_fallback,,False,False,"(""/^",parse_error: no examples extracted from question text.
+59733f94,equation,unknown_operator_fallback,,False,False,/,parse_error: no examples extracted from question text.
+5998ac05,equation,unknown_operator_fallback,,False,False,"""<",parse_error: no examples extracted from question text.
+599e922a,equation,unknown_operator_fallback,,False,False,>@,parse_error: no examples extracted from question text.
+59b2cbbf,equation,unknown_operator_fallback,,False,True,211,No rule matched all 3 example(s). Test case: 83 + 47 = ?
+5a0d5d2a,equation,unknown_operator_fallback,,False,True,341,No rule matched all 2 example(s). Test case: 39 + 94 = ?
+5a0d95e2,equation,unknown_operator_fallback,,False,False,/(#),parse_error: no examples extracted from question text.
+5a35e698,equation,unknown_operator_fallback,,False,False,[\),parse_error: no examples extracted from question text.
+5a3eaf6f,equation,unknown_operator_fallback,,False,False,"\{}""",parse_error: no examples extracted from question text.
+5a763686,equation,forward_concat,7495,True,True,7495,examples_parsed=1; rule=forward_concat; input=(74 & 95); predicted=7495; expected=7495; match=YES
+5a9fcf68,equation,unknown_operator_fallback,,False,False,4443,parse_error: no examples extracted from question text.
+5ad26838,equation,unknown_operator_fallback,,False,False,-{,parse_error: no examples extracted from question text.
+5aeb4ba5,equation,unknown_operator_fallback,,False,False,3985,parse_error: no examples extracted from question text.
+5b06502f,equation,unknown_operator_fallback,,False,False,1768,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+5b2523e6,equation,unknown_operator_fallback,,False,False,&&,parse_error: no examples extracted from question text.
+5b673564,equation,unknown_operator_fallback,,False,False,],parse_error: no examples extracted from question text.
+5bc9b870,equation,unknown_operator_fallback,,False,False,621,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+5bcb572e,equation,unknown_operator_fallback,,False,False,-!#,parse_error: no examples extracted from question text.
+5bd9919c,equation,unknown_operator_fallback,,False,False,]']`,parse_error: no examples extracted from question text.
+5be6a3c1,equation,unknown_operator_fallback,,False,False,}}?),parse_error: no examples extracted from question text.
+5c008804,equation,unknown_operator_fallback,,False,True,52,No rule matched all 1 example(s). Test case: 83 @ 36 = ?
+5c2ef0ae,equation,unknown_operator_fallback,,False,False,'@,parse_error: no examples extracted from question text.
+5c743e8a,equation,unknown_operator_fallback,,False,False,1755,parse_error: no examples extracted from question text.
+5c938bea,equation,unknown_operator_fallback,,False,False,27,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+5c9f274a,equation,unknown_operator_fallback,,False,False,:[``,parse_error: no examples extracted from question text.
+5ce7c6b4,equation,unknown_operator_fallback,,False,False,'>&,parse_error: no examples extracted from question text.
+5d055504,equation,unknown_operator_fallback,,False,False,99,parse_error: no examples extracted from question text.
+5d35ee2e,equation,unknown_operator_fallback,,False,False,&/{,parse_error: no examples extracted from question text.
+5d44a0b2,equation,unknown_operator_fallback,,False,True,8035,No rule matched all 3 example(s). Test case: 78 * 16 = ?
+5d786524,equation,unknown_operator_fallback,,False,False,[{%',parse_error: no examples extracted from question text.
+5d834875,equation,unknown_operator_fallback,,False,True,25,No rule matched all 1 example(s). Test case: 91 - 33 = ?
+5d89a09c,equation,unknown_operator_fallback,,False,True,0,No rule matched all 5 example(s). Test case: 78 - 78 = ?
+5d8c51ce,equation,unknown_operator_fallback,,False,True,06,No rule matched all 3 example(s). Test case: 91 + 04 = ?
+5dc0aca5,equation,unknown_operator_fallback,,False,True,3,No rule matched all 4 example(s). Test case: 15 + 12 = ?
+5e0c542f,equation,unknown_operator_fallback,,False,False,/,parse_error: no examples extracted from question text.
+5e2581b6,equation,unknown_operator_fallback,,False,False,]#,parse_error: no examples extracted from question text.
+5e4393fc,equation,unknown_operator_fallback,,False,False,"?"">""",parse_error: no examples extracted from question text.
+5e67b1a1,equation,unknown_operator_fallback,,False,False,63,parse_error: no examples extracted from question text.
+5e95a417,equation,unknown_operator_fallback,,False,False,](>?,parse_error: no examples extracted from question text.
+5e989cc5,equation,unknown_operator_fallback,,False,False,$$,parse_error: no examples extracted from question text.
+5eea60e7,equation,unknown_operator_fallback,,False,False,791,parse_error: no examples extracted from question text.
+5f4b89b7,equation,unknown_operator_fallback,,False,False,>\,parse_error: no examples extracted from question text.
+5f5227b5,equation,unknown_operator_fallback,,False,True,53@,No rule matched all 1 example(s). Test case: 06 @ 52 = ?
+5f5a73ff,equation,unknown_operator_fallback,,False,False,0897,parse_error: no examples extracted from question text.
+5f6798e1,equation,reverse_concat,7106,False,True,34,examples_parsed=1; rule=reverse_concat; input=(06 - 71); predicted=7106; expected=34; match=NO
+5f6b6ea3,equation,unknown_operator_fallback,,False,False,6,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+5f9f0ed7,equation,unknown_operator_fallback,,False,False,}/!},parse_error: no examples extracted from question text.
+5fe8d710,equation,unknown_operator_fallback,,False,True,281,No rule matched all 5 example(s). Test case: 59 + 68 = ?
+603ad93b,equation,unknown_operator_fallback,,False,True,9411,No rule matched all 4 example(s). Test case: 32 * 05 = ?
+6046d372,equation,unknown_operator_fallback,,False,False,[/,parse_error: no examples extracted from question text.
+605e1c08,equation,unknown_operator_fallback,,False,False,1020,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+60d928d0,equation,unknown_operator_fallback,,False,False,@}',parse_error: no examples extracted from question text.
+60ed3f31,equation,unknown_operator_fallback,,False,False,@%:\,parse_error: no examples extracted from question text.
+60f55291,equation,unknown_operator_fallback,,False,False,/\|?,parse_error: no examples extracted from question text.
+610bf536,equation,unknown_operator_fallback,,False,False,^,parse_error: no examples extracted from question text.
+614408ea,equation,unknown_operator_fallback,,False,True,38,No rule matched all 3 example(s). Test case: 15 * 33 = ?
+61557701,equation,unknown_operator_fallback,,False,False,|&,parse_error: no examples extracted from question text.
+61766c6f,equation,unknown_operator_fallback,,False,False,2572,parse_error: no examples extracted from question text.
+6183bab7,equation,unknown_operator_fallback,,False,False,@@,parse_error: no examples extracted from question text.
+61bbcdc3,equation,unknown_operator_fallback,,False,False,99,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+620c2521,equation,unknown_operator_fallback,,False,True,936,No rule matched all 2 example(s). Test case: 85 * 11 = ?
+62896e95,equation,unknown_operator_fallback,,False,False,]]%&,parse_error: no examples extracted from question text.
+6296c317,equation,unknown_operator_fallback,,False,False,:#<,parse_error: no examples extracted from question text.
+62fc7798,equation,unknown_operator_fallback,,False,False,}&,parse_error: no examples extracted from question text.
+63603ee7,equation,unknown_operator_fallback,,False,False,-$,parse_error: no examples extracted from question text.
+6385674a,equation,unknown_operator_fallback,,False,True,69,No rule matched all 3 example(s). Test case: 41 + 28 = ?
+638f93ca,equation,unknown_operator_fallback,,False,False,@,parse_error: no examples extracted from question text.
+6402d0ee,equation,unknown_operator_fallback,,False,False,\93,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+642c84f0,equation,unknown_operator_fallback,,False,False,{(}%,parse_error: no examples extracted from question text.
+64553a64,equation,unknown_operator_fallback,,False,False,}#',parse_error: no examples extracted from question text.
+648e2da2,equation,unknown_operator_fallback,,False,True,031,No rule matched all 3 example(s). Test case: 34 + 88 = ?
+64b2cbb6,equation,unknown_operator_fallback,,False,False,*^#,parse_error: no examples extracted from question text.
+64c53621,equation,unknown_operator_fallback,,False,False,&>'$,parse_error: no examples extracted from question text.
+64d775e5,equation,unknown_operator_fallback,,False,False,$&)<,parse_error: no examples extracted from question text.
+64fe405e,equation,unknown_operator_fallback,,False,False,1,parse_error: no examples extracted from question text.
+6548d382,equation,unknown_operator_fallback,,False,False,/\,parse_error: no examples extracted from question text.
+656cfb5f,equation,unknown_operator_fallback,,False,True,17,No rule matched all 1 example(s). Test case: 72 + 44 = ?
+657bcae9,equation,unknown_operator_fallback,,False,False,'}[,parse_error: no examples extracted from question text.
+65a61279,equation,unknown_operator_fallback,,False,False,?]$/,parse_error: no examples extracted from question text.
+65add53a,equation,unknown_operator_fallback,,False,False,]}%,parse_error: no examples extracted from question text.
+65b13ba2,equation,unknown_operator_fallback,,False,False,"]/""}",parse_error: no examples extracted from question text.
+65c52214,equation,unknown_operator_fallback,,False,True,1593,No rule matched all 3 example(s). Test case: 67 * 25 = ?
+662fd21c,equation,unknown_operator_fallback,,False,False,17,parse_error: no examples extracted from question text.
+66a0856f,equation,forward_concat,,False,False,38,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+66c5974c,equation,unknown_operator_fallback,,False,True,80,No rule matched all 5 example(s). Test case: 55 ^ 24 = ?
+672029b2,equation,unknown_operator_fallback,,False,True,31,No rule matched all 3 example(s). Test case: 98 - 83 = ?
+67995540,equation,unknown_operator_fallback,,False,False,|%@,parse_error: no examples extracted from question text.
+67de8e10,equation,unknown_operator_fallback,,False,True,071,No rule matched all 5 example(s). Test case: 69 + 47 = ?
+67f1bc8a,equation,unknown_operator_fallback,,False,True,1321,No rule matched all 1 example(s). Test case: 77 - 61 = ?
+680b66f2,equation,unknown_operator_fallback,,False,False,}$,parse_error: no examples extracted from question text.
+680f19b3,equation,unknown_operator_fallback,,False,False,9756,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+6848a4e8,equation,unknown_operator_fallback,,False,False,\$,parse_error: no examples extracted from question text.
+684de068,equation,unknown_operator_fallback,,False,False,"^""",parse_error: no examples extracted from question text.
+685be3a7,equation,unknown_operator_fallback,,False,False,>$$,parse_error: no examples extracted from question text.
+688c807b,equation,unknown_operator_fallback,,False,False,1793,parse_error: no examples extracted from question text.
+68903918,equation,unknown_operator_fallback,,False,True,4072,No rule matched all 3 example(s). Test case: 59 - 69 = ?
+6897f05e,equation,unknown_operator_fallback,,False,False,:%::,parse_error: no examples extracted from question text.
+68b9b9a8,equation,unknown_operator_fallback,,False,True,4734,No rule matched all 5 example(s). Test case: 45 * 18 = ?
+69197d42,equation,unknown_operator_fallback,,False,False,4662,parse_error: no examples extracted from question text.
+691f2f76,equation,unknown_operator_fallback,,False,True,331,No rule matched all 4 example(s). Test case: 57 + 85 = ?
+693432da,equation,unknown_operator_fallback,,False,False,|>[,parse_error: no examples extracted from question text.
+69771374,equation,unknown_operator_fallback,,False,False,#}(,parse_error: no examples extracted from question text.
+69aa57b3,equation,unknown_operator_fallback,,False,True,4472,No rule matched all 2 example(s). Test case: 72 + 44 = ?
+69eccfa5,equation,unknown_operator_fallback,,False,False,\^,parse_error: no examples extracted from question text.
+69fe4b0d,equation,unknown_operator_fallback,,False,True,59,No rule matched all 5 example(s). Test case: 70 - 11 = ?
+6a5cd9ec,equation,unknown_operator_fallback,,False,False,<[<\,parse_error: no examples extracted from question text.
+6ab04968,equation,unknown_operator_fallback,,False,False,1241,parse_error: no examples extracted from question text.
+6ac4d8c2,equation,unknown_operator_fallback,,False,True,831,No rule matched all 2 example(s). Test case: 17 + 76 = ?
+6b2e0c5a,equation,unknown_operator_fallback,,False,False,!(:',parse_error: no examples extracted from question text.
+6b393b81,equation,unknown_operator_fallback,,False,False,4046,parse_error: no examples extracted from question text.
+6b769a9e,equation,unknown_operator_fallback,,False,True,+92,No rule matched all 1 example(s). Test case: 24 + 17 = ?
+6bd59a1f,equation,unknown_operator_fallback,,False,True,7241,No rule matched all 3 example(s). Test case: 82 $ 15 = ?
+6be00ae9,equation,unknown_operator_fallback,,False,True,401,No rule matched all 3 example(s). Test case: 29 + 11 = ?
+6beb3a1f,equation,unknown_operator_fallback,,False,False,??,parse_error: no examples extracted from question text.
+6bef7413,equation,unknown_operator_fallback,,False,True,-28,No rule matched all 4 example(s). Test case: 01 - 29 = ?
+6c30f260,equation,unknown_operator_fallback,,False,False,-\(,parse_error: no examples extracted from question text.
+6c402bb7,equation,unknown_operator_fallback,,False,False,44,parse_error: no examples extracted from question text.
+6c7231ac,equation,unknown_operator_fallback,,False,False,:/#,parse_error: no examples extracted from question text.
+6c7f24b7,equation,unknown_operator_fallback,,False,False,^,parse_error: no examples extracted from question text.
+6c9e4485,equation,unknown_operator_fallback,,False,False,6253,parse_error: no examples extracted from question text.
+6cc5dafb,equation,unknown_operator_fallback,,False,False,)(,parse_error: no examples extracted from question text.
+6cd73bdd,equation,unknown_operator_fallback,,False,False,6895,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+6cdc3a9f,equation,unknown_operator_fallback,,False,False,3268,parse_error: no examples extracted from question text.
+6d3b9da4,equation,unknown_operator_fallback,,False,False,99,parse_error: no examples extracted from question text.
+6d6d0531,equation,unknown_operator_fallback,,False,False,)@/,parse_error: no examples extracted from question text.
+6d87d164,equation,unknown_operator_fallback,,False,False,'[,parse_error: no examples extracted from question text.
+6da9eb9a,equation,unknown_operator_fallback,,False,True,2664,No rule matched all 2 example(s). Test case: 36 & 47 = ?
+6dacf247,equation,unknown_operator_fallback,,False,False,/,parse_error: no examples extracted from question text.
+6dda26c0,equation,unknown_operator_fallback,,False,False,4643,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+6de4855a,equation,unknown_operator_fallback,,False,False,{|^,parse_error: no examples extracted from question text.
+6e56b39a,equation,unknown_operator_fallback,,False,False,-/#,parse_error: no examples extracted from question text.
+6e60b0c5,equation,unknown_operator_fallback,,False,False,9555,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+6e6401d7,equation,unknown_operator_fallback,,False,False,1,parse_error: no examples extracted from question text.
+6e6c2ce8,equation,unknown_operator_fallback,,False,False,[#{,parse_error: no examples extracted from question text.
+6e6f8d9c,equation,unknown_operator_fallback,,False,False,951,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+6e84a668,equation,unknown_operator_fallback,,False,False,|!^{,parse_error: no examples extracted from question text.
+6eb85496,equation,unknown_operator_fallback,,False,False,>^],parse_error: no examples extracted from question text.
+6ec54946,equation,unknown_operator_fallback,,False,False,&>[&,parse_error: no examples extracted from question text.
+6f0a117d,equation,unknown_operator_fallback,,False,False,-[\,parse_error: no examples extracted from question text.
+6f1211e2,equation,unknown_operator_fallback,,False,True,6745,No rule matched all 4 example(s). Test case: 45 * 67 = ?
+6f37d7be,equation,unknown_operator_fallback,,False,True,01,No rule matched all 2 example(s). Test case: 92 * 91 = ?
+6f8261d9,equation,unknown_operator_fallback,,False,False,\,parse_error: no examples extracted from question text.
+6f88e240,equation,unknown_operator_fallback,,False,False,445,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+6fc35fc2,equation,unknown_operator_fallback,,False,False,/}',parse_error: no examples extracted from question text.
+6fcbf5fd,equation,unknown_operator_fallback,,False,False,^`(,parse_error: no examples extracted from question text.
+7031716e,equation,unknown_operator_fallback,,False,False,{[,parse_error: no examples extracted from question text.
+705bb686,equation,unknown_operator_fallback,,False,True,5,No rule matched all 1 example(s). Test case: 54 ^ 04 = ?
+707fd23a,equation,unknown_operator_fallback,,False,True,3235,No rule matched all 1 example(s). Test case: 77 + 42 = ?
+70851afe,equation,unknown_operator_fallback,,False,False,"@""",parse_error: no examples extracted from question text.
+712fe3e4,equation,unknown_operator_fallback,,False,False,:#$#,parse_error: no examples extracted from question text.
+71310176,equation,unknown_operator_fallback,,False,False,:]{,parse_error: no examples extracted from question text.
+7137d73a,equation,unknown_operator_fallback,,False,False,"<""{",parse_error: no examples extracted from question text.
+7138d71a,equation,unknown_operator_fallback,,False,False,\,parse_error: no examples extracted from question text.
+715e0259,equation,unknown_operator_fallback,,False,False,$|?,parse_error: no examples extracted from question text.
+7195cb7b,equation,unknown_operator_fallback,,False,False,68,parse_error: no examples extracted from question text.
+71d91445,equation,unknown_operator_fallback,,False,False,},parse_error: no examples extracted from question text.
+71e02000,equation,forward_concat,3767,True,True,3767,examples_parsed=1; rule=forward_concat; input=(37 $ 67); predicted=3767; expected=3767; match=YES
+72336119,equation,unknown_operator_fallback,,False,False,3316,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+72413b7f,equation,unknown_operator_fallback,,False,False,"""/#",parse_error: no examples extracted from question text.
+7306613b,equation,unknown_operator_fallback,,False,True,251,No rule matched all 5 example(s). Test case: 79 + 65 = ?
+73e0994b,equation,unknown_operator_fallback,,False,False,)<',parse_error: no examples extracted from question text.
+743a293d,equation,unknown_operator_fallback,,False,True,2432,No rule matched all 5 example(s). Test case: 32 + 24 = ?
+744a2570,equation,unknown_operator_fallback,,False,False,5,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+7475f2bf,equation,unknown_operator_fallback,,False,False,111,parse_error: no examples extracted from question text.
+747dd795,equation,unknown_operator_fallback,,False,False,?}{,parse_error: no examples extracted from question text.
+74914eac,equation,unknown_operator_fallback,,False,False,::,parse_error: no examples extracted from question text.
+74b9b0ec,equation,unknown_operator_fallback,,False,False,16,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+74fff108,equation,unknown_operator_fallback,,False,True,49,No rule matched all 3 example(s). Test case: 65 ^ 16 = ?
+75032b65,equation,unknown_operator_fallback,,False,True,27,No rule matched all 2 example(s). Test case: 52 & 25 = ?
+750adc0c,equation,unknown_operator_fallback,,False,False,^/,parse_error: no examples extracted from question text.
+75645166,equation,reverse_concat,,False,False,7952,parse_error: no test case (= ?) found. Rule identified from examples: reverse_concat.
+758308ea,equation,unknown_operator_fallback,,False,False,(,parse_error: no examples extracted from question text.
+759cbdde,equation,unknown_operator_fallback,,False,True,211,No rule matched all 1 example(s). Test case: 84 * 46 = ?
+75c8715e,equation,unknown_operator_fallback,,False,False,`^$),parse_error: no examples extracted from question text.
+75eaf687,equation,unknown_operator_fallback,,False,False,96,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+764b4288,equation,unknown_operator_fallback,,False,True,72,No rule matched all 3 example(s). Test case: 49 ^ 76 = ?
+76587d66,equation,unknown_operator_fallback,,False,False,],parse_error: no examples extracted from question text.
+7660ac93,equation,unknown_operator_fallback,,False,False,{&,parse_error: no examples extracted from question text.
+767174e8,equation,unknown_operator_fallback,,False,False,]},parse_error: no examples extracted from question text.
+7681df4d,equation,unknown_operator_fallback,,False,False,<,parse_error: no examples extracted from question text.
+7688e06e,equation,unknown_operator_fallback,,False,True,-55,No rule matched all 5 example(s). Test case: 63 - 19 = ?
+76b79a0c,equation,unknown_operator_fallback,,False,True,2192,No rule matched all 1 example(s). Test case: 23 @ 19 = ?
+76c48f67,equation,unknown_operator_fallback,,False,False,']#|,parse_error: no examples extracted from question text.
+76d2ee64,equation,unknown_operator_fallback,,False,True,9402,No rule matched all 3 example(s). Test case: 02 + 94 = ?
+76e6f646,equation,unknown_operator_fallback,,False,False,6557,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+771472d6,equation,unknown_operator_fallback,,False,False,-'?,parse_error: no examples extracted from question text.
+77365caf,equation,unknown_operator_fallback,,False,False,$|,parse_error: no examples extracted from question text.
+773ca8a9,equation,unknown_operator_fallback,,False,True,83,No rule matched all 3 example(s). Test case: 41 ^ 42 = ?
+78002bf2,equation,unknown_operator_fallback,,False,False,:,parse_error: no examples extracted from question text.
+787a1344,equation,unknown_operator_fallback,,False,False,-[\,parse_error: no examples extracted from question text.
+791056ce,equation,unknown_operator_fallback,,False,False,4922,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+791fc537,equation,unknown_operator_fallback,,False,False,5342,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+7924844c,equation,unknown_operator_fallback,,False,False,-(,parse_error: no examples extracted from question text.
+7933172a,equation,unknown_operator_fallback,,False,False,^/&`,parse_error: no examples extracted from question text.
+794f71ed,equation,unknown_operator_fallback,,False,True,5432,No rule matched all 1 example(s). Test case: 53 * 76 = ?
+7993452d,equation,unknown_operator_fallback,,False,False,-^],parse_error: no examples extracted from question text.
+79acd75c,equation,unknown_operator_fallback,,False,False,8613,parse_error: no examples extracted from question text.
+79c81d5e,equation,unknown_operator_fallback,,False,False,:],parse_error: no examples extracted from question text.
+79f29eb5,equation,unknown_operator_fallback,,False,False,2370,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+7a17137f,equation,unknown_operator_fallback,,False,False,{{&,parse_error: no examples extracted from question text.
+7a422e17,equation,unknown_operator_fallback,,False,False,%'!,parse_error: no examples extracted from question text.
+7a5cfe3e,equation,unknown_operator_fallback,,False,False,-#>,parse_error: no examples extracted from question text.
+7a65a8eb,equation,unknown_operator_fallback,,False,False,}'#',parse_error: no examples extracted from question text.
+7a962e17,equation,unknown_operator_fallback,,False,True,361,No rule matched all 3 example(s). Test case: 77 / 68 = ?
+7a9711b1,equation,unknown_operator_fallback,,False,False,1838,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+7ac90433,equation,unknown_operator_fallback,,False,False,-23,parse_error: no examples extracted from question text.
+7b3d06f7,equation,unknown_operator_fallback,,False,False,|,parse_error: no examples extracted from question text.
+7bd5f8b9,equation,unknown_operator_fallback,,False,True,0,No rule matched all 2 example(s). Test case: 97 - 97 = ?
+7c0c5227,equation,unknown_operator_fallback,,False,True,14,No rule matched all 3 example(s). Test case: 69 - 55 = ?
+7c0e238e,equation,unknown_operator_fallback,,False,False,*^:,parse_error: no examples extracted from question text.
+7c5c7b73,equation,unknown_operator_fallback,,False,False,13,parse_error: no examples extracted from question text.
+7c6fce02,equation,unknown_operator_fallback,,False,False,:<,parse_error: no examples extracted from question text.
+7c72ad99,equation,reverse_concat,2733,True,True,2733,examples_parsed=3; rule=reverse_concat; input=(33 * 27); predicted=2733; expected=2733; match=YES
+7cac497a,equation,unknown_operator_fallback,,False,False,"%""""`",parse_error: no examples extracted from question text.
+7cb0f4c4,equation,unknown_operator_fallback,,False,False,$>@!,parse_error: no examples extracted from question text.
+7cb3089e,equation,unknown_operator_fallback,,False,False,}%,parse_error: no examples extracted from question text.
+7cc5442c,equation,unknown_operator_fallback,,False,False,>#)>,parse_error: no examples extracted from question text.
+7d279557,equation,unknown_operator_fallback,,False,False,::#,parse_error: no examples extracted from question text.
+7d8f22b1,equation,unknown_operator_fallback,,False,False,#)>|,parse_error: no examples extracted from question text.
+7d8fe3a8,equation,unknown_operator_fallback,,False,False,7644,parse_error: no examples extracted from question text.
+7d9f6c40,equation,unknown_operator_fallback,,False,True,461,No rule matched all 1 example(s). Test case: 98 + 47 = ?
+7d9ff0d2,equation,unknown_operator_fallback,,False,False,(,parse_error: no examples extracted from question text.
+7db0f3ee,equation,unknown_operator_fallback,,False,False,[]|,parse_error: no examples extracted from question text.
+7db5c1af,equation,unknown_operator_fallback,,False,False,'@:,parse_error: no examples extracted from question text.
+7db72717,equation,unknown_operator_fallback,,False,False,%),parse_error: no examples extracted from question text.
+7dbaea4b,equation,unknown_operator_fallback,,False,False,[),parse_error: no examples extracted from question text.
+7e2e8a95,equation,unknown_operator_fallback,,False,True,5419,No rule matched all 4 example(s). Test case: 63 $ 86 = ?
+7e3fefc6,equation,unknown_operator_fallback,,False,False,?,parse_error: no examples extracted from question text.
+7ecdae14,equation,unknown_operator_fallback,,False,False,4361,parse_error: no examples extracted from question text.
+7ed40e8a,equation,unknown_operator_fallback,,False,True,180,No rule matched all 2 example(s). Test case: 99 & 82 = ?
+7edceb37,equation,unknown_operator_fallback,,False,False,<$,parse_error: no examples extracted from question text.
+7eecd498,equation,unknown_operator_fallback,,False,False,^:`!,parse_error: no examples extracted from question text.
+7ef4d5d6,equation,unknown_operator_fallback,,False,False,>42,parse_error: no examples extracted from question text.
+7f21620f,equation,unknown_operator_fallback,,False,False,")""/{",parse_error: no examples extracted from question text.
+7f4fc924,equation,unknown_operator_fallback,,False,False,+[`,parse_error: no examples extracted from question text.
+7f5758a8,equation,unknown_operator_fallback,,False,False,'!!,parse_error: no examples extracted from question text.
+80082389,equation,unknown_operator_fallback,,False,False,"""{""",parse_error: no examples extracted from question text.
+8011cb24,equation,forward_concat,,False,False,:64,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+8021718e,equation,unknown_operator_fallback,,False,True,6479,No rule matched all 5 example(s). Test case: 79 * 64 = ?
+802c3591,equation,unknown_operator_fallback,,False,False,"`""""""",parse_error: no examples extracted from question text.
+8043a9d2,equation,unknown_operator_fallback,,False,False,$|\:,parse_error: no examples extracted from question text.
+806eba07,equation,unknown_operator_fallback,,False,False,321,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+808a8f62,equation,unknown_operator_fallback,,False,True,62,No rule matched all 4 example(s). Test case: 35 - 72 = ?
+8090718b,equation,unknown_operator_fallback,,False,False,:/^?,parse_error: no examples extracted from question text.
+80c4ae05,equation,unknown_operator_fallback,,False,False,"}$""",parse_error: no examples extracted from question text.
+80d44fe3,equation,unknown_operator_fallback,,False,False,72,parse_error: no examples extracted from question text.
+810028f1,equation,unknown_operator_fallback,,False,False,-&\,parse_error: no examples extracted from question text.
+811f5f56,equation,unknown_operator_fallback,,False,False,\^^@,parse_error: no examples extracted from question text.
+812c12cb,equation,unknown_operator_fallback,,False,True,-1,No rule matched all 4 example(s). Test case: 09 - 19 = ?
+8154fbdc,equation,unknown_operator_fallback,,False,False,8481,parse_error: no examples extracted from question text.
+8158a14c,equation,unknown_operator_fallback,,False,False,46,parse_error: no examples extracted from question text.
+8187e517,equation,unknown_operator_fallback,,False,False,@&#,parse_error: no examples extracted from question text.
+8193e7e0,equation,unknown_operator_fallback,,False,False,??{`,parse_error: no examples extracted from question text.
+81b6d789,equation,unknown_operator_fallback,,False,False,&)@!,parse_error: no examples extracted from question text.
+81c7ba7a,equation,unknown_operator_fallback,,False,False,?14,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+82109e34,equation,unknown_operator_fallback,,False,False,-@>,parse_error: no examples extracted from question text.
+823c8278,equation,unknown_operator_fallback,,False,False,|:,parse_error: no examples extracted from question text.
+824d4bcb,equation,unknown_operator_fallback,,False,False,64:,parse_error: no examples extracted from question text.
+826bf843,equation,unknown_operator_fallback,,False,False,-$),parse_error: no examples extracted from question text.
+82b32563,equation,unknown_operator_fallback,,False,False,^\%\,parse_error: no examples extracted from question text.
+82baf39f,equation,unknown_operator_fallback,,False,False,`<@,parse_error: no examples extracted from question text.
+82c9f137,equation,unknown_operator_fallback,,False,False,&%,parse_error: no examples extracted from question text.
+8321a400,equation,unknown_operator_fallback,,False,True,6915,No rule matched all 5 example(s). Test case: 15 * 69 = ?
+8326116b,equation,unknown_operator_fallback,,False,False,{{@?,parse_error: no examples extracted from question text.
+836d6c4a,equation,unknown_operator_fallback,,False,False,5643,parse_error: no examples extracted from question text.
+8373daa8,equation,unknown_operator_fallback,,False,True,84,No rule matched all 4 example(s). Test case: 08 - 23 = ?
+837a6ae7,equation,unknown_operator_fallback,,False,False,<>\>,parse_error: no examples extracted from question text.
+837af955,equation,unknown_operator_fallback,,False,True,0814,No rule matched all 5 example(s). Test case: 67 * 55 = ?
+8395d060,equation,unknown_operator_fallback,,False,False,?'@!,parse_error: no examples extracted from question text.
+83d7dcd4,equation,unknown_operator_fallback,,False,False,?|`,parse_error: no examples extracted from question text.
+83f2724b,equation,unknown_operator_fallback,,False,False,22,parse_error: no examples extracted from question text.
+84030b0b,equation,unknown_operator_fallback,,False,False,24,parse_error: no examples extracted from question text.
+842c7710,equation,unknown_operator_fallback,,False,False,///,parse_error: no examples extracted from question text.
+844f826c,equation,unknown_operator_fallback,,False,False,"/""",parse_error: no examples extracted from question text.
+845e726e,equation,unknown_operator_fallback,,False,True,051,No rule matched all 5 example(s). Test case: 67 + 47 = ?
+8494aad3,equation,unknown_operator_fallback,,False,False,"""`#&",parse_error: no examples extracted from question text.
+84af5d7e,equation,unknown_operator_fallback,,False,True,6155,No rule matched all 3 example(s). Test case: 55 + 61 = ?
+850dc715,equation,unknown_operator_fallback,,False,True,3395,No rule matched all 3 example(s). Test case: 96 * 68 = ?
+852a6f48,equation,unknown_operator_fallback,,False,False,\\,parse_error: no examples extracted from question text.
+852d16cb,equation,unknown_operator_fallback,,False,True,-7,No rule matched all 1 example(s). Test case: 09 - 79 = ?
+85c5b2a2,equation,unknown_operator_fallback,,False,False,$<$$,parse_error: no examples extracted from question text.
+85dc976c,equation,unknown_operator_fallback,,False,False,}:,parse_error: no examples extracted from question text.
+86088a1b,equation,unknown_operator_fallback,,False,False,&,parse_error: no examples extracted from question text.
+861cb0b2,equation,unknown_operator_fallback,,False,False,%,parse_error: no examples extracted from question text.
+861cb154,equation,unknown_operator_fallback,,False,False,2271,parse_error: no examples extracted from question text.
+865eab39,equation,unknown_operator_fallback,,False,False,#$,parse_error: no examples extracted from question text.
+865eca43,equation,unknown_operator_fallback,,False,False,',parse_error: no examples extracted from question text.
+867d9b19,equation,unknown_operator_fallback,,False,False,$#,parse_error: no examples extracted from question text.
+86ccbdf7,equation,unknown_operator_fallback,,False,False,:|,parse_error: no examples extracted from question text.
+86cda2ec,equation,unknown_operator_fallback,,False,True,13,No rule matched all 3 example(s). Test case: 26 - 39 = ?
+8753cdcc,equation,unknown_operator_fallback,,False,False,"'""""",parse_error: no examples extracted from question text.
+875ddb60,equation,unknown_operator_fallback,,False,False,"""<",parse_error: no examples extracted from question text.
+87711597,equation,unknown_operator_fallback,,False,False,01,parse_error: no examples extracted from question text.
+878c843c,equation,unknown_operator_fallback,,False,True,35,No rule matched all 2 example(s). Test case: 80 / 45 = ?
+87a89786,equation,unknown_operator_fallback,,False,True,17,No rule matched all 3 example(s). Test case: 53 + 53 = ?
+87a902eb,equation,unknown_operator_fallback,,False,True,047,No rule matched all 3 example(s). Test case: 75 * 31 = ?
+88b43464,equation,unknown_operator_fallback,,False,True,5311,No rule matched all 5 example(s). Test case: 11 + 53 = ?
+88c93c2c,equation,unknown_operator_fallback,,False,True,2842,No rule matched all 4 example(s). Test case: 43 * 37 = ?
+88fe5a52,equation,unknown_operator_fallback,,False,True,8065,No rule matched all 4 example(s). Test case: 97 * 17 = ?
+8916a10d,equation,unknown_operator_fallback,,False,False,::,parse_error: no examples extracted from question text.
+891942ba,equation,unknown_operator_fallback,,False,True,03,No rule matched all 4 example(s). Test case: 85 - 88 = ?
+893ffb06,equation,unknown_operator_fallback,,False,False,-@',parse_error: no examples extracted from question text.
+8962872b,equation,unknown_operator_fallback,,False,False,%`&,parse_error: no examples extracted from question text.
+89780a3c,equation,unknown_operator_fallback,,False,False,128,parse_error: no examples extracted from question text.
+898bc85a,equation,unknown_operator_fallback,,False,False,^[[,parse_error: no examples extracted from question text.
+899e7ce8,equation,unknown_operator_fallback,,False,True,1@,No rule matched all 3 example(s). Test case: 33 @ 23 = ?
+899e9abc,equation,unknown_operator_fallback,,False,False,"[""",parse_error: no examples extracted from question text.
+8a0c1aab,equation,unknown_operator_fallback,,False,False,<,parse_error: no examples extracted from question text.
+8a15edaa,equation,unknown_operator_fallback,,False,False,%\,parse_error: no examples extracted from question text.
+8a1bdd48,equation,unknown_operator_fallback,,False,False,`\&[,parse_error: no examples extracted from question text.
+8a800607,equation,unknown_operator_fallback,,False,False,2,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+8ae8e12a,equation,unknown_operator_fallback,,False,True,9,No rule matched all 3 example(s). Test case: 08 - 17 = ?
+8b1af00e,equation,unknown_operator_fallback,,False,False,%%%&,parse_error: no examples extracted from question text.
+8b7c2ea4,equation,unknown_operator_fallback,,False,False,][@,parse_error: no examples extracted from question text.
+8bc66fd7,equation,unknown_operator_fallback,,False,True,7432,No rule matched all 4 example(s). Test case: 64 * 15 = ?
+8bc6a26c,equation,unknown_operator_fallback,,False,True,38,No rule matched all 2 example(s). Test case: 12 # 26 = ?
+8bd4b4c8,equation,unknown_operator_fallback,,False,False,??[,parse_error: no examples extracted from question text.
+8bebef83,equation,unknown_operator_fallback,,False,False,3388,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+8c1529e1,equation,unknown_operator_fallback,,False,True,-52,No rule matched all 2 example(s). Test case: 65 - 18 = ?
+8c4f70b6,equation,unknown_operator_fallback,,False,False,-@%,parse_error: no examples extracted from question text.
+8c6a158e,equation,unknown_operator_fallback,,False,False,}30,parse_error: no examples extracted from question text.
+8ca27f6f,equation,unknown_operator_fallback,,False,False,(]%/,parse_error: no examples extracted from question text.
+8d2546a5,equation,unknown_operator_fallback,,False,True,1211,No rule matched all 3 example(s). Test case: 12 - 11 = ?
+8d652f91,equation,unknown_operator_fallback,,False,True,4,No rule matched all 5 example(s). Test case: 97 - 57 = ?
+8d9a062b,equation,unknown_operator_fallback,,False,False,^!,parse_error: no examples extracted from question text.
+8dac3984,equation,unknown_operator_fallback,,False,False,:!:|,parse_error: no examples extracted from question text.
+8dea05d7,equation,unknown_operator_fallback,,False,True,3907,No rule matched all 4 example(s). Test case: 07 + 39 = ?
+8df3daad,equation,forward_concat,4511,False,True,34,examples_parsed=3; rule=forward_concat; input=(45 | 11); predicted=4511; expected=34; match=NO
+8e169174,equation,unknown_operator_fallback,,False,True,527,No rule matched all 2 example(s). Test case: 48 / 11 = ?
+8e359dc8,equation,unknown_operator_fallback,,False,True,031,No rule matched all 3 example(s). Test case: 37 ^ 75 = ?
+8e3e4928,equation,unknown_operator_fallback,,False,False,5,parse_error: no examples extracted from question text.
+8e411cc7,equation,unknown_operator_fallback,,False,False,]]],parse_error: no examples extracted from question text.
+8e53b548,equation,unknown_operator_fallback,,False,False,|'',parse_error: no examples extracted from question text.
+8e56a42e,equation,unknown_operator_fallback,,False,False,%/<>,parse_error: no examples extracted from question text.
+8e6d01f1,equation,unknown_operator_fallback,,False,False,{},parse_error: no examples extracted from question text.
+8eac8f69,equation,unknown_operator_fallback,,False,True,885,No rule matched all 2 example(s). Test case: 21 + 94 = ?
+8f1af066,equation,unknown_operator_fallback,,False,False,-`[,parse_error: no examples extracted from question text.
+8fad338f,equation,unknown_operator_fallback,,False,True,4751,No rule matched all 1 example(s). Test case: 72 - 66 = ?
+8fdf7ccf,equation,unknown_operator_fallback,,False,False,<$$%,parse_error: no examples extracted from question text.
+8ff1151c,equation,unknown_operator_fallback,,False,False,"&(""&",parse_error: no examples extracted from question text.
+902da958,equation,unknown_operator_fallback,,False,True,761,No rule matched all 1 example(s). Test case: 38 / 48 = ?
+904e3a54,equation,unknown_operator_fallback,,False,False,66,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9081e954,equation,unknown_operator_fallback,,False,False,}{#,parse_error: no examples extracted from question text.
+90d57388,equation,unknown_operator_fallback,,False,True,2615,No rule matched all 5 example(s). Test case: 15 + 26 = ?
+90f00d9b,equation,unknown_operator_fallback,,False,False,{#,parse_error: no examples extracted from question text.
+90feb0c5,equation,unknown_operator_fallback,,False,False,:<],parse_error: no examples extracted from question text.
+912c6ea5,equation,unknown_operator_fallback,,False,False,071,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+912d2b79,equation,unknown_operator_fallback,,False,True,901,No rule matched all 5 example(s). Test case: 08 + 03 = ?
+912f9786,equation,unknown_operator_fallback,,False,False,^/,parse_error: no examples extracted from question text.
+913b2d7f,equation,unknown_operator_fallback,,False,False,103,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+913fdf86,equation,unknown_operator_fallback,,False,True,15,No rule matched all 2 example(s). Test case: 72 + 32 = ?
+91488dc9,equation,unknown_operator_fallback,,False,False,3431,parse_error: no examples extracted from question text.
+91a0e345,equation,unknown_operator_fallback,,False,False,(`]',parse_error: no examples extracted from question text.
+91b34547,equation,reverse_concat,4126,False,True,-84,examples_parsed=2; rule=reverse_concat; input=(26 - 41); predicted=4126; expected=-84; match=NO
+91b42a45,equation,unknown_operator_fallback,,False,False,170,parse_error: no examples extracted from question text.
+91e9dc52,equation,unknown_operator_fallback,,False,False,$#)#,parse_error: no examples extracted from question text.
+92135360,equation,unknown_operator_fallback,,False,False,$!$?,parse_error: no examples extracted from question text.
+921da788,equation,unknown_operator_fallback,,False,True,5403,No rule matched all 3 example(s). Test case: 53 | 78 = ?
+923ac2b5,equation,unknown_operator_fallback,,False,False,#'<@,parse_error: no examples extracted from question text.
+9243dd78,equation,unknown_operator_fallback,,False,False,"""<",parse_error: no examples extracted from question text.
+92471ca4,equation,unknown_operator_fallback,,False,True,36,No rule matched all 3 example(s). Test case: 02 - 38 = ?
+9250a0a8,equation,unknown_operator_fallback,,False,True,3,No rule matched all 2 example(s). Test case: 57 @ 18 = ?
+92e320c9,equation,unknown_operator_fallback,,False,False,3511,parse_error: no examples extracted from question text.
+9346686a,equation,unknown_operator_fallback,,False,False,:(,parse_error: no examples extracted from question text.
+93481650,equation,unknown_operator_fallback,,False,True,04,No rule matched all 5 example(s). Test case: 42 + 61 = ?
+936b3ae5,equation,forward_concat,,False,False,14>,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+937c06c5,equation,unknown_operator_fallback,,False,False,1,parse_error: no examples extracted from question text.
+93c9b36b,equation,unknown_operator_fallback,,False,False,>^[,parse_error: no examples extracted from question text.
+93d1c7eb,equation,unknown_operator_fallback,,False,False,0154,parse_error: no examples extracted from question text.
+93e6d0c0,equation,unknown_operator_fallback,,False,False,^<,parse_error: no examples extracted from question text.
+93f3ae6b,equation,unknown_operator_fallback,,False,False,701,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+940df3f4,equation,unknown_operator_fallback,,False,False,5102,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+94367b1d,equation,unknown_operator_fallback,,False,False,|',parse_error: no examples extracted from question text.
+945c151e,equation,unknown_operator_fallback,,False,True,461,No rule matched all 4 example(s). Test case: 38 + 08 = ?
+9461b22b,equation,unknown_operator_fallback,,False,False,3,parse_error: no examples extracted from question text.
+948e5474,equation,unknown_operator_fallback,,False,False,-&,parse_error: no examples extracted from question text.
+94a8fe23,equation,unknown_operator_fallback,,False,False,(\%,parse_error: no examples extracted from question text.
+94b3156f,equation,unknown_operator_fallback,,False,False,)'',parse_error: no examples extracted from question text.
+94b92001,equation,unknown_operator_fallback,,False,True,801,No rule matched all 2 example(s). Test case: 95 + 05 = ?
+94bf323a,equation,unknown_operator_fallback,,False,True,671,No rule matched all 5 example(s). Test case: 58 + 19 = ?
+94e41495,equation,unknown_operator_fallback,,False,False,-|,parse_error: no examples extracted from question text.
+95353c23,equation,unknown_operator_fallback,,False,False,<)<|,parse_error: no examples extracted from question text.
+957c70fd,equation,unknown_operator_fallback,,False,True,-7,No rule matched all 4 example(s). Test case: 07 - 77 = ?
+95afbb5f,equation,unknown_operator_fallback,,False,False,4560,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+95d8ff2c,equation,unknown_operator_fallback,,False,False,651,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+95def4c4,equation,unknown_operator_fallback,,False,False,\|,parse_error: no examples extracted from question text.
+9610985a,equation,unknown_operator_fallback,,False,False,-22,parse_error: no examples extracted from question text.
+96115336,equation,unknown_operator_fallback,,False,False,@!<<,parse_error: no examples extracted from question text.
+9634f949,equation,unknown_operator_fallback,,False,False,^!^,parse_error: no examples extracted from question text.
+963bdc67,equation,unknown_operator_fallback,,False,False,9973,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+963e85bb,equation,unknown_operator_fallback,,False,True,76,No rule matched all 4 example(s). Test case: 52 $ 24 = ?
+966c1f9f,equation,unknown_operator_fallback,,False,True,66,No rule matched all 1 example(s). Test case: 31 + 45 = ?
+969a6b00,equation,unknown_operator_fallback,,False,False,?!?>,parse_error: no examples extracted from question text.
+96e8be73,equation,unknown_operator_fallback,,False,False,(!],parse_error: no examples extracted from question text.
+96efb93a,equation,unknown_operator_fallback,,False,False,61,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9760032a,equation,reverse_concat,9372,True,True,9372,examples_parsed=2; rule=reverse_concat; input=(72 + 93); predicted=9372; expected=9372; match=YES
+9769bade,equation,unknown_operator_fallback,,False,False,5163,parse_error: no examples extracted from question text.
+979071a0,equation,unknown_operator_fallback,,False,False,))<,parse_error: no examples extracted from question text.
+97abca56,equation,unknown_operator_fallback,,False,False,`#::,parse_error: no examples extracted from question text.
+97c04f50,equation,unknown_operator_fallback,,False,False,"`#""&",parse_error: no examples extracted from question text.
+97d6db7a,equation,unknown_operator_fallback,,False,False,\[%^,parse_error: no examples extracted from question text.
+97dee6aa,equation,unknown_operator_fallback,,False,True,71,No rule matched all 5 example(s). Test case: 74 - 03 = ?
+982c0b42,equation,unknown_operator_fallback,,False,False,^}|%,parse_error: no examples extracted from question text.
+98a2636e,equation,unknown_operator_fallback,,False,True,001,No rule matched all 3 example(s). Test case: 36 + 73 = ?
+98bb54f7,equation,unknown_operator_fallback,,False,True,5846,No rule matched all 5 example(s). Test case: 96 * 49 = ?
+98eed496,equation,unknown_operator_fallback,,False,False,^[}`,parse_error: no examples extracted from question text.
+9925be81,equation,unknown_operator_fallback,,False,False,@}]),parse_error: no examples extracted from question text.
+9935aa11,equation,unknown_operator_fallback,,False,False,-`#,parse_error: no examples extracted from question text.
+99b7018f,equation,unknown_operator_fallback,,False,False,>\:,parse_error: no examples extracted from question text.
+99cc2e07,equation,reverse_concat,1522,False,True,/92,examples_parsed=1; rule=reverse_concat; input=(22 / 15); predicted=1522; expected=/92; match=NO
+99d6a3b5,equation,unknown_operator_fallback,,False,False,?()<,parse_error: no examples extracted from question text.
+99e2cf41,equation,unknown_operator_fallback,,False,True,4415,No rule matched all 4 example(s). Test case: 15 + 44 = ?
+9a0daca9,equation,unknown_operator_fallback,,False,False,"/"">|",parse_error: no examples extracted from question text.
+9a19fc2d,equation,unknown_operator_fallback,,False,False,#>[,parse_error: no examples extracted from question text.
+9a4f2f47,equation,unknown_operator_fallback,,False,False,('^,parse_error: no examples extracted from question text.
+9a5b6b28,equation,unknown_operator_fallback,,False,False,^22,parse_error: no examples extracted from question text.
+9a9f6025,equation,unknown_operator_fallback,,False,True,-56,No rule matched all 3 example(s). Test case: 03 - 59 = ?
+9aa48392,equation,reverse_concat,6658,False,True,151,examples_parsed=3; rule=reverse_concat; input=(58 + 66); predicted=6658; expected=151; match=NO
+9aa8dc92,equation,unknown_operator_fallback,,False,False,/#</,parse_error: no examples extracted from question text.
+9ae3b78e,equation,unknown_operator_fallback,,False,True,5214,No rule matched all 3 example(s). Test case: 57 @ 55 = ?
+9ae663c3,equation,unknown_operator_fallback,,False,False,:,parse_error: no examples extracted from question text.
+9afe43b4,equation,unknown_operator_fallback,,False,False,//(},parse_error: no examples extracted from question text.
+9b1ea308,equation,unknown_operator_fallback,,False,True,261,No rule matched all 1 example(s). Test case: 99 | 36 = ?
+9b458fbc,equation,forward_concat,,False,False,39,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+9b4cffb2,equation,unknown_operator_fallback,,False,False,&@<,parse_error: no examples extracted from question text.
+9b820b4e,equation,unknown_operator_fallback,,False,False,4419,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9b9e024b,equation,unknown_operator_fallback,,False,True,421,No rule matched all 1 example(s). Test case: 23 # 29 = ?
+9bfca34c,equation,unknown_operator_fallback,,False,False,|>`,parse_error: no examples extracted from question text.
+9c697047,equation,unknown_operator_fallback,,False,False,`:,parse_error: no examples extracted from question text.
+9c8eef89,equation,unknown_operator_fallback,,False,False,1728,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9c91b226,equation,unknown_operator_fallback,,False,False,03,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9cb03277,equation,unknown_operator_fallback,,False,False,26,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9cc02bc1,equation,unknown_operator_fallback,,False,False,:#:',parse_error: no examples extracted from question text.
+9ceba70a,equation,unknown_operator_fallback,,False,False,##%,parse_error: no examples extracted from question text.
+9d20c8a7,equation,unknown_operator_fallback,,False,False,]]]},parse_error: no examples extracted from question text.
+9d4ae6b8,equation,unknown_operator_fallback,,False,True,16,No rule matched all 2 example(s). Test case: 51 - 35 = ?
+9d575da5,equation,unknown_operator_fallback,,False,True,111,No rule matched all 4 example(s). Test case: 32 + 88 = ?
+9d68ef62,equation,unknown_operator_fallback,,False,False,83(,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9d71fece,equation,unknown_operator_fallback,,False,False,"""\",parse_error: no examples extracted from question text.
+9d7af57b,equation,unknown_operator_fallback,,False,False,89,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9dae880f,equation,unknown_operator_fallback,,False,False,))[,parse_error: no examples extracted from question text.
+9dd8adaa,equation,unknown_operator_fallback,,False,True,4308,No rule matched all 4 example(s). Test case: 08 * 43 = ?
+9dfe5ac9,equation,unknown_operator_fallback,,False,False,"'\%""",parse_error: no examples extracted from question text.
+9e5d97de,equation,unknown_operator_fallback,,False,True,79,No rule matched all 2 example(s). Test case: 48 - 31 = ?
+9eaae1f1,equation,unknown_operator_fallback,,False,False,/\,parse_error: no examples extracted from question text.
+9eacc9a2,equation,unknown_operator_fallback,,False,False,%?}%,parse_error: no examples extracted from question text.
+9eccbafd,equation,unknown_operator_fallback,,False,False,@>,parse_error: no examples extracted from question text.
+9ef98294,equation,unknown_operator_fallback,,False,False,64],parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+9f1015a1,equation,unknown_operator_fallback,,False,False,-$\,parse_error: no examples extracted from question text.
+9f1ff166,equation,unknown_operator_fallback,,False,False,[,parse_error: no examples extracted from question text.
+9f2fae58,equation,unknown_operator_fallback,,False,True,7272,No rule matched all 5 example(s). Test case: 88 $ 13 = ?
+9f8fda8a,equation,unknown_operator_fallback,,False,False,\#,parse_error: no examples extracted from question text.
+9f9b0251,equation,unknown_operator_fallback,,False,False,'!?/,parse_error: no examples extracted from question text.
+9fa9ecdc,equation,unknown_operator_fallback,,False,True,36,No rule matched all 3 example(s). Test case: 50 ^ 86 = ?
+9fb854c3,equation,unknown_operator_fallback,,False,True,4,No rule matched all 3 example(s). Test case: 83 - 43 = ?
+9fbd6a44,equation,unknown_operator_fallback,,False,False,::'',parse_error: no examples extracted from question text.
+9fc69c17,equation,unknown_operator_fallback,,False,False,#':@,parse_error: no examples extracted from question text.
+9fdb18b7,equation,unknown_operator_fallback,,False,False,^},parse_error: no examples extracted from question text.
+9ff449aa,equation,unknown_operator_fallback,,False,False,"%"">",parse_error: no examples extracted from question text.
+9ff6e9d2,equation,unknown_operator_fallback,,False,True,11,No rule matched all 3 example(s). Test case: 65 - 54 = ?
+a021ca5d,equation,unknown_operator_fallback,,False,False,)'&/,parse_error: no examples extracted from question text.
+a04ecffd,equation,unknown_operator_fallback,,False,False,!32,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+a08fbb68,equation,unknown_operator_fallback,,False,False,\$'<,parse_error: no examples extracted from question text.
+a0db1e75,equation,unknown_operator_fallback,,False,False,"-""!",parse_error: no examples extracted from question text.
+a11311a4,equation,unknown_operator_fallback,,False,False,%[,parse_error: no examples extracted from question text.
+a1220274,equation,unknown_operator_fallback,,False,False,&`{^,parse_error: no examples extracted from question text.
+a1230047,equation,unknown_operator_fallback,,False,False,%&,parse_error: no examples extracted from question text.
+a12f00f4,equation,unknown_operator_fallback,,False,False,$:[,parse_error: no examples extracted from question text.
+a1503629,equation,unknown_operator_fallback,,False,False,@)[[,parse_error: no examples extracted from question text.
+a1523a63,equation,unknown_operator_fallback,,False,False,87,parse_error: no examples extracted from question text.
+a19a75ba,equation,forward_concat,2655,True,True,2655,examples_parsed=1; rule=forward_concat; input=(26 # 55); predicted=2655; expected=2655; match=YES
+a1bae076,equation,unknown_operator_fallback,,False,False,0001,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+a2252b88,equation,unknown_operator_fallback,,False,True,2442,No rule matched all 1 example(s). Test case: 66 ^ 73 = ?
+a23e7ecb,equation,unknown_operator_fallback,,False,False,847,parse_error: no examples extracted from question text.
+a26065d4,equation,unknown_operator_fallback,,False,False,<',parse_error: no examples extracted from question text.
+a266aeb5,equation,unknown_operator_fallback,,False,False,({,parse_error: no examples extracted from question text.
+a2b66927,equation,unknown_operator_fallback,,False,False,{],parse_error: no examples extracted from question text.
+a2ca3aae,equation,unknown_operator_fallback,,False,False,\<?/,parse_error: no examples extracted from question text.
+a311baec,equation,unknown_operator_fallback,,False,True,521,No rule matched all 4 example(s). Test case: 26 + 46 = ?
+a3183159,equation,unknown_operator_fallback,,False,False,`{,parse_error: no examples extracted from question text.
+a34467bf,equation,unknown_operator_fallback,,False,False,[\(,parse_error: no examples extracted from question text.
+a35fa1a0,equation,unknown_operator_fallback,,False,False,"""&`]",parse_error: no examples extracted from question text.
+a361a1b7,equation,forward_concat,,False,False,:46,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+a362e44a,equation,unknown_operator_fallback,,False,False,'%,parse_error: no examples extracted from question text.
+a3a00a02,equation,unknown_operator_fallback,,False,False,^$,parse_error: no examples extracted from question text.
+a3da3c48,equation,unknown_operator_fallback,,False,False,\$,parse_error: no examples extracted from question text.
+a3e72f6d,equation,unknown_operator_fallback,,False,False,/!,parse_error: no examples extracted from question text.
+a40497f9,equation,unknown_operator_fallback,,False,False,%]\<,parse_error: no examples extracted from question text.
+a4e4ec1d,equation,unknown_operator_fallback,,False,False,>!,parse_error: no examples extracted from question text.
+a4ee9fa6,equation,unknown_operator_fallback,,False,False,^@|:,parse_error: no examples extracted from question text.
+a5124cb4,equation,unknown_operator_fallback,,False,True,-24,No rule matched all 1 example(s). Test case: 62 - 86 = ?
+a52aabb6,equation,unknown_operator_fallback,,False,False,!%,parse_error: no examples extracted from question text.
+a52c726c,equation,unknown_operator_fallback,,False,False,])?$,parse_error: no examples extracted from question text.
+a5f1991c,equation,unknown_operator_fallback,,False,False,/|',parse_error: no examples extracted from question text.
+a5f3a1ea,equation,unknown_operator_fallback,,False,True,63,No rule matched all 4 example(s). Test case: 52 + 11 = ?
+a610040a,equation,unknown_operator_fallback,,False,False,:(|:,parse_error: no examples extracted from question text.
+a644f19d,equation,unknown_operator_fallback,,False,False,#:,parse_error: no examples extracted from question text.
+a692ec38,equation,unknown_operator_fallback,,False,False,"/""}",parse_error: no examples extracted from question text.
+a7454fdb,equation,unknown_operator_fallback,,False,True,831,No rule matched all 5 example(s). Test case: 74 + 19 = ?
+a77be9fa,equation,unknown_operator_fallback,,False,False,"[""",parse_error: no examples extracted from question text.
+a7836586,equation,unknown_operator_fallback,,False,False,"%""",parse_error: no examples extracted from question text.
+a7d582da,equation,unknown_operator_fallback,,False,True,51,No rule matched all 3 example(s). Test case: 92 - 41 = ?
+a8323497,equation,unknown_operator_fallback,,False,False,$`,parse_error: no examples extracted from question text.
+a85864a9,equation,unknown_operator_fallback,,False,False,(\}:,parse_error: no examples extracted from question text.
+a87565bb,equation,unknown_operator_fallback,,False,False,67,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+a88f9fe3,equation,unknown_operator_fallback,,False,False,<],parse_error: no examples extracted from question text.
+a8e033fe,equation,unknown_operator_fallback,,False,False,6854,parse_error: no examples extracted from question text.
+a8e5eca1,equation,unknown_operator_fallback,,False,True,4274,No rule matched all 2 example(s). Test case: 74 * 42 = ?
+a926d5d0,equation,unknown_operator_fallback,,False,False,/<,parse_error: no examples extracted from question text.
+a928ad6e,equation,unknown_operator_fallback,,False,True,611,No rule matched all 5 example(s). Test case: 13 + 68 = ?
+a98d4d53,equation,unknown_operator_fallback,,False,False,-),parse_error: no examples extracted from question text.
+a9aa6c6e,equation,unknown_operator_fallback,,False,False,^</,parse_error: no examples extracted from question text.
+a9c57983,equation,unknown_operator_fallback,,False,False,001,parse_error: no examples extracted from question text.
+a9d91ec1,equation,unknown_operator_fallback,,False,False,:'%?,parse_error: no examples extracted from question text.
+a9deb8b5,equation,unknown_operator_fallback,,False,True,0131,No rule matched all 3 example(s). Test case: 75 * 32 = ?
+aa251ec4,equation,unknown_operator_fallback,,False,False,%20,parse_error: no examples extracted from question text.
+aa2e27a3,equation,unknown_operator_fallback,,False,False,$(,parse_error: no examples extracted from question text.
+aa7f06f4,equation,unknown_operator_fallback,,False,False,3212,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+aa8c76a1,equation,unknown_operator_fallback,,False,True,0861,No rule matched all 2 example(s). Test case: 61 * 08 = ?
+aaec36e0,equation,unknown_operator_fallback,,False,True,3201,No rule matched all 3 example(s). Test case: 39 * 11 = ?
+ab779293,equation,unknown_operator_fallback,,False,False,78,parse_error: no examples extracted from question text.
+ab7809d1,equation,unknown_operator_fallback,,False,True,2572,No rule matched all 2 example(s). Test case: 72 + 25 = ?
+abbb5d43,equation,unknown_operator_fallback,,False,False,8513,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+abe83078,equation,unknown_operator_fallback,,False,False,`<,parse_error: no examples extracted from question text.
+ac262f12,equation,unknown_operator_fallback,,False,True,8362,No rule matched all 3 example(s). Test case: 19 * 92 = ?
+ac96e25c,equation,unknown_operator_fallback,,False,False,-'/,parse_error: no examples extracted from question text.
+aca5c614,equation,unknown_operator_fallback,,False,True,-5,No rule matched all 5 example(s). Test case: 14 - 63 = ?
+acf8c11f,equation,unknown_operator_fallback,,False,False,"""'",parse_error: no examples extracted from question text.
+adad547a,equation,unknown_operator_fallback,,False,True,0091,No rule matched all 3 example(s). Test case: 52 * 67 = ?
+adcc6292,equation,unknown_operator_fallback,,False,False,-}^,parse_error: no examples extracted from question text.
+ae3d84e7,equation,unknown_operator_fallback,,False,False,<<<,parse_error: no examples extracted from question text.
+ae4aef23,equation,unknown_operator_fallback,,False,False,%<<,parse_error: no examples extracted from question text.
+ae64d5e4,equation,unknown_operator_fallback,,False,False,[,parse_error: no examples extracted from question text.
+ae6be599,equation,unknown_operator_fallback,,False,False,#`,parse_error: no examples extracted from question text.
+af018681,equation,unknown_operator_fallback,,False,False,"\${""",parse_error: no examples extracted from question text.
+af0e4262,equation,unknown_operator_fallback,,False,False,]{,parse_error: no examples extracted from question text.
+af34964a,equation,unknown_operator_fallback,,False,False,]:[:,parse_error: no examples extracted from question text.
+af7ec090,equation,unknown_operator_fallback,,False,False,'''^,parse_error: no examples extracted from question text.
+af95c8aa,equation,unknown_operator_fallback,,False,False,'\],parse_error: no examples extracted from question text.
+afa9a53b,equation,unknown_operator_fallback,,False,False,&%|,parse_error: no examples extracted from question text.
+afb53516,equation,unknown_operator_fallback,,False,False,<%&:,parse_error: no examples extracted from question text.
+afca7259,equation,unknown_operator_fallback,,False,False,>>&,parse_error: no examples extracted from question text.
+afcac7af,equation,unknown_operator_fallback,,False,True,-9,No rule matched all 3 example(s). Test case: 01 - 91 = ?
+afdb7326,equation,unknown_operator_fallback,,False,False,%\,parse_error: no examples extracted from question text.
+b0206bb7,equation,unknown_operator_fallback,,False,False,]$!,parse_error: no examples extracted from question text.
+b03ab026,equation,unknown_operator_fallback,,False,False,74,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b06625c4,equation,unknown_operator_fallback,,False,False,^&/,parse_error: no examples extracted from question text.
+b075e716,equation,unknown_operator_fallback,,False,True,2400,No rule matched all 1 example(s). Test case: 30 + 80 = ?
+b0d0dd45,equation,unknown_operator_fallback,,False,False,7289,parse_error: no examples extracted from question text.
+b1181806,equation,unknown_operator_fallback,,False,False,|>>,parse_error: no examples extracted from question text.
+b13d511a,equation,unknown_operator_fallback,,False,False,\&[[,parse_error: no examples extracted from question text.
+b15368e8,equation,unknown_operator_fallback,,False,False,^{,parse_error: no examples extracted from question text.
+b16d6db2,equation,unknown_operator_fallback,,False,False,":""<",parse_error: no examples extracted from question text.
+b1733f3e,equation,unknown_operator_fallback,,False,False,]/,parse_error: no examples extracted from question text.
+b193f06a,equation,unknown_operator_fallback,,False,False,3182,parse_error: no examples extracted from question text.
+b1b10e83,equation,unknown_operator_fallback,,False,False,"|""#$",parse_error: no examples extracted from question text.
+b1bc3731,equation,unknown_operator_fallback,,False,False,63,parse_error: no examples extracted from question text.
+b26d8818,equation,unknown_operator_fallback,,False,False,5983,parse_error: no examples extracted from question text.
+b271a61c,equation,unknown_operator_fallback,,False,False,*@^,parse_error: no examples extracted from question text.
+b2a8384e,equation,unknown_operator_fallback,,False,False,-$,parse_error: no examples extracted from question text.
+b2e5c467,equation,unknown_operator_fallback,,False,True,9111,No rule matched all 3 example(s). Test case: 61 ^ 07 = ?
+b3745e98,equation,unknown_operator_fallback,,False,False,!',parse_error: no examples extracted from question text.
+b391ffe1,equation,unknown_operator_fallback,,False,False,#!,parse_error: no examples extracted from question text.
+b3ae7f39,equation,unknown_operator_fallback,,False,False,801,parse_error: no examples extracted from question text.
+b3f9a15c,equation,unknown_operator_fallback,,False,False,1773,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b4342b90,equation,unknown_operator_fallback,,False,False,66,parse_error: no examples extracted from question text.
+b451be8a,equation,unknown_operator_fallback,,False,False,64,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b47e8621,equation,unknown_operator_fallback,,False,False,><<,parse_error: no examples extracted from question text.
+b4a15ca6,equation,unknown_operator_fallback,,False,True,301,No rule matched all 3 example(s). Test case: 16 + 34 = ?
+b4a5076f,equation,unknown_operator_fallback,,False,False,75,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b4b73143,equation,unknown_operator_fallback,,False,False,>\:,parse_error: no examples extracted from question text.
+b4eab219,equation,unknown_operator_fallback,,False,False,(#<,parse_error: no examples extracted from question text.
+b4f701f5,equation,unknown_operator_fallback,,False,True,2271,No rule matched all 3 example(s). Test case: 14 * 24 = ?
+b50cf853,equation,unknown_operator_fallback,,False,False,"|?""}",parse_error: no examples extracted from question text.
+b56d38be,equation,unknown_operator_fallback,,False,False,[/),parse_error: no examples extracted from question text.
+b5a936a9,equation,unknown_operator_fallback,,False,False,"-""(",parse_error: no examples extracted from question text.
+b5e1e604,equation,unknown_operator_fallback,,False,True,211,No rule matched all 1 example(s). Test case: 28 | 03 = ?
+b62453dc,equation,unknown_operator_fallback,,False,True,-75,No rule matched all 3 example(s). Test case: 43 - 19 = ?
+b63d963c,equation,unknown_operator_fallback,,False,False,<<!,parse_error: no examples extracted from question text.
+b643d81f,equation,unknown_operator_fallback,,False,True,9,No rule matched all 3 example(s). Test case: 97 - 07 = ?
+b655eee9,equation,unknown_operator_fallback,,False,True,-92,No rule matched all 1 example(s). Test case: 76 - 83 = ?
+b69391b8,equation,unknown_operator_fallback,,False,False,66,parse_error: no examples extracted from question text.
+b69d2e78,equation,unknown_operator_fallback,,False,False,|)\,parse_error: no examples extracted from question text.
+b73d0898,equation,unknown_operator_fallback,,False,True,9,No rule matched all 4 example(s). Test case: 41 - 15 = ?
+b7ad0671,equation,unknown_operator_fallback,,False,False,16,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b7b1d1a8,equation,unknown_operator_fallback,,False,False,57,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b7e92a59,equation,unknown_operator_fallback,,False,False,"""@|",parse_error: no examples extracted from question text.
+b8432f69,equation,unknown_operator_fallback,,False,False,:&&,parse_error: no examples extracted from question text.
+b8955624,equation,unknown_operator_fallback,,False,False,))?,parse_error: no examples extracted from question text.
+b8f00ea7,equation,unknown_operator_fallback,,False,False,5615,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b980017a,equation,unknown_operator_fallback,,False,True,7946,No rule matched all 3 example(s). Test case: 37 / 98 = ?
+b989c740,equation,reverse_concat,8618,True,True,8618,examples_parsed=5; rule=reverse_concat; input=(18 + 86); predicted=8618; expected=8618; match=YES
+b99d3059,equation,unknown_operator_fallback,,False,True,31,No rule matched all 3 example(s). Test case: 71 - 46 = ?
+b9b5a2c1,equation,unknown_operator_fallback,,False,False,&`,parse_error: no examples extracted from question text.
+b9bf883d,equation,unknown_operator_fallback,,False,False,100,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+b9f1d959,equation,unknown_operator_fallback,,False,False,:>,parse_error: no examples extracted from question text.
+ba76c1d2,equation,unknown_operator_fallback,,False,False,{`>!,parse_error: no examples extracted from question text.
+ba7d54c4,equation,unknown_operator_fallback,,False,False,>((<,parse_error: no examples extracted from question text.
+baab28bb,equation,unknown_operator_fallback,,False,False,#!,parse_error: no examples extracted from question text.
+bad6f95d,equation,unknown_operator_fallback,,False,True,41,No rule matched all 5 example(s). Test case: 54 - 95 = ?
+bad9f9da,equation,unknown_operator_fallback,,False,True,87,No rule matched all 1 example(s). Test case: 52 + 35 = ?
+baebfd26,equation,unknown_operator_fallback,,False,False,">@(""",parse_error: no examples extracted from question text.
+bb1ee8e2,equation,unknown_operator_fallback,,False,False,&,parse_error: no examples extracted from question text.
+bb9dd0ad,equation,unknown_operator_fallback,,False,False,/^//,parse_error: no examples extracted from question text.
+bba186c3,equation,unknown_operator_fallback,,False,False,704,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+bbcd608d,equation,unknown_operator_fallback,,False,False,''[,parse_error: no examples extracted from question text.
+bc0935ee,equation,forward_concat,5782,False,True,@25,examples_parsed=2; rule=forward_concat; input=(57 @ 82); predicted=5782; expected=@25; match=NO
+bc1ef494,equation,unknown_operator_fallback,,False,False,#)],parse_error: no examples extracted from question text.
+bc42e664,equation,unknown_operator_fallback,,False,True,71,No rule matched all 1 example(s). Test case: 47 * 75 = ?
+bc7f14d1,equation,unknown_operator_fallback,,False,True,151,No rule matched all 1 example(s). Test case: 79 & 45 = ?
+bc83b0a1,equation,unknown_operator_fallback,,False,False,(/&{,parse_error: no examples extracted from question text.
+bca230fd,equation,unknown_operator_fallback,,False,False,!<[$,parse_error: no examples extracted from question text.
+bcb0993a,equation,unknown_operator_fallback,,False,False,!!!,parse_error: no examples extracted from question text.
+bce10d97,equation,unknown_operator_fallback,,False,True,2,No rule matched all 4 example(s). Test case: 31 - 45 = ?
+bcff7dbe,equation,unknown_operator_fallback,,False,False,>[,parse_error: no examples extracted from question text.
+bd01bfeb,equation,unknown_operator_fallback,,False,False,&^,parse_error: no examples extracted from question text.
+bd36a922,equation,unknown_operator_fallback,,False,False,?(,parse_error: no examples extracted from question text.
+bd4c584a,equation,unknown_operator_fallback,,False,True,0491,No rule matched all 5 example(s). Test case: 02 $ 79 = ?
+bd8aa942,equation,unknown_operator_fallback,,False,False,1881,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+bdca0fac,equation,unknown_operator_fallback,,False,True,2925,No rule matched all 3 example(s). Test case: 45 * 89 = ?
+be0a10de,equation,unknown_operator_fallback,,False,False,""">",parse_error: no examples extracted from question text.
+be5971d7,equation,unknown_operator_fallback,,False,True,-85,No rule matched all 3 example(s). Test case: 18 - 32 = ?
+be7101dc,equation,unknown_operator_fallback,,False,False,\:%#,parse_error: no examples extracted from question text.
+be7a9eb1,equation,unknown_operator_fallback,,False,False,[]`',parse_error: no examples extracted from question text.
+be877da5,equation,unknown_operator_fallback,,False,True,02,No rule matched all 3 example(s). Test case: 93 - 91 = ?
+bebb9447,equation,unknown_operator_fallback,,False,False,%#,parse_error: no examples extracted from question text.
+bf2220e7,equation,unknown_operator_fallback,,False,False,:,parse_error: no examples extracted from question text.
+bf4bd858,equation,unknown_operator_fallback,,False,True,101,No rule matched all 3 example(s). Test case: 98 @ 31 = ?
+c00f2605,equation,unknown_operator_fallback,,False,False,"&""",parse_error: no examples extracted from question text.
+c01cebb4,equation,unknown_operator_fallback,,False,False,-[},parse_error: no examples extracted from question text.
+c05828eb,equation,unknown_operator_fallback,,False,False,-!|,parse_error: no examples extracted from question text.
+c06e61a2,equation,unknown_operator_fallback,,False,True,29,No rule matched all 4 example(s). Test case: 34 + 84 = ?
+c0dd90c0,equation,unknown_operator_fallback,,False,False,22,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+c0f32a1e,equation,unknown_operator_fallback,,False,True,085,No rule matched all 5 example(s). Test case: 92 * 02 = ?
+c11777c0,equation,unknown_operator_fallback,,False,False,56,parse_error: no examples extracted from question text.
+c170f7d4,equation,unknown_operator_fallback,,False,True,-15,No rule matched all 4 example(s). Test case: 01 - 16 = ?
+c2199ff2,equation,unknown_operator_fallback,,False,False,1807,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+c24074a8,equation,unknown_operator_fallback,,False,False,&/,parse_error: no examples extracted from question text.
+c2945f2c,equation,unknown_operator_fallback,,False,True,1976,No rule matched all 3 example(s). Test case: 07 * 79 = ?
+c32681cb,equation,unknown_operator_fallback,,False,False,<&,parse_error: no examples extracted from question text.
+c32e1c7b,equation,unknown_operator_fallback,,False,False,[$[,parse_error: no examples extracted from question text.
+c37a2a23,equation,unknown_operator_fallback,,False,False,5850,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+c37e694c,equation,unknown_operator_fallback,,False,False,{&\\,parse_error: no examples extracted from question text.
+c413ac69,equation,unknown_operator_fallback,,False,False,"{""]",parse_error: no examples extracted from question text.
+c43b5a13,equation,unknown_operator_fallback,,False,False,)|,parse_error: no examples extracted from question text.
+c4f66ede,equation,unknown_operator_fallback,,False,True,6125,No rule matched all 4 example(s). Test case: 25 * 61 = ?
+c541eb82,equation,unknown_operator_fallback,,False,True,-01,No rule matched all 2 example(s). Test case: 47 - 48 = ?
+c561264c,equation,unknown_operator_fallback,,False,True,0279,No rule matched all 4 example(s). Test case: 79 + 02 = ?
+c5955a0a,equation,unknown_operator_fallback,,False,False,@',parse_error: no examples extracted from question text.
+c5b058d6,equation,unknown_operator_fallback,,False,False,134,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+c5bf415c,equation,unknown_operator_fallback,,False,False,>:[,parse_error: no examples extracted from question text.
+c613082a,equation,unknown_operator_fallback,,False,True,31,No rule matched all 3 example(s). Test case: 78 - 47 = ?
+c6961082,equation,unknown_operator_fallback,,False,False,6831,parse_error: no examples extracted from question text.
+c69b17bf,equation,unknown_operator_fallback,,False,False,?),parse_error: no examples extracted from question text.
+c6c75305,equation,unknown_operator_fallback,,False,False,/\}%,parse_error: no examples extracted from question text.
+c6da25af,equation,unknown_operator_fallback,,False,False,121,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+c6e60b82,equation,unknown_operator_fallback,,False,False,@),parse_error: no examples extracted from question text.
+c7420a23,equation,unknown_operator_fallback,,False,True,33,No rule matched all 4 example(s). Test case: 42 $ 75 = ?
+c744d26e,equation,unknown_operator_fallback,,False,False,#>/,parse_error: no examples extracted from question text.
+c748b04f,equation,unknown_operator_fallback,,False,True,651,No rule matched all 4 example(s). Test case: 97 + 67 = ?
+c763054a,equation,unknown_operator_fallback,,False,True,85,No rule matched all 5 example(s). Test case: 97 - 12 = ?
+c76fc189,equation,unknown_operator_fallback,,False,False,-(<,parse_error: no examples extracted from question text.
+c7844441,equation,unknown_operator_fallback,,False,False,:/$^,parse_error: no examples extracted from question text.
+c7a7b13a,equation,unknown_operator_fallback,,False,True,35,No rule matched all 5 example(s). Test case: 93 - 29 = ?
+c7aae192,equation,unknown_operator_fallback,,False,False,">""(",parse_error: no examples extracted from question text.
+c7bcab48,equation,unknown_operator_fallback,,False,True,5899,No rule matched all 3 example(s). Test case: 58 # 99 = ?
+c81411a2,equation,unknown_operator_fallback,,False,True,05,No rule matched all 3 example(s). Test case: 73 + 31 = ?
+c84544db,equation,unknown_operator_fallback,,False,True,2024,No rule matched all 1 example(s). Test case: 20 # 24 = ?
+c857a727,equation,unknown_operator_fallback,,False,True,429,No rule matched all 5 example(s). Test case: 66 * 41 = ?
+c87ce9ea,equation,unknown_operator_fallback,,False,False,"""""%",parse_error: no examples extracted from question text.
+c87d761a,equation,unknown_operator_fallback,,False,False,'`(,parse_error: no examples extracted from question text.
+c885e697,equation,unknown_operator_fallback,,False,True,8234,No rule matched all 2 example(s). Test case: 34 * 82 = ?
+c8b57f1d,equation,unknown_operator_fallback,,False,False,""")",parse_error: no examples extracted from question text.
+c9151e86,equation,unknown_operator_fallback,,False,True,9421,No rule matched all 4 example(s). Test case: 69 * 31 = ?
+c922dbb4,equation,unknown_operator_fallback,,False,False,>@,parse_error: no examples extracted from question text.
+c934ffa1,equation,unknown_operator_fallback,,False,False,||,parse_error: no examples extracted from question text.
+c9463bb4,equation,unknown_operator_fallback,,False,False,)!!!,parse_error: no examples extracted from question text.
+c9780577,equation,unknown_operator_fallback,,False,False,)?,parse_error: no examples extracted from question text.
+c9c26b92,equation,unknown_operator_fallback,,False,True,2151,No rule matched all 4 example(s). Test case: 24 * 63 = ?
+c9e16aff,equation,unknown_operator_fallback,,False,False,]:(],parse_error: no examples extracted from question text.
+ca109b5e,equation,unknown_operator_fallback,,False,False,?#?,parse_error: no examples extracted from question text.
+ca43107b,equation,unknown_operator_fallback,,False,False,?,parse_error: no examples extracted from question text.
+ca5db1c0,equation,unknown_operator_fallback,,False,False,^,parse_error: no examples extracted from question text.
+ca85809b,equation,unknown_operator_fallback,,False,False,%!^&,parse_error: no examples extracted from question text.
+ca8929f5,equation,unknown_operator_fallback,,False,True,49,No rule matched all 3 example(s). Test case: 94 @ 54 = ?
+cad4b9a7,equation,unknown_operator_fallback,,False,False,"#""^",parse_error: no examples extracted from question text.
+cb2fdb6b,equation,unknown_operator_fallback,,False,True,54,No rule matched all 4 example(s). Test case: 08 - 53 = ?
+cb5fa22d,equation,unknown_operator_fallback,,False,True,8007,No rule matched all 4 example(s). Test case: 88 @ 91 = ?
+cb796a2b,equation,unknown_operator_fallback,,False,True,114,No rule matched all 1 example(s). Test case: 23 + 91 = ?
+cb7bb0d0,equation,unknown_operator_fallback,,False,False,}!,parse_error: no examples extracted from question text.
+cb7bd3d2,equation,unknown_operator_fallback,,False,False,[[?,parse_error: no examples extracted from question text.
+cbe4288b,equation,unknown_operator_fallback,,False,True,411,No rule matched all 3 example(s). Test case: 38 + 23 = ?
+cc3ea471,equation,unknown_operator_fallback,,False,False,-!!,parse_error: no examples extracted from question text.
+cc735e46,equation,unknown_operator_fallback,,False,False,4482,parse_error: no examples extracted from question text.
+cc800930,equation,unknown_operator_fallback,,False,True,131,No rule matched all 2 example(s). Test case: 59 / 63 = ?
+cc92d89f,equation,unknown_operator_fallback,,False,False,)[,parse_error: no examples extracted from question text.
+cca64860,equation,unknown_operator_fallback,,False,False,(,parse_error: no examples extracted from question text.
+cca882b8,equation,unknown_operator_fallback,,False,False,>)<|,parse_error: no examples extracted from question text.
+ccf4b43c,equation,unknown_operator_fallback,,False,False,-%#,parse_error: no examples extracted from question text.
+cd149ff8,equation,unknown_operator_fallback,,False,True,921,No rule matched all 2 example(s). Test case: 53 + 39 = ?
+cd1c5cc3,equation,unknown_operator_fallback,,False,False,!`,parse_error: no examples extracted from question text.
+cd2e20b9,equation,unknown_operator_fallback,,False,False,||`,parse_error: no examples extracted from question text.
+cd5e23c7,equation,unknown_operator_fallback,,False,False,]{&,parse_error: no examples extracted from question text.
+cd94ec17,equation,unknown_operator_fallback,,False,False,451,parse_error: no examples extracted from question text.
+cd9d50e2,equation,reverse_concat,5293,True,True,5293,examples_parsed=1; rule=reverse_concat; input=(93 + 52); predicted=5293; expected=5293; match=YES
+cde9f7ba,equation,unknown_operator_fallback,,False,False,81,parse_error: no examples extracted from question text.
+cdec898a,equation,unknown_operator_fallback,,False,False,<?/,parse_error: no examples extracted from question text.
+ce507d39,equation,unknown_operator_fallback,,False,False,2861,parse_error: no examples extracted from question text.
+ce7138bf,equation,unknown_operator_fallback,,False,False,3,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+cee07c09,equation,unknown_operator_fallback,,False,True,4281,No rule matched all 3 example(s). Test case: 84 $ 83 = ?
+cef4c8a9,equation,unknown_operator_fallback,,False,False,]`,parse_error: no examples extracted from question text.
+cef50c24,equation,unknown_operator_fallback,,False,False,?,parse_error: no examples extracted from question text.
+cf2a4028,equation,unknown_operator_fallback,,False,False,"!""{{",parse_error: no examples extracted from question text.
+cf356d18,equation,unknown_operator_fallback,,False,False,6,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+cf4c04c0,equation,unknown_operator_fallback,,False,False,-[,parse_error: no examples extracted from question text.
+cf517124,equation,unknown_operator_fallback,,False,True,24,No rule matched all 2 example(s). Test case: 03 ^ 21 = ?
+cf79c10e,equation,unknown_operator_fallback,,False,False,?(,parse_error: no examples extracted from question text.
+cf84c023,equation,unknown_operator_fallback,,False,False,13,parse_error: no examples extracted from question text.
+cfa59b38,equation,unknown_operator_fallback,,False,True,233,No rule matched all 5 example(s). Test case: 13 # 18 = ?
+cfd312b1,equation,unknown_operator_fallback,,False,False,{[\?,parse_error: no examples extracted from question text.
+d008b0b6,equation,unknown_operator_fallback,,False,True,131,No rule matched all 3 example(s). Test case: 37 + 85 = ?
+d033513f,equation,unknown_operator_fallback,,False,True,93,No rule matched all 5 example(s). Test case: 91 + 12 = ?
+d096a492,equation,unknown_operator_fallback,,False,True,-65,No rule matched all 4 example(s). Test case: 98 - 33 = ?
+d0b1e41a,equation,unknown_operator_fallback,,False,False,"#{""!",parse_error: no examples extracted from question text.
+d0e1010b,equation,unknown_operator_fallback,,False,False,!&&},parse_error: no examples extracted from question text.
+d129b085,equation,unknown_operator_fallback,,False,False,##$,parse_error: no examples extracted from question text.
+d13e92ec,equation,unknown_operator_fallback,,False,False,?&,parse_error: no examples extracted from question text.
+d17632d2,equation,unknown_operator_fallback,,False,False,571,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+d17d3a7a,equation,unknown_operator_fallback,,False,True,-01,No rule matched all 1 example(s). Test case: 66 - 67 = ?
+d1bd7478,equation,unknown_operator_fallback,,False,False,30,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+d1c6beb0,equation,unknown_operator_fallback,,False,False,|/,parse_error: no examples extracted from question text.
+d204b9cc,equation,unknown_operator_fallback,,False,False,231,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+d21c7677,equation,unknown_operator_fallback,,False,True,8544,No rule matched all 1 example(s). Test case: 94 # 19 = ?
+d22f2d08,equation,unknown_operator_fallback,,False,True,*26,No rule matched all 1 example(s). Test case: 47 * 73 = ?
+d23f4166,equation,unknown_operator_fallback,,False,False,{|)@,parse_error: no examples extracted from question text.
+d250fcc5,equation,unknown_operator_fallback,,False,False,<%,parse_error: no examples extracted from question text.
+d25a49a0,equation,unknown_operator_fallback,,False,False,}},parse_error: no examples extracted from question text.
+d29e19a4,equation,unknown_operator_fallback,,False,False,?|,parse_error: no examples extracted from question text.
+d2fe9d04,equation,unknown_operator_fallback,,False,False,)}),parse_error: no examples extracted from question text.
+d303ae8e,equation,unknown_operator_fallback,,False,True,39,No rule matched all 2 example(s). Test case: 86 + 42 = ?
+d3092ac1,equation,unknown_operator_fallback,,False,True,-7,No rule matched all 5 example(s). Test case: 92 - 63 = ?
+d350828e,equation,unknown_operator_fallback,,False,False,}!||,parse_error: no examples extracted from question text.
+d3b20e29,equation,unknown_operator_fallback,,False,True,3922,No rule matched all 3 example(s). Test case: 22 + 39 = ?
+d3c1d2fb,equation,unknown_operator_fallback,,False,False,)/,parse_error: no examples extracted from question text.
+d3d30b86,equation,unknown_operator_fallback,,False,False,!!$,parse_error: no examples extracted from question text.
+d407570e,equation,unknown_operator_fallback,,False,False,)}}&,parse_error: no examples extracted from question text.
+d4483d51,equation,unknown_operator_fallback,,False,True,3752,No rule matched all 5 example(s). Test case: 33 * 87 = ?
+d44ef285,equation,unknown_operator_fallback,,False,True,988,No rule matched all 4 example(s). Test case: 01 * 98 = ?
+d45dc67f,equation,unknown_operator_fallback,,False,False,(%(,parse_error: no examples extracted from question text.
+d46df3b0,equation,forward_concat,,False,False,3955,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+d490911e,equation,unknown_operator_fallback,,False,False,139,parse_error: no examples extracted from question text.
+d4b08884,equation,unknown_operator_fallback,,False,True,2,No rule matched all 3 example(s). Test case: 80 $ 13 = ?
+d546fd90,equation,unknown_operator_fallback,,False,False,\]@,parse_error: no examples extracted from question text.
+d5602cc5,equation,unknown_operator_fallback,,False,False,(%,parse_error: no examples extracted from question text.
+d56a1b4c,equation,unknown_operator_fallback,,False,False,"{/""",parse_error: no examples extracted from question text.
+d5a03a2e,equation,unknown_operator_fallback,,False,False,>>,parse_error: no examples extracted from question text.
+d5aa5564,equation,unknown_operator_fallback,,False,True,45,No rule matched all 2 example(s). Test case: 30 * 16 = ?
+d600988d,equation,unknown_operator_fallback,,False,False,-<|,parse_error: no examples extracted from question text.
+d63c1fb0,equation,unknown_operator_fallback,,False,False,"""|""%",parse_error: no examples extracted from question text.
+d64a6578,equation,unknown_operator_fallback,,False,False,2626,parse_error: no examples extracted from question text.
+d67cbe5f,equation,unknown_operator_fallback,,False,False,'@,parse_error: no examples extracted from question text.
+d67f28ad,equation,unknown_operator_fallback,,False,True,131,No rule matched all 2 example(s). Test case: 68 # 64 = ?
+d6a2e332,equation,unknown_operator_fallback,,False,False,582,parse_error: no examples extracted from question text.
+d6baf5e6,equation,unknown_operator_fallback,,False,True,7847,No rule matched all 4 example(s). Test case: 87 * 69 = ?
+d6c03e21,equation,unknown_operator_fallback,,False,False,&(`#,parse_error: no examples extracted from question text.
+d6f18fc8,equation,unknown_operator_fallback,,False,False,-},parse_error: no examples extracted from question text.
+d72d8c1c,equation,unknown_operator_fallback,,False,False,&@&%,parse_error: no examples extracted from question text.
+d73ef5bf,equation,unknown_operator_fallback,,False,False,\(|,parse_error: no examples extracted from question text.
+d7662688,equation,unknown_operator_fallback,,False,False,]&]],parse_error: no examples extracted from question text.
+d7682996,equation,unknown_operator_fallback,,False,True,157,No rule matched all 3 example(s). Test case: 95 $ 62 = ?
+d78128b2,equation,unknown_operator_fallback,,False,True,52,No rule matched all 4 example(s). Test case: 73 - 21 = ?
+d78ce112,equation,unknown_operator_fallback,,False,False,7042,parse_error: no examples extracted from question text.
+d7aec90d,equation,unknown_operator_fallback,,False,False,^>\,parse_error: no examples extracted from question text.
+d7bcb4a6,equation,unknown_operator_fallback,,False,False,}{,parse_error: no examples extracted from question text.
+d7e5414c,equation,unknown_operator_fallback,,False,False,|%\\,parse_error: no examples extracted from question text.
+d809394c,equation,unknown_operator_fallback,,False,False,9099,parse_error: no examples extracted from question text.
+d8126121,equation,unknown_operator_fallback,,False,False,$$(:,parse_error: no examples extracted from question text.
+d82f5933,equation,unknown_operator_fallback,,False,True,86,No rule matched all 3 example(s). Test case: 91 * 94 = ?
+d8735cc4,equation,forward_concat,,False,False,35,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+d8a47cb7,equation,unknown_operator_fallback,,False,True,49,No rule matched all 2 example(s). Test case: 92 & 56 = ?
+d8b3310a,equation,unknown_operator_fallback,,False,True,5491,No rule matched all 3 example(s). Test case: 63 - 45 = ?
+d8bc44b3,equation,unknown_operator_fallback,,False,True,31,No rule matched all 3 example(s). Test case: 37 - 06 = ?
+d8d87a89,equation,unknown_operator_fallback,,False,False,{,parse_error: no examples extracted from question text.
+d911e8e1,equation,unknown_operator_fallback,,False,False,:\:,parse_error: no examples extracted from question text.
+d9575f79,equation,unknown_operator_fallback,,False,False,|`/},parse_error: no examples extracted from question text.
+d96607f8,equation,unknown_operator_fallback,,False,False,"""!<}",parse_error: no examples extracted from question text.
+d98d85c0,equation,unknown_operator_fallback,,False,False,?(&@,parse_error: no examples extracted from question text.
+d9a2b78f,equation,unknown_operator_fallback,,False,True,901,No rule matched all 2 example(s). Test case: 74 * 26 = ?
+d9bedb64,equation,unknown_operator_fallback,,False,False,(1,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+da062350,equation,unknown_operator_fallback,,False,False,<[,parse_error: no examples extracted from question text.
+da10a947,equation,unknown_operator_fallback,,False,False,^$!^,parse_error: no examples extracted from question text.
+da2998b6,equation,unknown_operator_fallback,,False,False,-?|,parse_error: no examples extracted from question text.
+da353dee,equation,unknown_operator_fallback,,False,False,"@@@""",parse_error: no examples extracted from question text.
+da3f727d,equation,unknown_operator_fallback,,False,True,/14,No rule matched all 4 example(s). Test case: 59 / 73 = ?
+da51295d,equation,unknown_operator_fallback,,False,False,@]`,parse_error: no examples extracted from question text.
+da61dedc,equation,unknown_operator_fallback,,False,False,/|{#,parse_error: no examples extracted from question text.
+da931308,equation,unknown_operator_fallback,,False,False,-(],parse_error: no examples extracted from question text.
+dac75343,equation,unknown_operator_fallback,,False,False,#@@`,parse_error: no examples extracted from question text.
+dad3bf21,equation,unknown_operator_fallback,,False,False,-}},parse_error: no examples extracted from question text.
+dadc24d7,equation,unknown_operator_fallback,,False,False,{{,parse_error: no examples extracted from question text.
+dafd11de,equation,unknown_operator_fallback,,False,False,(',parse_error: no examples extracted from question text.
+db1e0603,equation,unknown_operator_fallback,,False,False,![},parse_error: no examples extracted from question text.
+db4383f3,equation,unknown_operator_fallback,,False,True,175,No rule matched all 2 example(s). Test case: 01 $ 75 = ?
+db4f43ef,equation,unknown_operator_fallback,,False,False,"%""|@",parse_error: no examples extracted from question text.
+db564ba9,equation,unknown_operator_fallback,,False,False,(`#,parse_error: no examples extracted from question text.
+db5a5b71,equation,unknown_operator_fallback,,False,False,31,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+db66c42c,equation,unknown_operator_fallback,,False,False,'},parse_error: no examples extracted from question text.
+db6a5663,equation,unknown_operator_fallback,,False,False,2945,parse_error: no examples extracted from question text.
+dba045b0,equation,unknown_operator_fallback,,False,False,`,parse_error: no examples extracted from question text.
+dbc6defc,equation,unknown_operator_fallback,,False,False,1886,parse_error: no examples extracted from question text.
+dbd0e3c9,equation,unknown_operator_fallback,,False,True,5631,No rule matched all 3 example(s). Test case: 56 * 31 = ?
+dbdbbaa3,equation,unknown_operator_fallback,,False,False,>'',parse_error: no examples extracted from question text.
+dc0f5e5e,equation,unknown_operator_fallback,,False,False,%%}#,parse_error: no examples extracted from question text.
+dc178d1c,equation,unknown_operator_fallback,,False,False,04,parse_error: no examples extracted from question text.
+dc240ebd,equation,unknown_operator_fallback,,False,False,`}:},parse_error: no examples extracted from question text.
+dc6c0d49,equation,unknown_operator_fallback,,False,False,:>?#,parse_error: no examples extracted from question text.
+dc73d295,equation,unknown_operator_fallback,,False,True,86,No rule matched all 2 example(s). Test case: 22 * 65 = ?
+dc7a5e7b,equation,forward_concat,4445,True,True,4445,examples_parsed=1; rule=forward_concat; input=(44 @ 45); predicted=4445; expected=4445; match=YES
+dc93896e,equation,unknown_operator_fallback,,False,False,[?<,parse_error: no examples extracted from question text.
+dcaf44c4,equation,unknown_operator_fallback,,False,True,8742,No rule matched all 3 example(s). Test case: 24 * 95 = ?
+dcb9e01d,equation,unknown_operator_fallback,,False,False,}@`,parse_error: no examples extracted from question text.
+dcbf2073,equation,unknown_operator_fallback,,False,True,124,No rule matched all 4 example(s). Test case: 77 - 48 = ?
+dd626fd0,equation,unknown_operator_fallback,,False,True,1671,No rule matched all 4 example(s). Test case: 08 * 22 = ?
+ddb9aafd,equation,unknown_operator_fallback,,False,False,5544,parse_error: no examples extracted from question text.
+dde06528,equation,unknown_operator_fallback,,False,False,8452,parse_error: no examples extracted from question text.
+de036bbf,equation,unknown_operator_fallback,,False,False,''#,parse_error: no examples extracted from question text.
+de3ea27c,equation,unknown_operator_fallback,,False,False,!|%],parse_error: no examples extracted from question text.
+dea42835,equation,unknown_operator_fallback,,False,False,['[/,parse_error: no examples extracted from question text.
+debff779,equation,unknown_operator_fallback,,False,True,94,No rule matched all 5 example(s). Test case: 36 - 41 = ?
+deed3497,equation,unknown_operator_fallback,,False,False,\^]],parse_error: no examples extracted from question text.
+df1e3788,equation,unknown_operator_fallback,,False,False,>^>,parse_error: no examples extracted from question text.
+df309eeb,equation,unknown_operator_fallback,,False,False,77,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+df3262bc,equation,unknown_operator_fallback,,False,False,]/,parse_error: no examples extracted from question text.
+df92aa6a,equation,unknown_operator_fallback,,False,True,7682,No rule matched all 3 example(s). Test case: 82 * 76 = ?
+dfec0ed4,equation,forward_concat,9370,True,True,9370,examples_parsed=2; rule=forward_concat; input=(93 * 70); predicted=9370; expected=9370; match=YES
+dfecf5f5,equation,unknown_operator_fallback,,False,False,',parse_error: no examples extracted from question text.
+e07fffa6,equation,unknown_operator_fallback,,False,True,04,No rule matched all 2 example(s). Test case: 36 - 32 = ?
+e102a09d,equation,unknown_operator_fallback,,False,True,-02,No rule matched all 5 example(s). Test case: 42 - 44 = ?
+e126a1e3,equation,unknown_operator_fallback,,False,False,"<"":",parse_error: no examples extracted from question text.
+e141dc83,equation,unknown_operator_fallback,,False,False,:>,parse_error: no examples extracted from question text.
+e1728524,equation,unknown_operator_fallback,,False,True,1089,No rule matched all 3 example(s). Test case: 99 / 99 = ?
+e1c0ae13,equation,unknown_operator_fallback,,False,False,4968,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+e2361a00,equation,unknown_operator_fallback,,False,False,',parse_error: no examples extracted from question text.
+e247d364,equation,unknown_operator_fallback,,False,False,11,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+e2bb1d9f,equation,unknown_operator_fallback,,False,True,-91,No rule matched all 3 example(s). Test case: 03 - 94 = ?
+e2c069ae,equation,unknown_operator_fallback,,False,False,/{,parse_error: no examples extracted from question text.
+e2f2bea4,equation,unknown_operator_fallback,,False,True,3075,No rule matched all 2 example(s). Test case: 29 * 26 = ?
+e307429d,equation,unknown_operator_fallback,,False,False,6523,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+e33f1695,equation,unknown_operator_fallback,,False,False,5554,parse_error: no examples extracted from question text.
+e3890bf7,equation,unknown_operator_fallback,,False,False,{@%],parse_error: no examples extracted from question text.
+e38c423b,equation,unknown_operator_fallback,,False,False,"""(@""",parse_error: no examples extracted from question text.
+e3b06854,equation,unknown_operator_fallback,,False,False,/&:,parse_error: no examples extracted from question text.
+e3b3573a,equation,unknown_operator_fallback,,False,True,7265,No rule matched all 1 example(s). Test case: 76 | 48 = ?
+e3bf0c2c,equation,unknown_operator_fallback,,False,False,"""`",parse_error: no examples extracted from question text.
+e3fbc768,equation,unknown_operator_fallback,,False,False,'(^),parse_error: no examples extracted from question text.
+e401ee4f,equation,unknown_operator_fallback,,False,False,^^@},parse_error: no examples extracted from question text.
+e4479bb1,equation,unknown_operator_fallback,,False,False,(35,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+e483e127,equation,unknown_operator_fallback,,False,False,#''>,parse_error: no examples extracted from question text.
+e4aeed67,equation,unknown_operator_fallback,,False,False,@`,parse_error: no examples extracted from question text.
+e4b6ce82,equation,unknown_operator_fallback,,False,True,669,No rule matched all 3 example(s). Test case: 24 @ 32 = ?
+e4ca4f9e,equation,unknown_operator_fallback,,False,False,'#{,parse_error: no examples extracted from question text.
+e4cc7639,equation,unknown_operator_fallback,,False,False,113,parse_error: no examples extracted from question text.
+e518256e,equation,unknown_operator_fallback,,False,False,84,parse_error: no examples extracted from question text.
+e582df31,equation,unknown_operator_fallback,,False,False,}@,parse_error: no examples extracted from question text.
+e585410a,equation,unknown_operator_fallback,,False,False,"$""!@",parse_error: no examples extracted from question text.
+e5956ffa,equation,unknown_operator_fallback,,False,False,821,parse_error: no examples extracted from question text.
+e5b65a4c,equation,unknown_operator_fallback,,False,False,``#,parse_error: no examples extracted from question text.
+e5d4eeb8,equation,unknown_operator_fallback,,False,True,1162,No rule matched all 3 example(s). Test case: 92 * 09 = ?
+e5d6e090,equation,unknown_operator_fallback,,False,False,#<@,parse_error: no examples extracted from question text.
+e5e29014,equation,unknown_operator_fallback,,False,False,'%,parse_error: no examples extracted from question text.
+e62b6ae9,equation,unknown_operator_fallback,,False,False,[[`<,parse_error: no examples extracted from question text.
+e667f2d7,equation,unknown_operator_fallback,,False,False,*4,parse_error: no examples extracted from question text.
+e6af1658,equation,unknown_operator_fallback,,False,False,)})/,parse_error: no examples extracted from question text.
+e70d5739,equation,unknown_operator_fallback,,False,True,6257,No rule matched all 3 example(s). Test case: 57 + 62 = ?
+e776562e,equation,unknown_operator_fallback,,False,False,@\%,parse_error: no examples extracted from question text.
+e7b87b82,equation,unknown_operator_fallback,,False,False,10,parse_error: no examples extracted from question text.
+e7cf0394,equation,unknown_operator_fallback,,False,False,9783,parse_error: no examples extracted from question text.
+e7dfe7d3,equation,unknown_operator_fallback,,False,False,0,parse_error: no examples extracted from question text.
+e8011eb6,equation,unknown_operator_fallback,,False,False,]$|%,parse_error: no examples extracted from question text.
+e82ed6be,equation,unknown_operator_fallback,,False,False,/'?,parse_error: no examples extracted from question text.
+e836fb20,equation,unknown_operator_fallback,,False,True,68,No rule matched all 4 example(s). Test case: 89 - 21 = ?
+e8de8b47,equation,unknown_operator_fallback,,False,True,1,No rule matched all 1 example(s). Test case: 57 $ 56 = ?
+e952f61f,equation,unknown_operator_fallback,,False,True,4699,No rule matched all 5 example(s). Test case: 50 $ 94 = ?
+e977d0b7,equation,unknown_operator_fallback,,False,False,&[/{,parse_error: no examples extracted from question text.
+e9a84dd6,equation,unknown_operator_fallback,,False,True,771,No rule matched all 4 example(s). Test case: 97 + 89 = ?
+e9a9f047,equation,unknown_operator_fallback,,False,False,|(,parse_error: no examples extracted from question text.
+e9aece37,equation,unknown_operator_fallback,,False,False,"[`""`",parse_error: no examples extracted from question text.
+e9afa4a0,equation,unknown_operator_fallback,,False,False,}51,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+e9b69bf8,equation,unknown_operator_fallback,,False,False,15,parse_error: no examples extracted from question text.
+e9e6b620,equation,unknown_operator_fallback,,False,False,25,parse_error: no examples extracted from question text.
+e9f8559a,equation,unknown_operator_fallback,,False,False,!|:',parse_error: no examples extracted from question text.
+ea04ed35,equation,unknown_operator_fallback,,False,False,"|""",parse_error: no examples extracted from question text.
+ea6d926a,equation,unknown_operator_fallback,,False,True,87,No rule matched all 4 example(s). Test case: 25 + 62 = ?
+ea829b32,equation,unknown_operator_fallback,,False,False,151,parse_error: no examples extracted from question text.
+ea9f3811,equation,forward_concat,,False,False,}13,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+eabc719f,equation,unknown_operator_fallback,,False,False,"/$""""",parse_error: no examples extracted from question text.
+eac0e775,equation,unknown_operator_fallback,,False,False,<@<(,parse_error: no examples extracted from question text.
+ead0e1dd,equation,unknown_operator_fallback,,False,False,911,parse_error: no examples extracted from question text.
+ead8fe28,equation,unknown_operator_fallback,,False,False,141,parse_error: no examples extracted from question text.
+eafc7e67,equation,unknown_operator_fallback,,False,True,9044,No rule matched all 3 example(s). Test case: 85 * 67 = ?
+eb0dcb97,equation,unknown_operator_fallback,,False,False,${,parse_error: no examples extracted from question text.
+eb1a62f7,equation,unknown_operator_fallback,,False,False,>!>},parse_error: no examples extracted from question text.
+eb354353,equation,unknown_operator_fallback,,False,False,\%<%,parse_error: no examples extracted from question text.
+eb68289b,equation,unknown_operator_fallback,,False,True,-82,No rule matched all 3 example(s). Test case: 72 - 55 = ?
+ebc56423,equation,unknown_operator_fallback,,False,False,-(`,parse_error: no examples extracted from question text.
+ec2099f5,equation,unknown_operator_fallback,,False,False,:]'\,parse_error: no examples extracted from question text.
+ec37a5e7,equation,unknown_operator_fallback,,False,True,-17,No rule matched all 5 example(s). Test case: 42 - 59 = ?
+ec694941,equation,unknown_operator_fallback,,False,True,1261,No rule matched all 2 example(s). Test case: 54 * 63 = ?
+ec8b4875,equation,unknown_operator_fallback,,False,False,"|""]",parse_error: no examples extracted from question text.
+ec92f091,equation,unknown_operator_fallback,,False,False,</,parse_error: no examples extracted from question text.
+ed561f79,equation,unknown_operator_fallback,,False,True,38,No rule matched all 4 example(s). Test case: 41 + 96 = ?
+ed61a9d6,equation,unknown_operator_fallback,,False,False,"!""""!",parse_error: no examples extracted from question text.
+ed80cf3e,equation,reverse_concat,1431,True,True,1431,examples_parsed=1; rule=reverse_concat; input=(31 * 14); predicted=1431; expected=1431; match=YES
+edb43422,equation,unknown_operator_fallback,,False,False,@^$,parse_error: no examples extracted from question text.
+edf364da,equation,unknown_operator_fallback,,False,False,$(%,parse_error: no examples extracted from question text.
+ee49f4b7,equation,unknown_operator_fallback,,False,False,)(^(,parse_error: no examples extracted from question text.
+ee9239e9,equation,unknown_operator_fallback,,False,True,2629,No rule matched all 3 example(s). Test case: 26 * 29 = ?
+eeae398e,equation,unknown_operator_fallback,,False,True,3770,No rule matched all 1 example(s). Test case: 65 / 58 = ?
+ef1b13ac,equation,unknown_operator_fallback,,False,True,8,No rule matched all 2 example(s). Test case: 74 + 66 = ?
+ef6bc241,equation,unknown_operator_fallback,,False,False,$55,parse_error: no examples extracted from question text.
+efa7edc3,equation,unknown_operator_fallback,,False,False,//:},parse_error: no examples extracted from question text.
+efc95486,equation,unknown_operator_fallback,,False,False,'/,parse_error: no examples extracted from question text.
+efc9691d,equation,unknown_operator_fallback,,False,False,+$(,parse_error: no examples extracted from question text.
+f01f112b,equation,unknown_operator_fallback,,False,False,$^>,parse_error: no examples extracted from question text.
+f06547b1,equation,unknown_operator_fallback,,False,False,"[%""",parse_error: no examples extracted from question text.
+f09672d3,equation,unknown_operator_fallback,,False,False,@],parse_error: no examples extracted from question text.
+f0a2d457,equation,forward_concat,,False,False,22,parse_error: no test case (= ?) found. Rule identified from examples: forward_concat.
+f1680db9,equation,unknown_operator_fallback,,False,False,:|#>,parse_error: no examples extracted from question text.
+f2209ca5,equation,unknown_operator_fallback,,False,False,>#<,parse_error: no examples extracted from question text.
+f2399f16,equation,unknown_operator_fallback,,False,False,">}""",parse_error: no examples extracted from question text.
+f28681ad,equation,unknown_operator_fallback,,False,True,4314,No rule matched all 5 example(s). Test case: 14 * 43 = ?
+f29193ea,equation,unknown_operator_fallback,,False,False,@%^,parse_error: no examples extracted from question text.
+f297547e,equation,unknown_operator_fallback,,False,False,@},parse_error: no examples extracted from question text.
+f299569f,equation,unknown_operator_fallback,,False,False,7992,parse_error: no examples extracted from question text.
+f2a25cf9,equation,unknown_operator_fallback,,False,False,:!,parse_error: no examples extracted from question text.
+f2afd89d,equation,unknown_operator_fallback,,False,True,6102,No rule matched all 4 example(s). Test case: 84 * 24 = ?
+f2fa334a,equation,unknown_operator_fallback,,False,False,545,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f2ff37b2,equation,unknown_operator_fallback,,False,False,2639,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f333b67f,equation,unknown_operator_fallback,,False,False,100,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f35a488d,equation,unknown_operator_fallback,,False,False,162,parse_error: no examples extracted from question text.
+f36fe07e,equation,unknown_operator_fallback,,False,False,"?""}",parse_error: no examples extracted from question text.
+f3959455,equation,unknown_operator_fallback,,False,False,:$,parse_error: no examples extracted from question text.
+f3c73290,equation,unknown_operator_fallback,,False,False,`[$,parse_error: no examples extracted from question text.
+f3ce6fa4,equation,unknown_operator_fallback,,False,False,"""{",parse_error: no examples extracted from question text.
+f3cecf2f,equation,unknown_operator_fallback,,False,False,031,parse_error: no examples extracted from question text.
+f3e08a24,equation,unknown_operator_fallback,,False,True,0548,No rule matched all 3 example(s). Test case: 48 + 05 = ?
+f45dd620,equation,unknown_operator_fallback,,False,False,-??,parse_error: no examples extracted from question text.
+f463ee16,equation,unknown_operator_fallback,,False,False,78,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f4d3e67f,equation,unknown_operator_fallback,,False,False,%(,parse_error: no examples extracted from question text.
+f4ecefa4,equation,unknown_operator_fallback,,False,False,86,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f4f92956,equation,unknown_operator_fallback,,False,False,(`)),parse_error: no examples extracted from question text.
+f5126d48,equation,unknown_operator_fallback,,False,False,${&@,parse_error: no examples extracted from question text.
+f519ace9,equation,unknown_operator_fallback,,False,False,-(,parse_error: no examples extracted from question text.
+f52edbc1,equation,unknown_operator_fallback,,False,False,?{,parse_error: no examples extracted from question text.
+f624f57c,equation,unknown_operator_fallback,,False,False,[,parse_error: no examples extracted from question text.
+f642e7b5,equation,unknown_operator_fallback,,False,True,-74,No rule matched all 4 example(s). Test case: 73 - 48 = ?
+f66f0fe0,equation,unknown_operator_fallback,,False,False,7793,parse_error: no examples extracted from question text.
+f6ca90f6,equation,unknown_operator_fallback,,False,False,31,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f6db706e,equation,unknown_operator_fallback,,False,True,4,No rule matched all 3 example(s). Test case: 94 * 54 = ?
+f7828fc1,equation,unknown_operator_fallback,,False,False,"@${""",parse_error: no examples extracted from question text.
+f7d26b8d,equation,unknown_operator_fallback,,False,False,/@,parse_error: no examples extracted from question text.
+f7d90ae3,equation,forward_concat,9819,True,True,9819,examples_parsed=2; rule=forward_concat; input=(98 / 19); predicted=9819; expected=9819; match=YES
+f7e8ca63,equation,unknown_operator_fallback,,False,False,>}{`,parse_error: no examples extracted from question text.
+f80d2e10,equation,unknown_operator_fallback,,False,False,{)^],parse_error: no examples extracted from question text.
+f8731f21,equation,unknown_operator_fallback,,False,False,<)$<,parse_error: no examples extracted from question text.
+f8bbabab,equation,unknown_operator_fallback,,False,False,>^`>,parse_error: no examples extracted from question text.
+f8d6abd1,equation,unknown_operator_fallback,,False,False,5543,parse_error: no examples extracted from question text.
+f901d1cc,equation,unknown_operator_fallback,,False,False,-<),parse_error: no examples extracted from question text.
+f93475e9,equation,unknown_operator_fallback,,False,True,4443,No rule matched all 4 example(s). Test case: 24 * 28 = ?
+f94810f5,equation,unknown_operator_fallback,,False,False,1592,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f96e1e6e,equation,unknown_operator_fallback,,False,True,041,No rule matched all 1 example(s). Test case: 85 - 28 = ?
+f971f8dd,equation,unknown_operator_fallback,,False,False,131,parse_error: no examples extracted from question text.
+f9799a68,equation,unknown_operator_fallback,,False,False,&:/?,parse_error: no examples extracted from question text.
+f9983eb7,equation,unknown_operator_fallback,,False,False,1983,parse_error: no examples extracted from question text.
+f9a33aa1,equation,unknown_operator_fallback,,False,False,/((`,parse_error: no examples extracted from question text.
+f9bd3119,equation,unknown_operator_fallback,,False,False,)2,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+f9ff29fa,equation,unknown_operator_fallback,,False,True,8482,No rule matched all 2 example(s). Test case: 23 * 98 = ?
+fa4d703a,equation,unknown_operator_fallback,,False,False,"^^""""",parse_error: no examples extracted from question text.
+fa5dfa46,equation,unknown_operator_fallback,,False,False,-^},parse_error: no examples extracted from question text.
+fa714b83,equation,unknown_operator_fallback,,False,False,/,parse_error: no examples extracted from question text.
+fa7426d3,equation,unknown_operator_fallback,,False,False,65,parse_error: no test case (= ?) found. Rule identified from examples: unknown_operator_fallback.
+fa952980,equation,unknown_operator_fallback,,False,True,71,No rule matched all 4 example(s). Test case: 18 $ 54 = ?
+fae3ee40,equation,unknown_operator_fallback,,False,False,{$,parse_error: no examples extracted from question text.
+faf1121c,equation,unknown_operator_fallback,,False,False,))[,parse_error: no examples extracted from question text.
+fb3f7b77,equation,unknown_operator_fallback,,False,True,62,No rule matched all 2 example(s). Test case: 46 - 83 = ?
+fb440865,equation,unknown_operator_fallback,,False,False,@@,parse_error: no examples extracted from question text.
+fb4bc935,equation,unknown_operator_fallback,,False,True,-6,No rule matched all 4 example(s). Test case: 64 - 25 = ?
+fb623471,equation,unknown_operator_fallback,,False,True,-21,No rule matched all 3 example(s). Test case: 08 - 29 = ?
+fba40625,equation,unknown_operator_fallback,,False,False,'>&,parse_error: no examples extracted from question text.
+fbd5fe63,equation,unknown_operator_fallback,,False,False,$[>,parse_error: no examples extracted from question text.
+fc137acd,equation,unknown_operator_fallback,,False,False,^^{>,parse_error: no examples extracted from question text.
+fc2b2fc9,equation,unknown_operator_fallback,,False,False,@:@,parse_error: no examples extracted from question text.
+fc3982df,equation,unknown_operator_fallback,,False,False,"#\[""",parse_error: no examples extracted from question text.
+fc759a1a,equation,unknown_operator_fallback,,False,True,127,No rule matched all 1 example(s). Test case: 48 ^ 79 = ?
+fc799f0a,equation,unknown_operator_fallback,,False,True,021,No rule matched all 3 example(s). Test case: 37 + 84 = ?
+fc7e4f9b,equation,unknown_operator_fallback,,False,False,?<,parse_error: no examples extracted from question text.
+fc7e53c7,equation,reverse_concat,3577,False,True,42,examples_parsed=1; rule=reverse_concat; input=(77 - 35); predicted=3577; expected=42; match=NO
+fcad9241,equation,unknown_operator_fallback,,False,False,}?,parse_error: no examples extracted from question text.
+fd1c8f66,equation,unknown_operator_fallback,,False,False,-}@,parse_error: no examples extracted from question text.
+fd683004,equation,unknown_operator_fallback,,False,True,19,No rule matched all 3 example(s). Test case: 43 + 75 = ?
+fdbdf50c,equation,unknown_operator_fallback,,False,False,"-\""",parse_error: no examples extracted from question text.
+fdd9ff2b,equation,unknown_operator_fallback,,False,True,825,No rule matched all 3 example(s). Test case: 21 * 44 = ?
+fe393711,equation,unknown_operator_fallback,,False,False,1291,parse_error: no examples extracted from question text.
+fe6da79d,equation,unknown_operator_fallback,,False,False,:&]!,parse_error: no examples extracted from question text.
+febd3442,equation,unknown_operator_fallback,,False,True,13,No rule matched all 4 example(s). Test case: 64 - 77 = ?
+fecad63c,equation,unknown_operator_fallback,,False,True,09,No rule matched all 4 example(s). Test case: 56 $ 52 = ?
+fee66e16,equation,unknown_operator_fallback,,False,False,3910,parse_error: no examples extracted from question text.
+fef61ca1,equation,unknown_operator_fallback,,False,False,111,parse_error: no examples extracted from question text.
+ff0e37ae,equation,unknown_operator_fallback,,False,False,"%'""`",parse_error: no examples extracted from question text.
+ff121f08,equation,unknown_operator_fallback,,False,False,#<,parse_error: no examples extracted from question text.
+ff8409cd,equation,unknown_operator_fallback,,False,False,9,parse_error: no examples extracted from question text.
+ff86cd34,equation,unknown_operator_fallback,,False,False,)|((,parse_error: no examples extracted from question text.

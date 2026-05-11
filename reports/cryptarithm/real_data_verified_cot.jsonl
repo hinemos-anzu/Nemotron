@@ -1,0 +1,20 @@
+{"problem_id": "047c4111", "category": "equation", "question": "19)37 = 18\n15$20 = 1520\n30)14 = 16\n25$96 = ?", "answer": "2596", "rule": "forward_concat", "verified": true}
+{"problem_id": "0cd170a0", "category": "equation", "question": "22:12 = 10\n23:33 = :10\n67^30 = 6730\n71^79 = 7179\n98^14 = ?", "answer": "9814", "rule": "forward_concat", "verified": true}
+{"problem_id": "2f485a40", "category": "equation", "question": "20+44 = 2044\n15}39 = 1539\n35}43 = 3543\n82+31 = 8231\n18+67 = ?", "answer": "1867", "rule": "forward_concat", "verified": true}
+{"problem_id": "3580648f", "category": "equation", "question": "83/40 = /43\n69/91 = /22\n87-64 = 8764\n21-13 = 2113\n25/14 = /11\n26-40 = ?", "answer": "2640", "rule": "forward_concat", "verified": true}
+{"problem_id": "41e6cbfc", "category": "equation", "question": "05+12 = 1205\n02*63 = 6302\n69+97 = 9769\n61+47 = 4761\n18+93 = ?", "answer": "9318", "rule": "reverse_concat", "verified": true}
+{"problem_id": "4aeed935", "category": "equation", "question": "24*74 = 7424\n75+78 = 7875\n31+96 = 9631\n07-19 = -12\n55*14 = ?", "answer": "1455", "rule": "reverse_concat", "verified": true}
+{"problem_id": "52c62a3e", "category": "equation", "question": "48\\75 = 72\\\n56\\24 = 32\\\n62*43 = 4362\n02*71 = 7102\n77*33 = 3377\n92*12 = ?", "answer": "1292", "rule": "reverse_concat", "verified": true}
+{"problem_id": "54c9bde5", "category": "equation", "question": "52(28 = 79\n50-78 = 5078\n71\\89 = \\18\n36-79 = 3679\n87(18 = 104\n30-64 = ?", "answer": "3064", "rule": "forward_concat", "verified": true}
+{"problem_id": "552e14d7", "category": "equation", "question": "59+94 = 9459\n68+08 = 0868\n14+35 = 3514\n12+98 = 9812\n76'52 = 24'\n56+17 = ?", "answer": "1756", "rule": "reverse_concat", "verified": true}
+{"problem_id": "5a763686", "category": "equation", "question": "67&82 = 6782\n41)47 = 88\n12>37 = 25\n74&95 = ?", "answer": "7495", "rule": "forward_concat", "verified": true}
+{"problem_id": "71e02000", "category": "equation", "question": "56-66 = -10\n25$31 = 2531\n47-19 = -28\n37$67 = ?", "answer": "3767", "rule": "forward_concat", "verified": true}
+{"problem_id": "7c72ad99", "category": "equation", "question": "69*91 = 9169\n33*27 = 2733\n19*34 = 3419\n33*27 = ?", "answer": "2733", "rule": "reverse_concat", "verified": true}
+{"problem_id": "9760032a", "category": "equation", "question": "32+98 = 9832\n51-63 = -12\n38+76 = 7638\n72+93 = ?", "answer": "9372", "rule": "reverse_concat", "verified": true}
+{"problem_id": "a19a75ba", "category": "equation", "question": "55+66 = +11\n76+59 = +82\n53#08 = 5308\n19!91 = 9271\n26#55 = ?", "answer": "2655", "rule": "forward_concat", "verified": true}
+{"problem_id": "b989c740", "category": "equation", "question": "13*63 = 6313\n03+21 = 2103\n56*85 = 8556\n56+74 = 7456\n66*17 = 1766\n18+86 = ?", "answer": "8618", "rule": "reverse_concat", "verified": true}
+{"problem_id": "cd9d50e2", "category": "equation", "question": "61-79 = -18\n92+76 = 7692\n53-24 = -7\n93+52 = ?", "answer": "5293", "rule": "reverse_concat", "verified": true}
+{"problem_id": "dc7a5e7b", "category": "equation", "question": "97?96 = 01?\n36!09 = 351\n73@82 = 7382\n44@45 = ?", "answer": "4445", "rule": "forward_concat", "verified": true}
+{"problem_id": "dfec0ed4", "category": "equation", "question": "15*59 = 1559\n81}30 = 2431\n18*77 = 1877\n93*70 = ?", "answer": "9370", "rule": "forward_concat", "verified": true}
+{"problem_id": "ed80cf3e", "category": "equation", "question": "56-78 = -22\n34-95 = -61\n67+11 = 1167\n31*14 = ?", "answer": "1431", "rule": "reverse_concat", "verified": true}
+{"problem_id": "f7d90ae3", "category": "equation", "question": "61`23 = 38\n84/48 = 8448\n87`85 = 2\n73/54 = 7354\n98/19 = ?", "answer": "9819", "rule": "forward_concat", "verified": true}
