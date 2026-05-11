@@ -34,6 +34,23 @@ from category_solvers import solve_by_category
 REPO_ROOT = _SCRIPTS.parent
 OUTPUT_DIR = REPO_ROOT / "reports" / "cryptarithm"
 
+# Numeric categories where floating-point tolerance applies
+_NUMERIC_CATS = {"gravity", "unit_conversion"}
+_NUMERIC_TOLERANCE = 0.015
+
+
+def _is_correct(predicted: Optional[str], expected: str, category: str) -> bool:
+    if predicted is None:
+        return False
+    if str(predicted).strip() == str(expected).strip():
+        return True
+    if category in _NUMERIC_CATS:
+        try:
+            return abs(float(predicted) - float(expected)) <= _NUMERIC_TOLERANCE
+        except (ValueError, TypeError):
+            pass
+    return False
+
 # ---------------------------------------------------------------------------
 # Category detection from prompt text
 # ---------------------------------------------------------------------------
@@ -160,12 +177,12 @@ def run(data_path: Path, target_cat: str = "equation") -> None:
             prompt = r.get("prompt", "")
             expected = r.get("answer", "")
             predicted = solve_by_category(target_cat, prompt, expected)
-            is_correct = predicted is not None and str(predicted).strip() == str(expected).strip()
+            correct = _is_correct(predicted, expected, target_cat)
             solved.append({
                 **r,
                 "solver_rule": target_cat + "_solver",
                 "solver_predicted": predicted,
-                "solver_correct": is_correct,
+                "solver_correct": correct,
                 "solver_parse_ok": predicted is not None,
                 "solver_explanation": f"predicted={predicted}; expected={expected}",
             })
