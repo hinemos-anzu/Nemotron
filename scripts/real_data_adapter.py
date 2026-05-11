@@ -29,6 +29,7 @@ from typing import Dict, List, Optional
 _SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(_SCRIPTS))
 from cryptarithm_solver import solve_batch, ALL_RULES, parse_examples
+from category_solvers import solve_by_category
 
 REPO_ROOT = _SCRIPTS.parent
 OUTPUT_DIR = REPO_ROOT / "reports" / "cryptarithm"
@@ -148,9 +149,26 @@ def run(data_path: Path, target_cat: str = "equation") -> None:
         r["problem_id"] = r.get("id", "")
         r.setdefault("examples", "")
 
-    # Run solver
+    # For equation: use cryptarithm solve_batch (concat rules)
+    # For all other categories: use category-specific solver
     print("Running solver...", flush=True)
-    solved = solve_batch(targets, question_key="question", answer_key="answer")
+    solved = []
+    if target_cat == "equation":
+        solved = solve_batch(targets, question_key="question", answer_key="answer")
+    else:
+        for r in targets:
+            prompt = r.get("prompt", "")
+            expected = r.get("answer", "")
+            predicted = solve_by_category(target_cat, prompt, expected)
+            is_correct = predicted is not None and str(predicted).strip() == str(expected).strip()
+            solved.append({
+                **r,
+                "solver_rule": target_cat + "_solver",
+                "solver_predicted": predicted,
+                "solver_correct": is_correct,
+                "solver_parse_ok": predicted is not None,
+                "solver_explanation": f"predicted={predicted}; expected={expected}",
+            })
 
     correct = sum(1 for r in solved if r.get("solver_correct"))
     parse_ok = sum(1 for r in solved if r.get("solver_parse_ok"))
