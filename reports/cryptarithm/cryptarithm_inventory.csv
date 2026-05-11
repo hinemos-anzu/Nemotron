@@ -1,0 +1,21 @@
+problem_id,category,question,answer,examples_count,question_len,answer_len,operator_symbols,in_corpus,source_file
+syn_ded_001,cryptarithm_deduce,3 + 5 = 35 | 7 + 2 = 72 | 4 + 8 = ?,48,2,31,2,+,False,synthetic_or_unknown
+syn_ded_002,cryptarithm_deduce,3 + 5 = 53 | 7 + 2 = 27 | 4 + 8 = ?,84,2,31,2,+,False,synthetic_or_unknown
+syn_ded_003,cryptarithm_deduce,12 + 34 = 2134 | 56 + 78 = 6578 | 90 + 11 = ?,0911,2,41,4,+,False,synthetic_or_unknown
+syn_ded_004,cryptarithm_deduce,12 + 34 = 1243 | 56 + 78 = 5687 | 90 + 11 = ?,9011,2,41,4,+,False,synthetic_or_unknown
+syn_ded_005,cryptarithm_deduce,123 + 456 = 321654 | 789 + 012 = 987210 | 345 + 678 = ?,543876,2,51,6,+,False,synthetic_or_unknown
+syn_ded_006,cryptarithm_deduce,AB + CD = ACBD | EF + GH = EGFH | IJ + KL = ?,IKJL,2,41,4,+,False,synthetic_or_unknown
+syn_ded_007,cryptarithm_deduce,AB + CD = CADB | EF + GH = GEHF | IJ + KL = ?,KILJ,2,41,4,+,False,synthetic_or_unknown
+syn_ded_008,cryptarithm_deduce,12 ★ 34 = 1234 | 56 ★ 78 = 5678 | 99 ★ 11 = ?,9911,2,41,4,★,False,synthetic_or_unknown
+syn_ded_009,cryptarithm_deduce,HELLO + WORLD = HELLOWORLD | FOO + BAR = FOOBAR | ABC + DEF = ?,ABCDEF,2,59,6,+,False,synthetic_or_unknown
+syn_ded_010,cryptarithm_deduce,1 + 2 = 99 | 3 + 4 = 88 | 5 + 6 = ?,77,2,31,2,+,False,synthetic_or_unknown
+syn_gue_001,cryptarithm_guess,"Given: 3 + 5 = 35, 7 + 2 = 72. What rule produces these outputs?",forward_concat,2,64,14,+,False,synthetic_or_unknown
+syn_gue_002,cryptarithm_guess,"Given: 3 + 5 = 53, 7 + 2 = 27. What rule produces these outputs?",reverse_concat,2,64,14,+,False,synthetic_or_unknown
+syn_gue_003,cryptarithm_guess,"Given: AB + CD = ACBD, EF + GH = EGFH. What rule produces these outputs?",interleave_lr,2,72,13,+,False,synthetic_or_unknown
+syn_gue_004,cryptarithm_guess,"Given: 12 + 34 = 2143, 56 + 78 = 6587. What rule produces these outputs?",reverse_both,2,72,12,+,False,synthetic_or_unknown
+syn_gue_005,cryptarithm_guess,"Given: 12 + 34 = 2134, 56 + 78 = 6578. What rule produces these outputs?",reverse_left,2,72,12,+,False,synthetic_or_unknown
+syn_gue_006,cryptarithm_guess,"Given: 12 + 34 = 1243, 56 + 78 = 5687. What rule produces these outputs?",reverse_right,2,72,13,+,False,synthetic_or_unknown
+syn_gue_007,cryptarithm_guess,"Given: AB + CD = CADB, EF + GH = GEHF. What rule produces these outputs?",interleave_rl,2,72,13,+,False,synthetic_or_unknown
+syn_gue_008,cryptarithm_guess,"Given: 123 + 456 = 321654, 789 + 012 = 987210. What rule produces these outputs?",reverse_both,2,80,12,+,False,synthetic_or_unknown
+syn_gue_009,cryptarithm_guess,"Given: 1 + 2 = 99, 3 + 4 = 88. No standard string rule applies. Name it.",unknown_operator_fallback,2,72,25,+,False,synthetic_or_unknown
+syn_gue_010,cryptarithm_guess,"Given: 12 ★ 34 = 1234, 56 ★ 78 = 5678. What rule does ★ follow?",forward_concat,2,63,14,★,False,synthetic_or_unknown

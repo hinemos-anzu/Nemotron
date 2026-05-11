@@ -1,0 +1,21 @@
+problem_id,category,solver_rule,solver_predicted,solver_correct,solver_parse_ok,answer,solver_explanation
+,cryptarithm_deduce,forward_concat,48,True,True,48,examples_parsed=2; rule=forward_concat; input=(4 + 8); predicted=48; expected=48; match=YES
+,cryptarithm_deduce,reverse_concat,84,True,True,84,examples_parsed=2; rule=reverse_concat; input=(4 + 8); predicted=84; expected=84; match=YES
+,cryptarithm_deduce,reverse_left,0911,True,True,0911,examples_parsed=2; rule=reverse_left; input=(90 + 11); predicted=0911; expected=0911; match=YES
+,cryptarithm_deduce,reverse_right,9011,True,True,9011,examples_parsed=2; rule=reverse_right; input=(90 + 11); predicted=9011; expected=9011; match=YES
+,cryptarithm_deduce,reverse_both,543876,True,True,543876,examples_parsed=2; rule=reverse_both; input=(345 + 678); predicted=543876; expected=543876; match=YES
+,cryptarithm_deduce,interleave_lr,IKJL,True,True,IKJL,examples_parsed=2; rule=interleave_lr; input=(IJ + KL); predicted=IKJL; expected=IKJL; match=YES
+,cryptarithm_deduce,interleave_rl,KILJ,True,True,KILJ,examples_parsed=2; rule=interleave_rl; input=(IJ + KL); predicted=KILJ; expected=KILJ; match=YES
+,cryptarithm_deduce,forward_concat,9911,True,True,9911,examples_parsed=2; rule=forward_concat; input=(99 ★ 11); predicted=9911; expected=9911; match=YES
+,cryptarithm_deduce,forward_concat,ABCDEF,True,True,ABCDEF,examples_parsed=2; rule=forward_concat; input=(ABC + DEF); predicted=ABCDEF; expected=ABCDEF; match=YES
+,cryptarithm_deduce,unknown_operator_fallback,,False,True,77,No rule matched all 2 example(s). Test case: 5 + 6 = ?
+,cryptarithm_guess,forward_concat,forward_concat,True,True,forward_concat,examples_parsed=2; rule_identified=forward_concat; expected=forward_concat; match=YES
+,cryptarithm_guess,reverse_concat,reverse_concat,True,True,reverse_concat,examples_parsed=2; rule_identified=reverse_concat; expected=reverse_concat; match=YES
+,cryptarithm_guess,interleave_lr,interleave_lr,True,True,interleave_lr,examples_parsed=2; rule_identified=interleave_lr; expected=interleave_lr; match=YES
+,cryptarithm_guess,reverse_both,reverse_both,True,True,reverse_both,examples_parsed=2; rule_identified=reverse_both; expected=reverse_both; match=YES
+,cryptarithm_guess,reverse_left,reverse_left,True,True,reverse_left,examples_parsed=2; rule_identified=reverse_left; expected=reverse_left; match=YES
+,cryptarithm_guess,reverse_right,reverse_right,True,True,reverse_right,examples_parsed=2; rule_identified=reverse_right; expected=reverse_right; match=YES
+,cryptarithm_guess,interleave_rl,interleave_rl,True,True,interleave_rl,examples_parsed=2; rule_identified=interleave_rl; expected=interleave_rl; match=YES
+,cryptarithm_guess,reverse_both,reverse_both,True,True,reverse_both,examples_parsed=2; rule_identified=reverse_both; expected=reverse_both; match=YES
+,cryptarithm_guess,unknown_operator_fallback,unknown_operator_fallback,True,True,unknown_operator_fallback,examples_parsed=2; rule_identified=unknown_operator_fallback; expected=unknown_operator_fallback; match=YES
+,cryptarithm_guess,forward_concat,forward_concat,True,True,forward_concat,examples_parsed=2; rule_identified=forward_concat; expected=forward_concat; match=YES
