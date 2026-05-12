@@ -51,22 +51,40 @@ torch>=2.2.0
 RUN_TRAINING_SH = """\
 #!/bin/bash
 # オフラインでのトレーニング実行スクリプト
-# 事前に download_model.py でモデルをダウンロードしておくこと
+#
+# 使い方:
+#   bash run_training.sh                          # ローカルキャッシュを使用
+#   bash run_training.sh /path/to/model           # モデルパスを直接指定
+#   MODEL_PATH=/path/to/model bash run_training.sh  # 環境変数で指定
 
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MODEL_DIR="${SCRIPT_DIR}/model_cache/nemotron-8b"
+
+# モデルパスの決定: 引数 > 環境変数 > ローカルキャッシュ
+if [ -n "$1" ]; then
+    MODEL_DIR="$1"
+elif [ -n "$MODEL_PATH" ]; then
+    MODEL_DIR="$MODEL_PATH"
+else
+    MODEL_DIR="${SCRIPT_DIR}/model_cache/nemotron-8b"
+fi
 
 if [ ! -d "$MODEL_DIR" ]; then
     echo "ERROR: モデルが見つかりません: $MODEL_DIR"
-    echo "インターネットがある環境で先に実行してください:"
-    echo "  python scripts/download_model.py --save_dir $MODEL_DIR"
+    echo ""
+    echo "【ローカル実行の場合】インターネットがある環境で先に実行:"
+    echo "  python scripts/download_model.py --save_dir ${SCRIPT_DIR}/model_cache/nemotron-8b"
+    echo ""
+    echo "【Kaggle オフラインの場合】モデルパスを引数で指定:"
+    echo "  bash run_training.sh /kaggle/input/nvidia/nemotron/transformers/llama-3.1-nemotron-nano-8b-v1/1"
     exit 1
 fi
 
+echo "Using model: $MODEL_DIR"
+
 python "${SCRIPT_DIR}/scripts/train_sft.py" \\
     --corpus  "${SCRIPT_DIR}/reports/cryptarithm/corpus.jsonl" \\
-    --output_dir "${SCRIPT_DIR}/adapter_output" \\
+    --output_dir /kaggle/working/adapter \\
     --model_name "${MODEL_DIR}" \\
     --lora_r 16 \\
     --lora_alpha 32 \\
