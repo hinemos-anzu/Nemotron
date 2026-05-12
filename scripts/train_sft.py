@@ -205,7 +205,7 @@ def train(args: argparse.Namespace) -> None:
         gradient_accumulation_steps=args.grad_accum,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.05,
+        warmup_steps=max(1, int(0.05 * len(dataset) // (args.batch_size * args.grad_accum) * args.epochs)),
         fp16=use_fp16,
         bf16=use_bf16,
         logging_steps=10,
@@ -218,12 +218,17 @@ def train(args: argparse.Namespace) -> None:
     )
 
     # ---- SFT Trainer ----
-    # SFTTrainer accepts a "messages" column and applies the tokenizer's chat template
+    # TRL ≥ 0.9 renamed 'tokenizer' to 'processing_class'
+    import trl as _trl
+    _trl_ver = tuple(int(x) for x in _trl.__version__.split(".")[:2])
+    _tok_key = "processing_class" if _trl_ver >= (0, 9) else "tokenizer"
+    print(f"  TRL version: {_trl.__version__}  → using {_tok_key}=", flush=True)
+
     trainer = SFTTrainer(
         model=model,
         train_dataset=dataset,
         args=training_args,
-        tokenizer=tokenizer,
+        **{_tok_key: tokenizer},
         max_seq_length=args.max_seq_len,
         packing=False,
     )
