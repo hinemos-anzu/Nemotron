@@ -126,6 +126,12 @@ def train(args: argparse.Namespace) -> None:
               flush=True)
         args.lora_r = 32
 
+    # Detect float precision: T4/V100 only support fp16; A100/H100 support bf16
+    use_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    use_fp16 = torch.cuda.is_available() and not use_bf16
+    compute_dtype = torch.bfloat16 if use_bf16 else torch.float16
+    print(f"  GPU bf16 support: {use_bf16}  → using {'bf16' if use_bf16 else 'fp16'}", flush=True)
+
     print(f"Loading corpus: {corpus_path}", flush=True)
     records = load_corpus(corpus_path)
     print(f"  records: {len(records)}", flush=True)
@@ -148,7 +154,7 @@ def train(args: argparse.Namespace) -> None:
         load_in_4bit=True,
         bnb_4bit_use_double_quant=True,
         bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_compute_dtype=compute_dtype,
     )
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
@@ -161,7 +167,7 @@ def train(args: argparse.Namespace) -> None:
         quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=True,
-        torch_dtype=torch.bfloat16,
+        dtype=compute_dtype,
     )
     model = prepare_model_for_kbit_training(model)
 
@@ -200,8 +206,8 @@ def train(args: argparse.Namespace) -> None:
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
         warmup_ratio=0.05,
-        fp16=False,
-        bf16=True,
+        fp16=use_fp16,
+        bf16=use_bf16,
         logging_steps=10,
         save_strategy="epoch",
         save_total_limit=1,
