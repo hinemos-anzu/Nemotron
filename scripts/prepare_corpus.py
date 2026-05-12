@@ -87,7 +87,7 @@ def prepare(
     for cat, cnt in sorted(after_cats.items()):
         print(f"  {cat:20s}: {cnt}")
 
-    # Write corpus.jsonl — keep only fields train_sft.py needs
+    # Write corpus.jsonl — keep fields train_sft.py needs
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8") as fh:
         for r in selected:
@@ -101,6 +101,7 @@ def prepare(
                 "verified":   True,
             }
             fh.write(json.dumps(out, ensure_ascii=False) + "\n")
+
 
     print(f"\nCorpus written → {output_path}  ({len(selected)} records)", flush=True)
 
