@@ -229,10 +229,21 @@ def train(args: argparse.Namespace) -> None:
         remove_unused_columns=False,
     )
     if _trl_ver >= (1, 0):
-        # SFTConfig owns max_seq_length and packing
-        _train_kwargs["max_seq_length"] = args.max_seq_len
+        # SFTConfig owns max_seq_length and packing in most 1.x versions;
+        # in 1.4+ it was removed — try with it, fall back without
         _train_kwargs["packing"] = False
-    training_args = _TrainingCls(**_train_kwargs)
+        try:
+            _train_kwargs["max_seq_length"] = args.max_seq_len
+            training_args = _TrainingCls(**_train_kwargs)
+        except TypeError:
+            _train_kwargs.pop("max_seq_length", None)
+            training_args = _TrainingCls(**_train_kwargs)
+            # Enforce truncation via tokenizer instead
+            tokenizer.model_max_length = args.max_seq_len
+            print(f"  max_seq_length not in SFTConfig; set tokenizer.model_max_length={args.max_seq_len}",
+                  flush=True)
+    else:
+        training_args = _TrainingCls(**_train_kwargs)
 
     # ---- SFT Trainer ----
     # TRL >= 0.9: processing_class= replaces tokenizer=
