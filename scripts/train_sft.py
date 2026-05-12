@@ -164,19 +164,35 @@ def train(args: argparse.Namespace) -> None:
         bnb_4bit_compute_dtype=compute_dtype,
     )
 
-    # local_files_only=True when model_name is a local path (avoids HF hub validation)
+    # For local paths: set TRANSFORMERS_OFFLINE to prevent any HF hub contact,
+    # and pass a Path object (bypasses repo-id string validation in hf_hub).
     _is_local = args.model_name.startswith("/") or args.model_name.startswith("./")
-    _from_pretrained_kwargs = {"trust_remote_code": True}
     if _is_local:
-        _from_pretrained_kwargs["local_files_only"] = True
+        import os as _os
+        _os.environ["TRANSFORMERS_OFFLINE"] = "1"
+        _os.environ["HF_DATASETS_OFFLINE"] = "1"
+        model_ref = Path(args.model_name)
+        if not model_ref.is_dir():
+            print(f"ERROR: local model path not found: {model_ref}", file=sys.stderr)
+            sys.exit(1)
+        config_json = model_ref / "config.json"
+        if not config_json.exists():
+            print(f"ERROR: config.json not found in {model_ref}", file=sys.stderr)
+            print(f"  Contents: {list(model_ref.iterdir())}", file=sys.stderr)
+            sys.exit(1)
+        print(f"  Local model path verified: {model_ref}", flush=True)
+    else:
+        model_ref = args.model_name
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name, **_from_pretrained_kwargs)
+    _from_pretrained_kwargs = {"trust_remote_code": True}
+
+    tokenizer = AutoTokenizer.from_pretrained(model_ref, **_from_pretrained_kwargs)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
 
     model = AutoModelForCausalLM.from_pretrained(
-        args.model_name,
+        model_ref,
         quantization_config=bnb_config,
         device_map="auto",
         dtype=compute_dtype,
