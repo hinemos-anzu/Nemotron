@@ -111,10 +111,17 @@ def train(args: argparse.Namespace) -> None:
         AutoTokenizer,
         AutoModelForCausalLM,
         BitsAndBytesConfig,
-        TrainingArguments,
     )
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, TaskType
+    import trl as _trl
+    _trl_ver = tuple(int(x) for x in _trl.__version__.split(".")[:2])
     from trl import SFTTrainer
+    # TRL >= 1.0: SFTConfig replaces TrainingArguments for SFT-specific params
+    # (max_seq_length, packing moved into SFTConfig)
+    if _trl_ver >= (1, 0):
+        from trl import SFTConfig as _TrainingCls
+    else:
+        from transformers import TrainingArguments as _TrainingCls
 
     corpus_path = Path(args.corpus)
     output_dir  = Path(args.output_dir)
@@ -197,15 +204,20 @@ def train(args: argparse.Namespace) -> None:
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
+    print(f"  TRL version: {_trl.__version__}", flush=True)
+
     # ---- Training arguments ----
-    training_args = TrainingArguments(
+    # TRL >= 1.0: use SFTConfig (max_seq_length / packing live here, not in SFTTrainer)
+    # TRL <  1.0: use TrainingArguments + pass max_seq_length to SFTTrainer
+    _warmup_steps = max(1, int(0.05 * len(dataset) // (args.batch_size * args.grad_accum) * args.epochs))
+    _train_kwargs: dict = dict(
         output_dir=str(output_dir / "checkpoints"),
         num_train_epochs=args.epochs,
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_steps=max(1, int(0.05 * len(dataset) // (args.batch_size * args.grad_accum) * args.epochs)),
+        warmup_steps=_warmup_steps,
         fp16=use_fp16,
         bf16=use_bf16,
         logging_steps=10,
@@ -216,21 +228,26 @@ def train(args: argparse.Namespace) -> None:
         dataloader_num_workers=0,
         remove_unused_columns=False,
     )
+    if _trl_ver >= (1, 0):
+        # SFTConfig owns max_seq_length and packing
+        _train_kwargs["max_seq_length"] = args.max_seq_len
+        _train_kwargs["packing"] = False
+    training_args = _TrainingCls(**_train_kwargs)
 
     # ---- SFT Trainer ----
-    # TRL ≥ 0.9 renamed 'tokenizer' to 'processing_class'
-    import trl as _trl
-    _trl_ver = tuple(int(x) for x in _trl.__version__.split(".")[:2])
+    # TRL >= 0.9: processing_class= replaces tokenizer=
     _tok_key = "processing_class" if _trl_ver >= (0, 9) else "tokenizer"
-    print(f"  TRL version: {_trl.__version__}  → using {_tok_key}=", flush=True)
+    _trainer_extra: dict = {_tok_key: tokenizer}
+    if _trl_ver < (1, 0):
+        # older TRL: pass these directly to SFTTrainer
+        _trainer_extra["max_seq_length"] = args.max_seq_len
+        _trainer_extra["packing"] = False
 
     trainer = SFTTrainer(
         model=model,
         train_dataset=dataset,
         args=training_args,
-        **{_tok_key: tokenizer},
-        max_seq_length=args.max_seq_len,
-        packing=False,
+        **_trainer_extra,
     )
 
     print("\nStarting training...", flush=True)
