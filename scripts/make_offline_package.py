@@ -140,17 +140,23 @@ README_OFFLINE_TXT = """\
    python scripts/download_model.py \\
        --model_name nvidia/Llama-3.1-Nemotron-Nano-8B-v1 \\
        --save_dir ./model_cache/nemotron-8b
+   ※ model_cache/ フォルダはこのフォルダ内に作成されます
 
 2. 依存パッケージをインストール:
    pip install -r requirements.txt
 
-3. インターネットをオフにしてトレーニング実行:
+3. zipを展開してこのフォルダに入ってからスクリプトを実行:
+   unzip nemotron_offline.zip
+   cd nemotron_offline
    bash run_training.sh
    # アダプタは ./adapter_output/ に保存される
 
+【重要】run_training.sh は nemotron_offline/ フォルダの中にあります。
+  解凍した場所ではなく、必ず cd nemotron_offline してから実行してください。
+
 【出力ファイル】
-  adapter_output/adapter_model.safetensors
-  adapter_output/adapter_config.json
+  nemotron_offline/adapter_output/adapter_model.safetensors
+  nemotron_offline/adapter_output/adapter_config.json
 
 【Kaggle オフラインの場合】
   run_training_kaggle.py の内容をノートブックセルに貼り付けてください。
