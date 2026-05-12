@@ -164,7 +164,13 @@ def train(args: argparse.Namespace) -> None:
         bnb_4bit_compute_dtype=compute_dtype,
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
+    # local_files_only=True when model_name is a local path (avoids HF hub validation)
+    _is_local = args.model_name.startswith("/") or args.model_name.startswith("./")
+    _from_pretrained_kwargs = {"trust_remote_code": True}
+    if _is_local:
+        _from_pretrained_kwargs["local_files_only"] = True
+
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name, **_from_pretrained_kwargs)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
@@ -173,8 +179,8 @@ def train(args: argparse.Namespace) -> None:
         args.model_name,
         quantization_config=bnb_config,
         device_map="auto",
-        trust_remote_code=True,
         dtype=compute_dtype,
+        **_from_pretrained_kwargs,
     )
     model = prepare_model_for_kbit_training(model)
 
