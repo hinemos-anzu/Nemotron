@@ -1,0 +1,10 @@
+# Local cryptarithm diagnostic outputs generated from challenge data.
+reports/cryptarithm/cryptarithm_problem_inventory.csv
+reports/cryptarithm/cryptarithm_solver_coverage.csv
+reports/cryptarithm/cryptarithm_generated_cot_sample.jsonl
+reports/cryptarithm/cryptarithm_corpus_patch.jsonl
+reports/cryptarithm/cryptarithm_failure_report.md
+
+# Python cache artifacts.
+__pycache__/
+*.py[cod]
