@@ -1,0 +1,4 @@
+problem_id,category,question,answer,examples,input_output_length,operator_symbols,current_corpus_included,source_path
+forward,cryptarithm_deduce,EF?GH,EFGH,"[{""input"":""AB?CD"",""output"":""ABCD""}]",{},?,false,fixture
+reverse,cryptarithm_guess,EF?GH,GHEF,"[{""input"":""AB?CD"",""output"":""CDAB""}]",{},?,false,fixture
+no_examples,cryptarithm_deduce,EF?GH,EFGH,,{},?,false,fixture

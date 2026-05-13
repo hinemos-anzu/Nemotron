@@ -1,0 +1,2 @@
+{"problem_id":"json_forward","category":"cryptarithm_deduce","question":"EF?GH","answer":"EFGH","examples":[{"input":"AB?CD","output":"ABCD"}]}
+{"problem_id":"non_crypto","category":"arithmetic","question":"1+1","answer":"2"}
