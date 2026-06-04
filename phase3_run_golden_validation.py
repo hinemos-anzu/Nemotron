@@ -170,7 +170,7 @@ def get_problem_id(record: Dict[str, Any], idx: int) -> str:
 # ---------------------------------------------------------------------------
 
 GOLDEN_GENERATION_CONFIG = {
-    "max_new_tokens": 2048,
+    "max_new_tokens": 1024,
     "temperature": 0.0,       # greedy
     "do_sample": False,
     "repetition_penalty": 1.0,
@@ -303,6 +303,13 @@ def run_inference_transformers(
     # uses our stub instead of the broken CUDA extension.
     _apply_mamba_patch()
 
+    # Must be set before any CUDA allocation so the PyTorch caching allocator can
+    # serve non-contiguous reserved blocks without OOM.  On T4×2 after PEFT load,
+    # GPU 1 has ~852MB reserved-but-unallocated (fragmented); without this flag
+    # a 768MB contiguous request fails even though enough total memory is free.
+    import os as _os
+    _os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
     import gc as _gc
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
@@ -377,6 +384,21 @@ def run_inference_transformers(
         for i in range(_n_gpus)
     }
     _diag(f"GPU budget ({int(_pct*100)}%): {_gpu_budget}")
+
+    # Pre-flight: 4-bit NF4 Nemotron-30B requires ≥17GB total GPU VRAM.
+    # bitsandbytes rejects any CPU/disk offloading for quantized modules.
+    # P100 (1×16GB) is insufficient; T4×2 (2×14.6GB = 29.2GB) is required.
+    _total_vram_gb = sum(
+        torch.cuda.get_device_properties(i).total_memory for i in range(_n_gpus)
+    ) / 1024**3
+    _diag(f"Total GPU VRAM: {_total_vram_gb:.1f}GB across {_n_gpus} GPU(s)")
+    if _total_vram_gb < 16.5:
+        raise RuntimeError(
+            f"Insufficient GPU VRAM: {_total_vram_gb:.1f}GB across {_n_gpus} GPU(s). "
+            "4-bit NF4 Nemotron-30B requires ≥17GB total GPU VRAM. "
+            "Please use Kaggle T4×2 (29.2GB). "
+            "Select 'GPU T4 x2' in Notebook Settings → Accelerator."
+        )
 
     # ── 4-bit NF4 only — no 8-bit fallback ────────────────────────────────────
     # 8-bit (30GB) plus failed-4-bit garbage easily exceeds 29GB RAM and OOMs.
@@ -481,9 +503,10 @@ def run_inference_transformers(
             if idx == 0:
                 print(f"[warn] prompt truncated to {_MAX_INPUT_TOKENS} tokens")
 
-        # Free cached CUDA allocations from previous iteration
-        if idx % 10 == 0:
-            torch.cuda.empty_cache()
+        # Free fragmented CUDA allocations before each generation step.
+        # With expandable_segments=True this reclaims reserved-unallocated blocks
+        # so the 768MB+ KV-cache allocation on GPU 1 succeeds every iteration.
+        torch.cuda.empty_cache()
 
         t0 = time.time()
         with torch.no_grad():
