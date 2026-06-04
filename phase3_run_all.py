@@ -43,6 +43,16 @@ def _find_first(candidates: List[str]) -> Optional[Path]:
     return None
 
 
+def _glob_find(patterns: List[str]) -> Optional[Path]:
+    """Glob search across /kaggle/input/ as a last resort for competition files."""
+    import glob as _glob
+    for pattern in patterns:
+        matches = sorted(_glob.glob(pattern))
+        if matches:
+            return Path(matches[0])
+    return None
+
+
 def _try_kagglehub_model(model_slug: str) -> Optional[Path]:
     """Resolve model path via kagglehub (same as best-score notebook).
     Returns None if kagglehub is not installed or the download fails.
@@ -69,14 +79,22 @@ def detect_paths() -> Dict[str, Optional[Path]]:
         "/kaggle/input/nvidia-nemotron-model-reasoning-challenge/problems.jsonl",
         "/kaggle/input/nemotron-reasoning-challenge/problems.jsonl",
         "/kaggle/input/nvidia-nemotron/problems.jsonl",
+        os.environ.get("PROBLEMS_PATH", ""),
         "data/raw/problems.jsonl",
         "problems.jsonl",
+    ]) or _glob_find([
+        "/kaggle/input/*/problems.jsonl",
+        "/kaggle/input/*/*/problems.jsonl",
     ])
     train_csv = _find_first([
         "/kaggle/input/nvidia-nemotron-model-reasoning-challenge/train.csv",
         "/kaggle/input/nemotron-reasoning-challenge/train.csv",
+        os.environ.get("TRAIN_CSV_PATH", ""),
         "data/raw/train.csv",
         "train.csv",
+    ]) or _glob_find([
+        "/kaggle/input/*/train.csv",
+        "/kaggle/input/*/*/train.csv",
     ])
     adapter = _find_first([
         *[f"/kaggle/input/models/huikang/nemotron-adapter/transformers/default/{v}"
