@@ -1,0 +1,16 @@
+category,subcategory,n,correct,accuracy,avg_min_logprob,avg_answer_min_logprob,n_wrong_low_conf,n_wrong_high_conf,n_correct_low_conf,priority_score,priority_reason
+cryptarithm,string_transform,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.72,ESTIMATED_-1.85,ESTIMATED_-2.31,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,5,high_volume+low_accuracy+wrong_low_conf_concentrated+solver_verifiable
+cryptarithm,alphametic_addition,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.65,ESTIMATED_-2.12,ESTIMATED_-2.78,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,5,high_volume+low_accuracy+wrong_low_conf_concentrated+solver_verifiable
+bit_manipulation,xor,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.74,ESTIMATED_-2.05,ESTIMATED_-2.55,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,5,moderate_volume+low_accuracy+solver_verifiable
+bit_manipulation,shift_left,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.76,ESTIMATED_-1.92,ESTIMATED_-2.41,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,4,moderate_volume+moderate_accuracy_gap+solver_verifiable
+bit_manipulation,shift_right,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.77,ESTIMATED_-1.88,ESTIMATED_-2.38,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,4,moderate_volume+moderate_accuracy_gap+solver_verifiable
+numeral_conversion,binary_to_decimal,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.82,ESTIMATED_-1.42,ESTIMATED_-1.89,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,4,moderate_volume+moderate_accuracy_gap+solver_verifiable
+numeral_conversion,hex_to_decimal,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.81,ESTIMATED_-1.51,ESTIMATED_-1.95,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,4,moderate_volume+moderate_accuracy_gap+solver_verifiable
+bit_manipulation,signed_unsigned,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.70,ESTIMATED_-2.34,ESTIMATED_-2.89,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,4,high_volume+low_accuracy+solver_verifiable
+numeral_conversion,base_n_conversion,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.79,ESTIMATED_-1.65,ESTIMATED_-2.12,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,3,moderate_volume+moderate_accuracy_gap+solver_verifiable
+cipher,n/a,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.88,ESTIMATED_-0.98,ESTIMATED_-1.22,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,2,moderate_volume
+equation,n/a,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.91,ESTIMATED_-0.85,ESTIMATED_-1.05,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,2,moderate_volume
+unit_conversion,n/a,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.93,ESTIMATED_-0.72,ESTIMATED_-0.88,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,1,no_clear_priority_signal
+arithmetic,n/a,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.94,ESTIMATED_-0.68,ESTIMATED_-0.84,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,1,no_clear_priority_signal
+logic,n/a,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.89,ESTIMATED_-0.91,ESTIMATED_-1.15,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,2,moderate_volume
+other,unknown,PLACEHOLDER,PLACEHOLDER,ESTIMATED_0.82,ESTIMATED_-1.25,ESTIMATED_-1.58,PLACEHOLDER,PLACEHOLDER,PLACEHOLDER,2,moderate_volume

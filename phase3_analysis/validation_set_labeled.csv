@@ -1,0 +1,11 @@
+problem_id,category,subcategory,confidence,manual_review_required,question,gold_answer
+SCHEMA_TEMPLATE_ROW_1,cryptarithm,string_transform,high,False,AB?CD (examples: EF?GH=EFGH),ABCD
+SCHEMA_TEMPLATE_ROW_2,bit_manipulation,xor,medium,False,What is 0b1010 XOR 0b1100?,0b0110
+SCHEMA_TEMPLATE_ROW_3,numeral_conversion,binary_to_decimal,medium,False,Convert 0b10110 to decimal,22
+SCHEMA_TEMPLATE_ROW_4,cipher,n/a,medium,False,Decode KHOOR with ROT-3,HELLO
+SCHEMA_TEMPLATE_ROW_5,equation,n/a,medium,False,Solve for x: 2x + 5 = 13,4
+SCHEMA_TEMPLATE_ROW_6,unit_conversion,n/a,medium,False,Convert 100 kilometers to miles,62.14
+SCHEMA_TEMPLATE_ROW_7,arithmetic,n/a,medium,False,What is 144 / 12?,12
+SCHEMA_TEMPLATE_ROW_8,cryptarithm,alphametic_addition,high,False,"SEND + MORE = MONEY; find digits",MONEY=10652
+SCHEMA_TEMPLATE_ROW_9,bit_manipulation,shift_right,medium,False,What is 0b10000 >> 2?,0b00100
+SCHEMA_TEMPLATE_ROW_10,numeral_conversion,decimal_to_hex,medium,False,Convert 255 to hexadecimal,FF

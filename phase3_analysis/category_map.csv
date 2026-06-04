@@ -1,0 +1,12 @@
+problem_id,category,subcategory,confidence,rule,matched_keywords,manual_review_required
+SCHEMA_TEMPLATE_ROW_1,cryptarithm,string_transform,high,explicit_category_field,cryptarithm_deduce,False
+SCHEMA_TEMPLATE_ROW_2,cryptarithm,unknown,high,explicit_category_field,cryptarithm_guess,False
+SCHEMA_TEMPLATE_ROW_3,bit_manipulation,xor,medium,single_keyword_match,XOR,False
+SCHEMA_TEMPLATE_ROW_4,bit_manipulation,shift_left,medium,single_keyword_match,<<,False
+SCHEMA_TEMPLATE_ROW_5,numeral_conversion,binary_to_decimal,medium,single_keyword_match,binary|decimal,False
+SCHEMA_TEMPLATE_ROW_6,numeral_conversion,hex_to_decimal,medium,single_keyword_match,hexadecimal,False
+SCHEMA_TEMPLATE_ROW_7,cipher,n/a,medium,single_keyword_match,cipher,False
+SCHEMA_TEMPLATE_ROW_8,equation,n/a,medium,single_keyword_match,solve|for,False
+SCHEMA_TEMPLATE_ROW_9,unit_conversion,n/a,medium,single_keyword_match,kilometer|miles,False
+SCHEMA_TEMPLATE_ROW_10,arithmetic,n/a,medium,single_keyword_match,\d+\s*[\+\-]\s*\d+,False
+SCHEMA_TEMPLATE_ROW_11,other,unknown,low,no_match_fallback,,True
