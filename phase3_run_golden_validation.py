@@ -365,13 +365,13 @@ def run_inference_transformers(
         _fr, _ = torch.cuda.mem_get_info(_gi)
         _diag(f"GPU {_gi} free after GC: {_fr/1024**3:.1f}GB")
 
-    # GPU-only max_memory: 4-bit NF4 quantized 30B ≈ 15GB → fits on 2×T4 (29.2GB).
-    # Use only 65% per GPU (not 90%) so inference activations (Mamba SSM states,
-    # LoRA forward pass) and Kaggle background processes don't OOM.
-    # Asymmetric: give GPU 0 the tighter budget so GPU 1 — which PEFT tends to
-    # load heavier due to MoE experts — keeps more inference headroom.
+    # GPU-only max_memory: 4-bit NF4 quantized 30B ≈ 17GB → must fit entirely on GPU.
+    # bitsandbytes 4-bit validator rejects any CPU/disk modules, so budget must be
+    # large enough (≥17GB total) to keep all quantized layers on GPU.
+    # 80% × 14.6GB × 2 = ~23.4GB total budget (17GB model + ~6GB headroom).
+    # After PEFT validation pass, gc+empty_cache reclaims ~4GB for inference.
     _n_gpus = torch.cuda.device_count()
-    _pct = 0.65
+    _pct = 0.80
     _gpu_budget = {
         i: f"{int(torch.cuda.get_device_properties(i).total_memory * _pct / 1024**3)}GiB"
         for i in range(_n_gpus)
