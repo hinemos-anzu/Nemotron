@@ -170,7 +170,7 @@ def get_problem_id(record: Dict[str, Any], idx: int) -> str:
 # ---------------------------------------------------------------------------
 
 GOLDEN_GENERATION_CONFIG = {
-    "max_new_tokens": 1024,
+    "max_new_tokens": 2048,
     "temperature": 0.0,       # greedy
     "do_sample": False,
     "repetition_penalty": 1.0,
@@ -298,17 +298,24 @@ def run_inference_transformers(
     It imports heavy dependencies lazily to allow the rest of the script
     to be imported and tested on CPU.
     """
+    # PYTORCH_CUDA_ALLOC_CONF must be set BEFORE any CUDA allocation — the allocator
+    # reads its config only on first init.  _apply_mamba_patch() calls
+    # import_module('mamba_ssm') whose __init__.py may import torch (and thus
+    # initialize the allocator), so we must set the env var first.
+    # Use merge logic instead of setdefault so we don't clobber an existing value
+    # that the parent process / notebook cell may have already set.
+    import os as _os
+    _existing_alloc = _os.environ.get("PYTORCH_CUDA_ALLOC_CONF", "")
+    if "expandable_segments" not in _existing_alloc:
+        _os.environ["PYTORCH_CUDA_ALLOC_CONF"] = (
+            f"{_existing_alloc},expandable_segments:True"
+            if _existing_alloc else "expandable_segments:True"
+        )
+
     # Must patch mamba_ssm BEFORE any transformers imports so that
     # modeling_nemotron_h.py's module-level is_mamba_2_ssm_available() check
     # uses our stub instead of the broken CUDA extension.
     _apply_mamba_patch()
-
-    # Must be set before any CUDA allocation so the PyTorch caching allocator can
-    # serve non-contiguous reserved blocks without OOM.  On T4×2 after PEFT load,
-    # GPU 1 has ~852MB reserved-but-unallocated (fragmented); without this flag
-    # a 768MB contiguous request fails even though enough total memory is free.
-    import os as _os
-    _os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
     import gc as _gc
     import torch
@@ -318,9 +325,18 @@ def run_inference_transformers(
     set_seed(seed)
     torch.manual_seed(seed)
 
-    # ── Diagnostics written to file so they survive a kernel OOM restart ──────
+    # ── Diagnostics appended to file so they survive a kernel OOM restart ───────
+    # Use append mode (not write_text("")) so a prior run's diagnostics are
+    # preserved when the script is re-invoked after a crash.
+    import datetime as _dt
     _diag_path = output_dir / "step2_diagnostics.txt"
-    _diag_path.write_text("")
+    _diag_sep = (
+        f"\n{'='*60}\n"
+        f"Run started {_dt.datetime.utcnow().isoformat()}Z\n"
+        f"{'='*60}\n"
+    )
+    with _diag_path.open("a") as _fh:
+        _fh.write(_diag_sep)
 
     def _diag(msg: str) -> None:
         print(msg, flush=True)
@@ -461,9 +477,26 @@ def run_inference_transformers(
     except Exception as _pe:
         print(f"[peft_patch] Warning: {_pe}")
 
+    # Set eval mode on the base model BEFORE the PEFT validation forward pass
+    # so dropout is disabled during any internal pass inside from_pretrained().
+    model.eval()
+
     # With quantization the model fits on GPU; no disk offload needed for PEFT.
     _diag(f"Loading adapter from {adapter_path}")
-    model = PeftModel.from_pretrained(model, adapter_path)
+    try:
+        model = PeftModel.from_pretrained(model, adapter_path)
+    except Exception as _peft_exc:
+        _diag(f"PEFT load FAILED: {type(_peft_exc).__name__}: {_peft_exc}")
+        try:
+            del model
+        except Exception:
+            pass
+        _gc.collect()
+        torch.cuda.empty_cache()
+        raise RuntimeError(
+            f"FATAL: PeftModel.from_pretrained() failed: {_peft_exc}\n"
+            f"Check adapter path: {adapter_path}"
+        ) from _peft_exc
     model.eval()
 
     # PEFT's adapter loading runs a validation forward pass that caches large
@@ -487,8 +520,13 @@ def run_inference_transformers(
 
     records: List[Dict[str, Any]] = []
     _MAX_INPUT_TOKENS = 768  # cap prompt length to keep SSM intermediate tensors small
+    _truncation_warned = False  # fire once on first truncation event (not just idx==0)
 
-    for idx, record in enumerate(problems):
+    # Write JSONL incrementally so partial results survive a kernel OOM restart.
+    _jsonl_path = output_dir / "golden_validation_predictions.jsonl"
+
+    with _jsonl_path.open("w", encoding="utf-8") as _jsonl_fh:
+      for idx, record in enumerate(problems):
         pid = get_problem_id(record, idx)
         cat_info = category_map.get(pid, {"category": "other", "subcategory": "unknown"})
         question = str(record.get("question", record.get("prompt", ""))).strip()
@@ -497,31 +535,67 @@ def run_inference_transformers(
         prompt = build_prompt(record)
         inputs = tokenizer(prompt, return_tensors="pt").to(input_device)
 
-        # Truncate long prompts from the left to prevent OOM in naive Mamba SSM
+        # Truncate long prompts from the RIGHT to keep the question at the start.
+        # Truncating from the left (v[:, -N:]) would discard the question and keep
+        # only the format-footer boilerplate — wrong model input.
+        _was_truncated = False
         if inputs["input_ids"].shape[1] > _MAX_INPUT_TOKENS:
-            inputs = {k: v[:, -_MAX_INPUT_TOKENS:] for k, v in inputs.items()}
-            if idx == 0:
-                print(f"[warn] prompt truncated to {_MAX_INPUT_TOKENS} tokens")
+            inputs = {k: v[:, :_MAX_INPUT_TOKENS] for k, v in inputs.items()}
+            _was_truncated = True
+            if not _truncation_warned:
+                _truncation_warned = True
+                _diag(f"[warn] prompt truncated to {_MAX_INPUT_TOKENS} tokens "
+                      f"(first occurrence at idx={idx}, pid={pid})")
+
+        # Pass only input_ids + attention_mask to generate() — extra tokenizer keys
+        # (token_type_ids, position_ids, etc.) cause TypeError in some model variants.
+        _gen_inputs: Dict[str, Any] = {"input_ids": inputs["input_ids"]}
+        if "attention_mask" in inputs:
+            _gen_inputs["attention_mask"] = inputs["attention_mask"]
+        _input_len = _gen_inputs["input_ids"].shape[1]
 
         # Free fragmented CUDA allocations before each generation step.
         # With expandable_segments=True this reclaims reserved-unallocated blocks
         # so the 768MB+ KV-cache allocation on GPU 1 succeeds every iteration.
         torch.cuda.empty_cache()
 
-        t0 = time.time()
-        with torch.no_grad():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=GOLDEN_GENERATION_CONFIG["max_new_tokens"],
-                do_sample=GOLDEN_GENERATION_CONFIG["do_sample"],
-                temperature=None,  # greedy when do_sample=False
-                repetition_penalty=GOLDEN_GENERATION_CONFIG["repetition_penalty"],
-                eos_token_id=tokenizer.eos_token_id,
-                pad_token_id=tokenizer.eos_token_id,
-            )
-        elapsed = time.time() - t0
+        try:
+            t0 = time.time()
+            with torch.no_grad():
+                output = model.generate(
+                    **_gen_inputs,
+                    max_new_tokens=GOLDEN_GENERATION_CONFIG["max_new_tokens"],
+                    do_sample=GOLDEN_GENERATION_CONFIG["do_sample"],
+                    temperature=None,  # greedy when do_sample=False
+                    repetition_penalty=GOLDEN_GENERATION_CONFIG["repetition_penalty"],
+                    eos_token_id=tokenizer.eos_token_id,
+                    pad_token_id=tokenizer.eos_token_id,
+                )
+            elapsed = time.time() - t0
+        except Exception as _gen_exc:
+            _diag(f"[{idx+1:4d}/{len(problems)}] {pid}: GENERATE_ERROR "
+                  f"{type(_gen_exc).__name__}: {_gen_exc}")
+            _gc.collect()
+            torch.cuda.empty_cache()
+            entry = {
+                "problem_id": pid, "category": cat_info["category"],
+                "subcategory": cat_info["subcategory"], "question": question,
+                "gold_answer": gold_answer, "pred_answer": "",
+                "raw_output": f"[GENERATE_ERROR: {type(_gen_exc).__name__}: {_gen_exc}]",
+                "reasoning_text": "", "final_answer_text": "",
+                "is_correct": False, "parse_success": False,
+                "parse_error_type": "generate_error",
+                "generation_token_count": 0, "finish_reason": "error",
+                "was_prompt_truncated": _was_truncated,
+                "elapsed_seconds": 0.0, "seed": seed,
+                "generation_config": dict(GOLDEN_GENERATION_CONFIG),
+            }
+            records.append(entry)
+            _jsonl_fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            _jsonl_fh.flush()
+            continue
 
-        generated_ids = output[0][inputs["input_ids"].shape[1]:]
+        generated_ids = output[0][_input_len:]
         raw_output = tokenizer.decode(generated_ids, skip_special_tokens=True)
 
         pred_answer, reasoning_text, final_answer_text = extract_answer(raw_output)
@@ -530,9 +604,14 @@ def run_inference_transformers(
         err_type = parse_error_type(pred_answer, raw_output)
         n_tokens = int(generated_ids.shape[0])
 
-        finish_reason = "eos" if n_tokens < GOLDEN_GENERATION_CONFIG["max_new_tokens"] else "length"
+        # Determine finish reason by checking the last generated token against EOS.
+        # The `< max_new_tokens` check misclassifies EOS generated at exactly the limit.
+        _last_tok = int(generated_ids[-1]) if n_tokens > 0 else None
+        finish_reason = (
+            "eos" if _last_tok == tokenizer.eos_token_id else "length"
+        )
 
-        entry: Dict[str, Any] = {
+        entry = {
             "problem_id": pid,
             "category": cat_info["category"],
             "subcategory": cat_info["subcategory"],
@@ -547,14 +626,18 @@ def run_inference_transformers(
             "parse_error_type": err_type or "",
             "generation_token_count": n_tokens,
             "finish_reason": finish_reason,
+            "was_prompt_truncated": _was_truncated,
             "elapsed_seconds": round(elapsed, 2),
             "seed": seed,
-            "generation_config": GOLDEN_GENERATION_CONFIG,
+            "generation_config": dict(GOLDEN_GENERATION_CONFIG),
         }
         records.append(entry)
+        _jsonl_fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        _jsonl_fh.flush()
 
         status = "OK" if is_correct else ("PARSE_FAIL" if not parse_success else "WRONG")
-        print(f"[{idx+1:4d}/{len(problems)}] {pid}: {status}  tokens={n_tokens}")
+        _trunc_flag = " [TRUNC]" if _was_truncated else ""
+        print(f"[{idx+1:4d}/{len(problems)}] {pid}: {status}  tokens={n_tokens}{_trunc_flag}")
 
     return records
 
