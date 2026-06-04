@@ -43,8 +43,28 @@ def _find_first(candidates: List[str]) -> Optional[Path]:
     return None
 
 
+def _try_kagglehub_model(model_slug: str) -> Optional[Path]:
+    """Resolve model path via kagglehub (same as best-score notebook).
+    Returns None if kagglehub is not installed or the download fails.
+    """
+    try:
+        import kagglehub  # type: ignore
+        path = kagglehub.model_download(model_slug)
+        if path and Path(path).exists():
+            return Path(path)
+    except Exception:
+        pass
+    return None
+
+
 def detect_paths() -> Dict[str, Optional[Path]]:
-    """Kaggle / ローカル双方で動くパス自動検出"""
+    """Kaggle / ローカル双方で動くパス自動検出.
+
+    Model resolution order (matches best-score notebook):
+      1. MODEL_PATH env var (if set and exists)
+      2. kagglehub.model_download("metric/nemotron-3-nano-30b-a3b-bf16/transformers/default")
+      3. Filesystem fallbacks
+    """
     problems = _find_first([
         "/kaggle/input/nvidia-nemotron-model-reasoning-challenge/problems.jsonl",
         "/kaggle/input/nemotron-reasoning-challenge/problems.jsonl",
@@ -64,11 +84,18 @@ def detect_paths() -> Dict[str, Optional[Path]]:
         "/kaggle/input/models/huikang/nemotron-adapter/transformers/default",
         os.environ.get("ADAPTER_PATH", ""),
     ])
-    model = _find_first([
-        "/kaggle/input/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default",
-        "/kaggle/input/nemotron-3-nano/transformers/default",
-        os.environ.get("MODEL_PATH", ""),
-    ])
+    # Model: env var → kagglehub (best-score notebook pattern) → filesystem fallbacks
+    env_model = os.environ.get("MODEL_PATH", "")
+    if env_model and Path(env_model).exists():
+        model: Optional[Path] = Path(env_model)
+    else:
+        model = _try_kagglehub_model("metric/nemotron-3-nano-30b-a3b-bf16/transformers/default")
+        if model is None:
+            model = _find_first([
+                "/kaggle/input/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default",
+                "/kaggle/input/nemotron-3-nano/transformers/default",
+                env_model,
+            ])
     return {"problems": problems, "train_csv": train_csv, "adapter": adapter, "model": model}
 
 

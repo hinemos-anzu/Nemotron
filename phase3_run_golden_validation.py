@@ -395,7 +395,7 @@ def main() -> None:
     parser.add_argument(
         "--model",
         default=os.environ.get("MODEL_PATH", ""),
-        help="Path to the base model directory",
+        help="Path to the base model directory (auto-resolved via kagglehub if not set)",
     )
     parser.add_argument(
         "--problems",
@@ -423,13 +423,26 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Resolve model path: env/arg → kagglehub (same as best-score notebook) → error
+    model_path = args.model
+    if not model_path or not Path(model_path).exists():
+        try:
+            import kagglehub  # type: ignore
+            model_path = kagglehub.model_download(
+                "metric/nemotron-3-nano-30b-a3b-bf16/transformers/default"
+            )
+            print(f"Model path resolved via kagglehub: {model_path}")
+        except Exception as e:
+            print(f"[WARNING] kagglehub model_download failed: {e}")
+            print("[WARNING] --model path not found. Inference will fail unless you set MODEL_PATH.")
+
     category_map = load_category_map(Path(args.category_map))
     problems = load_problems(Path(args.problems))
 
     print(f"Problems loaded: {len(problems)}")
     print(f"Category map entries: {len(category_map)}")
     print(f"Adapter: {args.adapter}")
-    print(f"Model: {args.model}")
+    print(f"Model: {model_path}")
     print(f"Seed: {args.seed}")
     print(f"Generation config: {GOLDEN_GENERATION_CONFIG}")
 
@@ -452,7 +465,7 @@ def main() -> None:
         problems=problems,
         category_map=category_map,
         adapter_path=args.adapter,
-        model_path=args.model,
+        model_path=model_path,
         seed=args.seed,
         output_dir=output_dir,
     )
