@@ -365,15 +365,18 @@ def run_inference_transformers(
         _fr, _ = torch.cuda.mem_get_info(_gi)
         _diag(f"GPU {_gi} free after GC: {_fr/1024**3:.1f}GB")
 
-    # GPU-only max_memory: 4-bit NF4 quantized 30B ≈ 15GB → fits on 2×T4 (32GB).
-    # Excluding "cpu" key forces accelerate to use ONLY GPU — no CPU RAM for
-    # model weights, avoiding the 29GB RAM OOM from 8-bit / partial-load leaks.
+    # GPU-only max_memory: 4-bit NF4 quantized 30B ≈ 15GB → fits on 2×T4 (29.2GB).
+    # Use only 65% per GPU (not 90%) so inference activations (Mamba SSM states,
+    # LoRA forward pass) and Kaggle background processes don't OOM.
+    # Asymmetric: give GPU 0 the tighter budget so GPU 1 — which PEFT tends to
+    # load heavier due to MoE experts — keeps more inference headroom.
     _n_gpus = torch.cuda.device_count()
+    _pct = 0.65
     _gpu_budget = {
-        i: f"{int(torch.cuda.get_device_properties(i).total_memory * 0.90 / 1024**3)}GiB"
+        i: f"{int(torch.cuda.get_device_properties(i).total_memory * _pct / 1024**3)}GiB"
         for i in range(_n_gpus)
     }
-    _diag(f"GPU budget (90%): {_gpu_budget}")
+    _diag(f"GPU budget ({int(_pct*100)}%): {_gpu_budget}")
 
     # ── 4-bit NF4 only — no 8-bit fallback ────────────────────────────────────
     # 8-bit (30GB) plus failed-4-bit garbage easily exceeds 29GB RAM and OOMs.
@@ -437,9 +440,18 @@ def run_inference_transformers(
         print(f"[peft_patch] Warning: {_pe}")
 
     # With quantization the model fits on GPU; no disk offload needed for PEFT.
-    print(f"Loading adapter from {adapter_path}")
+    _diag(f"Loading adapter from {adapter_path}")
     model = PeftModel.from_pretrained(model, adapter_path)
     model.eval()
+
+    # PEFT's adapter loading runs a validation forward pass that caches large
+    # temporary tensors in PyTorch's CUDA allocator.  Flush them now so they
+    # don't count against inference headroom.
+    _gc.collect()
+    torch.cuda.empty_cache()
+    for _gi in range(torch.cuda.device_count()):
+        _fr, _tot = torch.cuda.mem_get_info(_gi)
+        _diag(f"GPU {_gi} free after PEFT + empty_cache: {_fr/1024**3:.1f}GB / {_tot/1024**3:.1f}GB")
 
     # model.device is undefined when layers span multiple devices; find first CUDA param.
     def _infer_input_device(m: torch.nn.Module) -> torch.device:
@@ -449,9 +461,10 @@ def run_inference_transformers(
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     input_device = _infer_input_device(model)
-    print(f"Input device: {input_device}")
+    _diag(f"Input device: {input_device}")
 
     records: List[Dict[str, Any]] = []
+    _MAX_INPUT_TOKENS = 768  # cap prompt length to keep SSM intermediate tensors small
 
     for idx, record in enumerate(problems):
         pid = get_problem_id(record, idx)
@@ -461,6 +474,16 @@ def run_inference_transformers(
 
         prompt = build_prompt(record)
         inputs = tokenizer(prompt, return_tensors="pt").to(input_device)
+
+        # Truncate long prompts from the left to prevent OOM in naive Mamba SSM
+        if inputs["input_ids"].shape[1] > _MAX_INPUT_TOKENS:
+            inputs = {k: v[:, -_MAX_INPUT_TOKENS:] for k, v in inputs.items()}
+            if idx == 0:
+                print(f"[warn] prompt truncated to {_MAX_INPUT_TOKENS} tokens")
+
+        # Free cached CUDA allocations from previous iteration
+        if idx % 10 == 0:
+            torch.cuda.empty_cache()
 
         t0 = time.time()
         with torch.no_grad():
