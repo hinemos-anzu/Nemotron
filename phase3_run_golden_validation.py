@@ -518,6 +518,40 @@ def run_inference_transformers(
     input_device = _infer_input_device(model)
     _diag(f"Input device: {input_device}")
 
+    # Try to find NemotronH's custom hybrid cache class so generate() can cache
+    # SSM states incrementally (O(1) memory per step) instead of reprocessing the
+    # full growing sequence at every step (O(N) → OOM on long outputs).
+    # The warning "NemotronH requires an initialized NemotronHHybridDynamicCache"
+    # confirms that without this, torch_forward runs over the full sequence each step.
+    import sys as _sys
+    _nemh_cache_cls = None
+    _model_cfg_for_cache = None
+    try:
+        for _mn in list(_sys.modules.keys()):
+            if "modeling_nemotron_h" in _mn:
+                _cls = getattr(_sys.modules[_mn], "NemotronHHybridDynamicCache", None)
+                if _cls is not None:
+                    _nemh_cache_cls = _cls
+                    break
+        if _nemh_cache_cls is not None:
+            # Config lives on the base model, not the PeftModel wrapper
+            _model_cfg_for_cache = (
+                getattr(model, "config", None)
+                or getattr(getattr(model, "base_model", None), "config", None)
+            )
+            if _model_cfg_for_cache is None:
+                try:
+                    _model_cfg_for_cache = model.base_model.model.config
+                except Exception:
+                    pass
+            _diag("[cache] NemotronHHybridDynamicCache found — SSM states will be cached")
+        else:
+            _diag("[cache] NemotronHHybridDynamicCache not found — "
+                  "each generation step will reprocess the full sequence (OOM risk on long outputs)")
+    except Exception as _ce:
+        _diag(f"[cache] Cache class lookup failed: {_ce}")
+
+
     records: List[Dict[str, Any]] = []
     _MAX_INPUT_TOKENS = 768  # cap prompt length to keep SSM intermediate tensors small
     _truncation_warned = False  # fire once on first truncation event (not just idx==0)
@@ -554,6 +588,26 @@ def run_inference_transformers(
             _gen_inputs["attention_mask"] = inputs["attention_mask"]
         _input_len = _gen_inputs["input_ids"].shape[1]
 
+        # Initialize a fresh NemotronHHybridDynamicCache per problem so generate()
+        # can store SSM states incrementally (O(1) per step) rather than reprocessing
+        # the full growing sequence at every step (O(N) → OOM on long outputs).
+        # Without this, the warning "NemotronH requires an initialized
+        # NemotronHHybridDynamicCache" fires and torch_forward runs over the full
+        # sequence each step until GPU 1 exhausts memory.
+        _past_kv = None
+        if _nemh_cache_cls is not None and _model_cfg_for_cache is not None:
+            try:
+                _past_kv = _nemh_cache_cls(
+                    config=_model_cfg_for_cache,
+                    batch_size=1,
+                    dtype=compute_dtype,
+                )
+            except Exception as _cache_init_err:
+                _diag(f"[{idx+1:4d}/{len(problems)}] {pid}: cache init failed "
+                      f"({type(_cache_init_err).__name__}: {_cache_init_err}) — "
+                      "falling back to no cache (OOM risk)")
+                _past_kv = None
+
         # Free fragmented CUDA allocations before each generation step.
         # With expandable_segments=True this reclaims reserved-unallocated blocks
         # so the 768MB+ KV-cache allocation on GPU 1 succeeds every iteration.
@@ -562,7 +616,7 @@ def run_inference_transformers(
         try:
             t0 = time.time()
             with torch.no_grad():
-                output = model.generate(
+                _generate_kwargs: Dict[str, Any] = dict(
                     **_gen_inputs,
                     max_new_tokens=GOLDEN_GENERATION_CONFIG["max_new_tokens"],
                     do_sample=GOLDEN_GENERATION_CONFIG["do_sample"],
@@ -571,6 +625,9 @@ def run_inference_transformers(
                     eos_token_id=tokenizer.eos_token_id,
                     pad_token_id=tokenizer.eos_token_id,
                 )
+                if _past_kv is not None:
+                    _generate_kwargs["past_key_values"] = _past_kv
+                output = model.generate(**_generate_kwargs)
             elapsed = time.time() - t0
         except Exception as _gen_exc:
             _diag(f"[{idx+1:4d}/{len(problems)}] {pid}: GENERATE_ERROR "
