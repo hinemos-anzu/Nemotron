@@ -1,7 +1,2 @@
 problem_id,category,subcategory,question,gold_answer,pred_answer,is_correct,min_logprob,answer_min_logprob,failure_type,failure_reason,solver_check_possible,synthetic_generation_possible,recommended_template,example_priority
-SCHEMA_TEMPLATE_BIT_1,bit_manipulation,xor,What is 0b10110101 XOR 0b11001010?,0b01111111,0b01001111,False,ESTIMATED_-2.89,ESTIMATED_-3.45,xor_error,bit 6 XOR computed as AND,True,True,bitwise_xor_step_cot,5
-SCHEMA_TEMPLATE_BIT_2,bit_manipulation,shift_left,What is 0b00001111 shifted left by 3 bits?,0b01111000,0b00111100,False,ESTIMATED_-2.41,ESTIMATED_-2.98,shift_error,shift amount applied as 2 instead of 3,True,True,shift_direction_explicit_cot,5
-SCHEMA_TEMPLATE_BIT_3,bit_manipulation,signed_unsigned,What is -5 in 8-bit two's complement?,0b11111011,0b10000101,False,ESTIMATED_-3.12,ESTIMATED_-3.78,signed_unsigned_error,model uses sign-magnitude instead of two's complement,True,True,twos_complement_cot,5
-SCHEMA_TEMPLATE_BIT_4,bit_manipulation,binary_arithmetic,Add 0b01101 and 0b10011 in binary,0b100000,0b11110,False,ESTIMATED_-2.05,ESTIMATED_-2.61,arithmetic_error,carry not propagated in final column,True,True,step_verify_cot,4
-SCHEMA_TEMPLATE_BIT_5,bit_manipulation,xor,XOR result of 0b1111 and 0b0000?,0b1111,0b0000,False,ESTIMATED_-0.72,ESTIMATED_-0.38,answer_format_error,correct value in reasoning but wrong format in answer,True,True,format_check_cot,4
-PLACEHOLDER_ROW,bit_manipulation,unknown,RUN_INFERENCE_TO_POPULATE,,,,,,unknown,run phase3_classify_bit_numeral_failures.py,True,False,general_bit_diagnostic_cot,1
+SCHEMA_TEMPLATE_ROW_2,bit_manipulation,xor,What is 0b1010 XOR 0b1100?,0b0110,0b0100,False,-3.45,-2.91,xor_error,XOR result is incorrect,True,True,bitwise_xor_step_cot,5

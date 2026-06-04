@@ -1,0 +1,99 @@
+[05:28:12] ============================================================
+[05:28:12] Phase 3 自動分析開始  2026-06-04T05:28:12.592785+00:00
+[05:28:12] Output dir: phase3_analysis
+[05:28:12] ============================================================
+[05:28:12] 
+[パス確認]
+[05:28:12]   ✓ problems    : /dev/null
+[05:28:12]   ✗ train_csv   : NOT FOUND
+[05:28:12]   ✗ adapter     : NOT FOUND
+[05:28:12]   ✗ model       : NOT FOUND
+[05:28:12] 
+実行ステップ: [4, 5, 6, 7]
+
+[05:28:12] ============================================================
+[05:28:12] Step 4: カテゴリ失敗集計 — 開始
+[05:28:12]   CMD: /usr/local/bin/python /home/user/Nemotron/phase3_analyze_category_failures.py --predictions phase3_analysis/golden_validation_predictions.jsonl --logprob phase3_analysis/min_logprob_summary.csv --output phase3_analysis/category_failure_summary.csv
+[05:28:12]   | Wrote 6 rows to phase3_analysis/category_failure_summary.csv
+[05:28:12]   | 
+[05:28:12]   | Top priority categories:
+[05:28:12]   |   [4] bit_manipulation/xor: n=1 acc=0.0 reason=low_accuracy+wrong_low_conf_concentrated+solver_verifiable
+[05:28:12]   |   [2] ALL/ALL: n=1 acc=0.0 reason=low_accuracy
+[05:28:12]   |   [1] cipher/n/a: n=1 acc=1.0 reason=no_clear_priority_signal
+[05:28:12]   |   [1] cryptarithm/string_transform: n=1 acc=1.0 reason=solver_verifiable
+[05:28:12]   |   [1] equation/n/a: n=1 acc=1.0 reason=solver_verifiable
+[05:28:12]   |   [1] numeral_conversion/binary_to_decimal: n=1 acc=1.0 reason=solver_verifiable
+[05:28:12] Step 4: カテゴリ失敗集計 — ✓ 完了  (0s)
+[05:28:12] ============================================================
+[05:28:12] Step 5: cryptarithm失敗分類 — 開始
+[05:28:12]   CMD: /usr/local/bin/python /home/user/Nemotron/phase3_classify_cryptarithm_failures.py --predictions phase3_analysis/golden_validation_predictions.jsonl --logprob phase3_analysis/min_logprob_summary.csv --output phase3_analysis/failure_cases_cryptarithm.csv --failure-type-summary phase3_analysis/failure_type_summary.csv --include-correct-low-logprob
+[05:28:12]   | Cryptarithm predictions: 1
+[05:28:12]   | 
+[05:28:12]   | Cryptarithm failure types (0 cases):
+[05:28:12]   | 
+[05:28:12]   | Wrote 0 rows to phase3_analysis/failure_cases_cryptarithm.csv
+[05:28:12] Step 5: cryptarithm失敗分類 — ✓ 完了  (0s)
+[05:28:12] ============================================================
+[05:28:12] Step 6: bit/numeral失敗分類 — 開始
+[05:28:12]   CMD: /usr/local/bin/python /home/user/Nemotron/phase3_classify_bit_numeral_failures.py --predictions phase3_analysis/golden_validation_predictions.jsonl --logprob phase3_analysis/min_logprob_summary.csv --output-bit phase3_analysis/failure_cases_bit_manipulation.csv --output-numeral phase3_analysis/failure_cases_numeral_conversion.csv --failure-type-summary phase3_analysis/failure_type_summary.csv
+[05:28:12]   | bit_manipulation predictions: 1
+[05:28:12]   | numeral_conversion predictions: 1
+[05:28:12]   | 
+[05:28:12]   | bit_manipulation failure types (1 wrong cases):
+[05:28:12]   |   xor_error                              1 (100.0%)
+[05:28:12]   | 
+[05:28:12]   | numeral_conversion failure types (0 wrong cases):
+[05:28:12]   | 
+[05:28:12]   | Wrote bit    -> phase3_analysis/failure_cases_bit_manipulation.csv
+[05:28:12]   | Wrote numeral -> phase3_analysis/failure_cases_numeral_conversion.csv
+[05:28:12] Step 6: bit/numeral失敗分類 — ✓ 完了  (0s)
+[05:28:12] ============================================================
+[05:28:12] Step 7: 最終レポート生成 — 開始
+[05:28:12]   CMD: /usr/local/bin/python /home/user/Nemotron/phase3_make_recommendation.py --category-failure phase3_analysis/category_failure_summary.csv --failure-type phase3_analysis/failure_type_summary.csv --summary phase3_analysis/golden_validation_summary.csv --output phase3_analysis/phase3_recommendation.md
+[05:28:12]   | Wrote report to phase3_analysis/phase3_recommendation.md
+[05:28:12] Step 7: 最終レポート生成 — ✓ 完了  (0s)
+[05:28:12] 
+============================================================
+[05:28:12] 実行サマリー
+[05:28:12]   ✓ Step 4: カテゴリ失敗集計                                 0s
+[05:28:12]   ✓ Step 5: cryptarithm失敗分類                          0s
+[05:28:12]   ✓ Step 6: bit/numeral失敗分類                          0s
+[05:28:12]   ✓ Step 7: 最終レポート生成                                 0s
+[05:28:12] 
+4/4 ステップ成功
+[05:28:12] 
+============================================================
+[05:28:12] Phase 3 分析結果サマリー
+[05:28:12] ============================================================
+[05:28:12] 
+[overall]  n=PLACEHOLDER_RUN_INFERENCE  accuracy=PLACEHOLDER  parse_rate=PLACEHOLDER
+[05:28:12] 
+[弱いカテゴリ Top5]
+[05:28:12]   bit_manipulation/xor: acc=0.0  n=1  priority=4
+[05:28:12]   ALL/ALL: acc=0.0  n=1  priority=2
+[05:28:12]   cipher/n/a: acc=1.0  n=1  priority=1
+[05:28:12]   cryptarithm/string_transform: acc=1.0  n=1  priority=1
+[05:28:12]   equation/n/a: acc=1.0  n=1  priority=1
+[05:28:12] 
+[cryptarithm 主な失敗タイプ Top5]
+[05:28:12] 
+[生成ファイル]
+[05:28:12]   README.md                                          7.2 KB
+[05:28:12]   category_failure_summary.csv                       0.6 KB
+[05:28:12]   category_map.csv                                   1.0 KB
+[05:28:12]   failure_cases_bit_manipulation.csv                 0.4 KB
+[05:28:12]   failure_cases_cryptarithm.csv                      0.2 KB
+[05:28:12]   failure_cases_numeral_conversion.csv               0.2 KB
+[05:28:12]   failure_type_summary.csv                           0.1 KB
+[05:28:12]   golden_validation_predictions.jsonl                3.2 KB
+[05:28:12]   golden_validation_summary.csv                      1.1 KB
+[05:28:12]   min_logprob_summary.csv                            0.8 KB
+[05:28:12]   phase3_recommendation.md                           11.3 KB
+[05:28:12]   reproducibility_notes.md                           5.9 KB
+[05:28:12]   run_all.log                                        5.9 KB
+[05:28:12]   run_commands.md                                    7.7 KB
+[05:28:12]   validation_set_labeled.csv                         1.0 KB
+[05:28:12] 
+[確認] adapter変更・training・submission作成は実行していません
+[05:28:12] 
+総実行時間: 0.0分

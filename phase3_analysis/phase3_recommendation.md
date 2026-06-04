@@ -1,6 +1,6 @@
 # Phase 3 Analysis Report
 
-Generated: 2026-06-04 00:34 UTC
+Generated: 2026-06-04 05:28 UTC
 
 > **Data status:** This report was generated from live analysis CSVs.
 > Sections marked [ESTIMATED] contain prior-based estimates where actual
@@ -18,18 +18,18 @@ Generated: 2026-06-04 00:34 UTC
 | Avg generation tokens | PLACEHOLDER |
 
 **Main weakness categories (weakest first):**
-- `cryptarithm/alphametic_addition`: acc=ESTIMATED_0.65 (n=PLACEHOLDER)
-- `bit_manipulation/signed_unsigned`: acc=ESTIMATED_0.70 (n=PLACEHOLDER)
-- `cryptarithm/string_transform`: acc=ESTIMATED_0.72 (n=PLACEHOLDER)
-- `bit_manipulation/xor`: acc=ESTIMATED_0.74 (n=PLACEHOLDER)
-- `bit_manipulation/shift_left`: acc=ESTIMATED_0.76 (n=PLACEHOLDER)
+- `bit_manipulation/xor`: acc=0.0 (n=1)
+- `ALL/ALL`: acc=0.0 (n=1)
+- `cipher/n/a`: acc=1.0 (n=1)
+- `cryptarithm/string_transform`: acc=1.0 (n=1)
+- `equation/n/a`: acc=1.0 (n=1)
 
 **Improvement priority categories:**
-- `cryptarithm/string_transform`: priority=5 — high_volume+low_accuracy+wrong_low_conf_concentrated+solver_verifiable
-- `cryptarithm/alphametic_addition`: priority=5 — high_volume+low_accuracy+wrong_low_conf_concentrated+solver_verifiable
-- `bit_manipulation/xor`: priority=5 — moderate_volume+low_accuracy+solver_verifiable
-- `bit_manipulation/shift_left`: priority=4 — moderate_volume+moderate_accuracy_gap+solver_verifiable
-- `bit_manipulation/shift_right`: priority=4 — moderate_volume+moderate_accuracy_gap+solver_verifiable
+- `bit_manipulation/xor`: priority=4 — low_accuracy+wrong_low_conf_concentrated+solver_verifiable
+- `ALL/ALL`: priority=2 — low_accuracy
+- `cipher/n/a`: priority=1 — no_clear_priority_signal
+- `cryptarithm/string_transform`: priority=1 — solver_verifiable
+- `equation/n/a`: priority=1 — solver_verifiable
 
 ---
 
@@ -37,35 +37,19 @@ Generated: 2026-06-04 00:34 UTC
 
 | category | subcategory | n | accuracy | avg_min_logprob | n_wrong_low_conf | n_correct_low_conf | priority_score |
 | -------- | ----------- | ---- | -------- | --------------- | ---------------- | ------------------ | -------------- |
-| cryptarithm | alphametic_addition | PLACEHOLDER | ESTIMATED_0.65 | ESTIMATED_-2.12 | PLACEHOLDER | PLACEHOLDER | 5 |
-| cryptarithm | string_transform | PLACEHOLDER | ESTIMATED_0.72 | ESTIMATED_-1.85 | PLACEHOLDER | PLACEHOLDER | 5 |
-| bit_manipulation | xor | PLACEHOLDER | ESTIMATED_0.74 | ESTIMATED_-2.05 | PLACEHOLDER | PLACEHOLDER | 5 |
-| bit_manipulation | signed_unsigned | PLACEHOLDER | ESTIMATED_0.70 | ESTIMATED_-2.34 | PLACEHOLDER | PLACEHOLDER | 4 |
-| bit_manipulation | shift_left | PLACEHOLDER | ESTIMATED_0.76 | ESTIMATED_-1.92 | PLACEHOLDER | PLACEHOLDER | 4 |
-| bit_manipulation | shift_right | PLACEHOLDER | ESTIMATED_0.77 | ESTIMATED_-1.88 | PLACEHOLDER | PLACEHOLDER | 4 |
-| numeral_conversion | hex_to_decimal | PLACEHOLDER | ESTIMATED_0.81 | ESTIMATED_-1.51 | PLACEHOLDER | PLACEHOLDER | 4 |
-| numeral_conversion | binary_to_decimal | PLACEHOLDER | ESTIMATED_0.82 | ESTIMATED_-1.42 | PLACEHOLDER | PLACEHOLDER | 4 |
-| numeral_conversion | base_n_conversion | PLACEHOLDER | ESTIMATED_0.79 | ESTIMATED_-1.65 | PLACEHOLDER | PLACEHOLDER | 3 |
-| other | unknown | PLACEHOLDER | ESTIMATED_0.82 | ESTIMATED_-1.25 | PLACEHOLDER | PLACEHOLDER | 2 |
-| cipher | n/a | PLACEHOLDER | ESTIMATED_0.88 | ESTIMATED_-0.98 | PLACEHOLDER | PLACEHOLDER | 2 |
-| logic | n/a | PLACEHOLDER | ESTIMATED_0.89 | ESTIMATED_-0.91 | PLACEHOLDER | PLACEHOLDER | 2 |
-| equation | n/a | PLACEHOLDER | ESTIMATED_0.91 | ESTIMATED_-0.85 | PLACEHOLDER | PLACEHOLDER | 2 |
-| unit_conversion | n/a | PLACEHOLDER | ESTIMATED_0.93 | ESTIMATED_-0.72 | PLACEHOLDER | PLACEHOLDER | 1 |
-| arithmetic | n/a | PLACEHOLDER | ESTIMATED_0.94 | ESTIMATED_-0.68 | PLACEHOLDER | PLACEHOLDER | 1 |
+| bit_manipulation | xor | 1 | 0.0 | -3.45 | 1 | 0 | 4 |
+| ALL | ALL | 1 | 0.0 |  | 0 | 0 | 2 |
+| cipher | n/a | 1 | 1.0 | -0.45 | 0 | 0 | 1 |
+| cryptarithm | string_transform | 1 | 1.0 | -0.82 | 0 | 0 | 1 |
+| equation | n/a | 1 | 1.0 | -0.38 | 0 | 0 | 1 |
+| numeral_conversion | binary_to_decimal | 1 | 1.0 | -0.71 | 0 | 0 | 1 |
 
 ---
 
 ## 3. Cryptarithm Findings
 
-### Main failure types
+_(No cryptarithm failure data — run step 5 first.)_
 
-| failure_type | count | pct |
-| ------------ | ----- | ---- |
-| mapping_conflict | PLACEHOLDER | ESTIMATED_28.5% |
-| carry_error | PLACEHOLDER | ESTIMATED_22.1% |
-| incomplete_search | PLACEHOLDER | ESTIMATED_16.4% |
-| leading_zero_error | PLACEHOLDER | ESTIMATED_12.3% |
-| final_parse_error | PLACEHOLDER | ESTIMATED_9.8% |
 
 ### Solver check feasibility
 - `alphametic_addition/subtraction/multiplication`: **YES** — constraint propagation solver available in `scripts/cryptarithm_solver.py`
@@ -91,11 +75,7 @@ Generated: 2026-06-04 00:34 UTC
 
 | failure_type | count | pct |
 | ------------ | ----- | ---- |
-| xor_error | PLACEHOLDER | ESTIMATED_31.2% |
-| shift_error | PLACEHOLDER | ESTIMATED_21.8% |
-| base_conversion_error | PLACEHOLDER | ESTIMATED_18.5% |
-| signed_unsigned_error | PLACEHOLDER | ESTIMATED_12.4% |
-| answer_format_error | PLACEHOLDER | ESTIMATED_6.9% |
+| xor_error | 1 | 100.0% |
 
 ### Next-phase candidates
 1. `bitwise_xor_step_cot` — explicit truth-table walkthrough for XOR
@@ -108,15 +88,8 @@ Generated: 2026-06-04 00:34 UTC
 
 ## 5. Numeral Conversion Findings
 
-### Main failure types
+_(No numeral_conversion failure data — run step 6 first.)_
 
-| failure_type | count | pct |
-| ------------ | ----- | ---- |
-| binary_decimal_error | PLACEHOLDER | ESTIMATED_33.8% |
-| hex_decimal_error | PLACEHOLDER | ESTIMATED_24.6% |
-| base_n_place_value_error | PLACEHOLDER | ESTIMATED_18.5% |
-| decimal_binary_error | PLACEHOLDER | ESTIMATED_11.7% |
-| digit_order_error | PLACEHOLDER | ESTIMATED_6.2% |
 
 ### Next-phase candidates
 1. `positional_binary_cot` — explicit place-value table (2^7 ... 2^0)
