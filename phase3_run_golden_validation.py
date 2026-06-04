@@ -222,8 +222,15 @@ def _apply_mamba_patch() -> None:
     dataset bundles already contain working stubs/patches — we find the
     most recent one and insert its parent directory at the front of sys.path
     so Python picks it up before the broken system copy.
+
+    After injection we also normalise mamba_ssm.__version__ to a valid PEP 440
+    string below 2.0.4 ('1.2.0') so that:
+      - is_mamba_2_ssm_available() → False  (avoids mamba2 CUDA path)
+      - is_mamba_ssm_available()   → True   (model uses mamba1 stub ops)
     """
     import glob as _glob
+    import importlib as _importlib
+    import re as _re
     import sys
 
     all_stubs = {
@@ -255,7 +262,22 @@ def _apply_mamba_patch() -> None:
     if best not in sys.path:
         sys.path.insert(0, best)
 
-    print(f"[mamba_patch] Patched mamba_ssm from {best}")
+    # Pre-import the stub so we can normalise its __version__ BEFORE
+    # is_mamba_2_ssm_available() reads it.  The stubs ship with versions like
+    # '2.2.2.stub' which are not valid PEP 440 strings — packaging.version.parse()
+    # raises InvalidVersion on them.  Force version to '1.2.0' so the check
+    # returns False for mamba2 (< 2.0.4) while mamba1 remains "available".
+    try:
+        stub = _importlib.import_module("mamba_ssm")
+        raw_v = getattr(stub, "__version__", "0.0.0")
+        # Strip non-numeric/dot suffix: '2.2.2.stub' → '2.2.2' → force to 1.2.0
+        clean_v = _re.sub(r"[^0-9.].*$", "", raw_v).rstrip(".")
+        stub.__version__ = "1.2.0"  # < 2.0.4 → is_mamba_2_ssm_available() = False
+        sys.modules["mamba_ssm"] = stub
+        print(f"[mamba_patch] Patched mamba_ssm from {best} "
+              f"(version {raw_v!r} → '1.2.0')")
+    except Exception as exc:
+        print(f"[mamba_patch] Warning: version normalisation failed: {exc}")
 
 
 # ---------------------------------------------------------------------------
