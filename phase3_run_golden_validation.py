@@ -113,10 +113,42 @@ def load_category_map(path: Path) -> Dict[str, Dict[str, str]]:
     return result
 
 
-def load_problems(path: Path) -> List[Dict[str, Any]]:
+def _load_csv_problems(path: Path) -> List[Dict[str, Any]]:
+    """Load problems from CSV. Normalises column names to question/answer/problem_id."""
+    import csv as _csv
+    QUESTION_COLS = ("question", "problem", "prompt", "input", "text")
+    ANSWER_COLS = ("answer", "solution", "target", "output", "label")
+    ID_COLS = ("id", "problem_id", "uid", "sample_id", "index")
+
     records: List[Dict[str, Any]] = []
+    with path.open("r", encoding="utf-8", newline="") as fh:
+        reader = _csv.DictReader(fh)
+        if not reader.fieldnames:
+            return records
+        fl = {f.lower(): f for f in reader.fieldnames}
+        q_col = next((fl[c] for c in QUESTION_COLS if c in fl), None)
+        a_col = next((fl[c] for c in ANSWER_COLS if c in fl), None)
+        id_col = next((fl[c] for c in ID_COLS if c in fl), None)
+        for idx, row in enumerate(reader):
+            rec: Dict[str, Any] = dict(row)
+            if q_col and q_col != "question":
+                rec["question"] = row[q_col]
+            if a_col and a_col != "answer":
+                rec["answer"] = row[a_col]
+            if id_col and id_col != "problem_id":
+                rec["problem_id"] = row[id_col]
+            elif "problem_id" not in rec:
+                rec["problem_id"] = f"row_{idx}"
+            records.append(rec)
+    return records
+
+
+def load_problems(path: Path) -> List[Dict[str, Any]]:
     if not path.exists():
-        return records
+        return []
+    if path.suffix.lower() == ".csv":
+        return _load_csv_problems(path)
+    records: List[Dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()

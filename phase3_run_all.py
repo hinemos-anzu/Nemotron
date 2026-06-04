@@ -75,18 +75,27 @@ def detect_paths() -> Dict[str, Optional[Path]]:
       2. kagglehub.model_download("metric/nemotron-3-nano-30b-a3b-bf16/transformers/default")
       3. Filesystem fallbacks
     """
+    # Competition data: slug is "nvidia-nemotron-3-reasoning-challenge" (with digit "3")
+    # Primary format is train.csv (not problems.jsonl)
     problems = _find_first([
+        "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv",
+        "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/problems.jsonl",
+        "/kaggle/input/nvidia-nemotron-model-reasoning-challenge/train.csv",
         "/kaggle/input/nvidia-nemotron-model-reasoning-challenge/problems.jsonl",
+        "/kaggle/input/nemotron-reasoning-challenge/train.csv",
         "/kaggle/input/nemotron-reasoning-challenge/problems.jsonl",
         "/kaggle/input/nvidia-nemotron/problems.jsonl",
         os.environ.get("PROBLEMS_PATH", ""),
+        "data/raw/train.csv",
         "data/raw/problems.jsonl",
         "problems.jsonl",
     ]) or _glob_find([
         "/kaggle/input/*/problems.jsonl",
+        "/kaggle/input/*/train.csv",
         "/kaggle/input/*/*/problems.jsonl",
     ])
     train_csv = _find_first([
+        "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv",
         "/kaggle/input/nvidia-nemotron-model-reasoning-challenge/train.csv",
         "/kaggle/input/nemotron-reasoning-challenge/train.csv",
         os.environ.get("TRAIN_CSV_PATH", ""),
@@ -188,7 +197,12 @@ def run_step(cmd: List[str], logger: Logger, timeout: int = 7200) -> bool:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def step1_category_map(paths: Dict[str, Optional[Path]], out: Path, logger: Logger) -> bool:
-    inputs = [str(p) for p in (paths["problems"], paths["train_csv"]) if p]
+    seen: set = set()
+    inputs = []
+    for p in (paths["problems"], paths["train_csv"]):
+        if p and str(p) not in seen:
+            seen.add(str(p))
+            inputs.append(str(p))
     if not inputs:
         logger.log("  [SKIP] 問題ファイルが見つかりません")
         return False
