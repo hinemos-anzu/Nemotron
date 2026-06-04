@@ -215,7 +215,7 @@ def step1_category_map(paths: Dict[str, Optional[Path]], out: Path, logger: Logg
 
 
 def step2_inference(paths: Dict[str, Optional[Path]], out: Path, logger: Logger,
-                    dry_run: bool = False) -> bool:
+                    dry_run: bool = False, max_problems: int = 0) -> bool:
     if not paths["adapter"]:
         logger.log("  [SKIP] adapterが見つかりません")
         return False
@@ -237,6 +237,8 @@ def step2_inference(paths: Dict[str, Optional[Path]], out: Path, logger: Logger,
     ]
     if dry_run:
         cmd.append("--dry-run")
+    if max_problems and max_problems > 0:
+        cmd += ["--max-problems", str(max_problems)]
     return run_step(cmd, logger, timeout=10800)
 
 
@@ -411,6 +413,12 @@ def main() -> None:
     parser.add_argument("--problems", default="", help="問題ファイルパスを手動指定")
     parser.add_argument("--adapter",  default="", help="adapterパスを手動指定")
     parser.add_argument("--model",    default="", help="base modelパスを手動指定")
+    parser.add_argument(
+        "--max-problems",
+        type=int,
+        default=0,
+        help="推論問題数の上限 (0=全件). スモークテスト用: --max-problems 200",
+    )
     args = parser.parse_args()
 
     out = Path(args.output_dir)
@@ -458,7 +466,7 @@ def main() -> None:
 
     if 2 in steps_to_run:
         t0 = logger.step_start(2, "Golden validation 推論")
-        results[2] = step2_inference(paths, out, logger)
+        results[2] = step2_inference(paths, out, logger, max_problems=args.max_problems)
         logger.step_done(2, "Golden validation 推論", t0, results[2])
 
     if 3 in steps_to_run:

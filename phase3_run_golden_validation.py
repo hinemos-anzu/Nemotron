@@ -313,13 +313,47 @@ def run_inference_transformers(
     print(f"Loading tokenizer from {model_path}")
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
-    print(f"Loading base model from {model_path}")
-    model = AutoModelForCausalLM.from_pretrained(
-        model_path,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-        trust_remote_code=True,
-    )
+    # 4-bit quantization avoids disk offloading (model fits ~15 GB on 2xT4),
+    # which prevents PEFT's _update_offload() KeyError on disk-offloaded params.
+    bnb_available = False
+    try:
+        import bitsandbytes as _bnb  # noqa: F401
+        from transformers import BitsAndBytesConfig
+        bnb_available = True
+    except ImportError:
+        pass
+
+    if bnb_available:
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+        )
+        print(f"Loading base model from {model_path} (4-bit NF4 quantization)")
+        model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            quantization_config=quantization_config,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+    else:
+        # Fallback: bfloat16 with CPU RAM overflow to minimize disk offloading.
+        # offload_index stays empty when nothing hits disk, keeping PEFT happy.
+        n_gpus = torch.cuda.device_count()
+        max_mem: Dict[Any, str] = {
+            i: f"{int(torch.cuda.get_device_properties(i).total_memory * 0.85 / 1024**3)}GiB"
+            for i in range(n_gpus)
+        }
+        max_mem["cpu"] = "100GiB"
+        print(f"Loading base model from {model_path} (bfloat16, max_memory={max_mem})")
+        model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+            max_memory=max_mem,
+            trust_remote_code=True,
+        )
 
     print(f"Loading adapter from {adapter_path}")
     model = PeftModel.from_pretrained(model, adapter_path)
@@ -521,6 +555,12 @@ def main() -> None:
     )
     parser.add_argument("--seed", type=int, default=SEED)
     parser.add_argument(
+        "--max-problems",
+        type=int,
+        default=0,
+        help="Limit inference to first N problems (0 = all). Useful for quick smoke tests.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Validate inputs and config without running inference",
@@ -545,6 +585,10 @@ def main() -> None:
 
     category_map = load_category_map(Path(args.category_map))
     problems = load_problems(Path(args.problems))
+
+    if args.max_problems and args.max_problems > 0:
+        problems = problems[: args.max_problems]
+        print(f"[max-problems] Capped at {args.max_problems}")
 
     print(f"Problems loaded: {len(problems)}")
     print(f"Category map entries: {len(category_map)}")
