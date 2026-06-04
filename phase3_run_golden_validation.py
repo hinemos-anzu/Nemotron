@@ -211,6 +211,54 @@ def build_prompt(record: Dict[str, Any]) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Mamba SSM patch (Kaggle-specific)
+# ---------------------------------------------------------------------------
+
+def _apply_mamba_patch() -> None:
+    """Inject a working mamba_ssm stub to override the broken CUDA extension.
+
+    The Kaggle environment ships mamba_ssm built against a different CUDA
+    version, causing 'undefined symbol' errors.  The user's own nemotron
+    dataset bundles already contain working stubs/patches — we find the
+    most recent one and insert its parent directory at the front of sys.path
+    so Python picks it up before the broken system copy.
+    """
+    import glob as _glob
+    import sys
+
+    all_stubs = {
+        str(Path(p).parent.parent)
+        for p in _glob.glob(
+            "/kaggle/input/datasets/hinemos/**/mamba_ssm/__init__.py",
+            recursive=True,
+        )
+    }
+
+    if not all_stubs:
+        print("[mamba_patch] No stub found in /kaggle/input/datasets/hinemos/ — "
+              "model loading may fail with CUDA symbol errors")
+        return
+
+    def _scan_impl_size(parent: str) -> int:
+        p = Path(parent) / "mamba_ssm/ops/selective_scan_interface.py"
+        return p.stat().st_size if p.exists() else 0
+
+    # Prefer stubs that have a non-empty selective_scan_interface.py, then
+    # take the alphabetically latest (highest date + run number)
+    best = sorted(all_stubs, key=lambda d: (_scan_impl_size(d), d), reverse=True)[0]
+
+    # Evict any already-cached broken modules
+    for key in list(sys.modules.keys()):
+        if key == "mamba_ssm" or key.startswith("mamba_ssm."):
+            del sys.modules[key]
+
+    if best not in sys.path:
+        sys.path.insert(0, best)
+
+    print(f"[mamba_patch] Patched mamba_ssm from {best}")
+
+
+# ---------------------------------------------------------------------------
 # Inference runner (transformers path — for vLLM see reproducibility_notes.md)
 # ---------------------------------------------------------------------------
 
@@ -228,6 +276,11 @@ def run_inference_transformers(
     It imports heavy dependencies lazily to allow the rest of the script
     to be imported and tested on CPU.
     """
+    # Must patch mamba_ssm BEFORE any transformers imports so that
+    # modeling_nemotron_h.py's module-level is_mamba_2_ssm_available() check
+    # uses our stub instead of the broken CUDA extension.
+    _apply_mamba_patch()
+
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
     from peft import PeftModel
