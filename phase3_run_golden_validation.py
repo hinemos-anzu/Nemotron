@@ -310,27 +310,39 @@ def run_inference_transformers(
     set_seed(seed)
     torch.manual_seed(seed)
 
+    # T4 GPUs don't support bfloat16 natively (Volta arch); use float16 there
+    has_bf16 = (
+        torch.cuda.is_available()
+        and hasattr(torch.cuda, "is_bf16_supported")
+        and torch.cuda.is_bf16_supported()
+    )
+    compute_dtype = torch.bfloat16 if has_bf16 else torch.float16
+    print(f"GPU bf16 support: {has_bf16}  →  compute_dtype={compute_dtype}")
+
     print(f"Loading tokenizer from {model_path}")
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
-    # 4-bit quantization avoids disk offloading (model fits ~15 GB on 2xT4),
-    # which prevents PEFT's _update_offload() KeyError on disk-offloaded params.
+    # 4-bit NF4 quantization: 60GB model → ~15GB, fits on 2xT4 without any offloading.
+    # Catching all exceptions because on Kaggle T4, bnb sometimes raises RuntimeError
+    # (CUDA version mismatch) rather than ImportError.
     bnb_available = False
     try:
         import bitsandbytes as _bnb  # noqa: F401
         from transformers import BitsAndBytesConfig
         bnb_available = True
-    except ImportError:
-        pass
+        print(f"[model_load] bitsandbytes OK (version {getattr(_bnb, '__version__', '?')})")
+    except Exception as bnb_exc:
+        print(f"[model_load] bitsandbytes unavailable "
+              f"({type(bnb_exc).__name__}: {bnb_exc}) → fallback to {compute_dtype}+offload")
 
     if bnb_available:
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_compute_dtype=compute_dtype,
             bnb_4bit_use_double_quant=True,
             bnb_4bit_quant_type="nf4",
         )
-        print(f"Loading base model from {model_path} (4-bit NF4 quantization)")
+        print(f"Loading base model from {model_path} (4-bit NF4, compute={compute_dtype})")
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
             quantization_config=quantization_config,
@@ -338,26 +350,62 @@ def run_inference_transformers(
             trust_remote_code=True,
         )
     else:
-        # Fallback: bfloat16 with CPU RAM overflow to minimize disk offloading.
-        # offload_index stays empty when nothing hits disk, keeping PEFT happy.
+        # Fallback: prefer CPU RAM over disk to keep offload_index as small as possible.
         n_gpus = torch.cuda.device_count()
         max_mem: Dict[Any, str] = {
             i: f"{int(torch.cuda.get_device_properties(i).total_memory * 0.85 / 1024**3)}GiB"
             for i in range(n_gpus)
         }
-        max_mem["cpu"] = "100GiB"
-        print(f"Loading base model from {model_path} (bfloat16, max_memory={max_mem})")
+        max_mem["cpu"] = "100GiB"  # tell accelerate to use CPU before disk
+        print(f"Loading base model from {model_path} ({compute_dtype}, max_memory={max_mem})")
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=compute_dtype,
             device_map="auto",
             max_memory=max_mem,
             trust_remote_code=True,
         )
 
-    print(f"Loading adapter from {adapter_path}")
-    model = PeftModel.from_pretrained(model, adapter_path)
+    # Monkey-patch PEFT's _update_offload so it tolerates missing Mamba MoE
+    # module keys (e.g. experts.100.down_proj not in named_modules() when the
+    # MoE block is built lazily / via the stub). Safe for read-only inference.
+    try:
+        from peft import peft_model as _peft_model_mod
+        _orig_upd = _peft_model_mod.PeftModel._update_offload
+
+        def _safe_update_offload(self, offload_index, adapters_weights):
+            if not offload_index:
+                return offload_index
+            try:
+                return _orig_upd(self, offload_index, adapters_weights)
+            except KeyError as _ke:
+                print(f"[peft_patch] _update_offload KeyError skipped "
+                      f"(Mamba MoE key not in named_modules): {_ke}")
+                return offload_index
+
+        _peft_model_mod.PeftModel._update_offload = _safe_update_offload
+        print("[peft_patch] Patched _update_offload to tolerate MoE KeyError")
+    except Exception as _pe:
+        print(f"[peft_patch] Warning: could not patch _update_offload: {_pe}")
+
+    # Provide offload_dir so PEFT can disk-offload layers if the wrapped model
+    # doesn't fit on GPU+CPU (required when base model had CPU-offloaded params).
+    offload_dir = str(output_dir / "model_offload")
+    os.makedirs(offload_dir, exist_ok=True)
+    print(f"Loading adapter from {adapter_path} (offload_dir={offload_dir})")
+    model = PeftModel.from_pretrained(model, adapter_path, offload_dir=offload_dir)
     model.eval()
+
+    # When the model is dispatched across CPU/GPU/disk, model.device is not
+    # defined. Determine the input device from the first parameter on GPU.
+    def _infer_input_device(m: torch.nn.Module) -> torch.device:
+        for p in m.parameters():
+            if p.device.type == "cuda":
+                return p.device
+        return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    input_device = _infer_input_device(model)
+    print(f"Input device for tokenized inputs: {input_device}")
 
     records: List[Dict[str, Any]] = []
 
@@ -368,7 +416,7 @@ def run_inference_transformers(
         gold_answer = str(record.get("answer", record.get("target", ""))).strip()
 
         prompt = build_prompt(record)
-        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        inputs = tokenizer(prompt, return_tensors="pt").to(input_device)
 
         t0 = time.time()
         with torch.no_grad():
