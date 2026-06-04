@@ -303,6 +303,7 @@ def run_inference_transformers(
     # uses our stub instead of the broken CUDA extension.
     _apply_mamba_patch()
 
+    import gc as _gc
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
     from peft import PeftModel
@@ -310,16 +311,22 @@ def run_inference_transformers(
     set_seed(seed)
     torch.manual_seed(seed)
 
-    # ── Environment diagnostics (printed before any heavy work) ───────────────
-    print("=== Environment diagnostics ===")
-    print(f"  PyTorch  : {torch.__version__}")
-    print(f"  CUDA     : {torch.version.cuda}")
-    print(f"  GPUs     : {torch.cuda.device_count()}")
+    # ── Diagnostics written to file so they survive a kernel OOM restart ──────
+    _diag_path = output_dir / "step2_diagnostics.txt"
+    _diag_path.write_text("")
+
+    def _diag(msg: str) -> None:
+        print(msg, flush=True)
+        with _diag_path.open("a") as _fh:
+            _fh.write(msg + "\n")
+
+    _diag("=== Step 2 diagnostics ===")
+    _diag(f"PyTorch {torch.__version__}  CUDA {torch.version.cuda}")
     for _gi in range(torch.cuda.device_count()):
         _pr = torch.cuda.get_device_properties(_gi)
         _fr, _tot = torch.cuda.mem_get_info(_gi)
-        print(f"  GPU {_gi}    : {_pr.name}  "
-              f"{_tot/1024**3:.1f} GB total  {_fr/1024**3:.1f} GB free")
+        _diag(f"GPU {_gi}: {_pr.name}  {_tot/1024**3:.1f}GB total  {_fr/1024**3:.1f}GB free")
+
     # T4 (Volta) doesn't support bfloat16 natively
     has_bf16 = (
         torch.cuda.is_available()
@@ -327,7 +334,7 @@ def run_inference_transformers(
         and torch.cuda.is_bf16_supported()
     )
     compute_dtype = torch.bfloat16 if has_bf16 else torch.float16
-    print(f"  bf16     : {has_bf16}  →  compute_dtype={compute_dtype}")
+    _diag(f"bf16 native: {has_bf16}  →  compute_dtype={compute_dtype}")
 
     # bitsandbytes probe
     _bnb_ok = False
@@ -337,70 +344,76 @@ def run_inference_transformers(
         from transformers import BitsAndBytesConfig as _BnBCfg
         _BitsAndBytesConfig = _BnBCfg
         _bnb_ok = True
-        print(f"  bnb      : OK  v{getattr(_bnb_mod, '__version__', '?')}")
+        _diag(f"bitsandbytes: OK  v{getattr(_bnb_mod, '__version__', '?')}")
     except Exception as _bnb_exc:
-        print(f"  bnb      : FAILED  {type(_bnb_exc).__name__}: {_bnb_exc}")
-    print("================================")
+        _diag(f"bitsandbytes: FAILED  {type(_bnb_exc).__name__}: {_bnb_exc}")
 
-    print(f"Loading tokenizer from {model_path}")
+    if not _bnb_ok:
+        raise RuntimeError(
+            "bitsandbytes is required to load this 60GB model on Kaggle T4×2 (32GB GPU, 29GB RAM).\n"
+            "Fix: in a notebook cell run:  !pip install -q bitsandbytes --upgrade\n"
+            "then restart the kernel and re-run from Cell 1."
+        )
+
+    _diag(f"Loading tokenizer from {model_path}")
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
-    # ── Model loading: 4-bit → 8-bit → fail fast (no bfloat16 fallback) ──────
-    # The bfloat16 path requires disk offloading (~30 GB) which exceeds Kaggle's
-    # 20 GB working-directory limit and kills the kernel.  Quantization reduces
-    # the model to ~15 GB (4-bit) or ~30 GB (8-bit) so it fits entirely on GPU.
-    model = None
+    # ── Free memory before the heavy model load ────────────────────────────────
+    _gc.collect()
+    torch.cuda.empty_cache()
+    for _gi in range(torch.cuda.device_count()):
+        _fr, _ = torch.cuda.mem_get_info(_gi)
+        _diag(f"GPU {_gi} free after GC: {_fr/1024**3:.1f}GB")
 
-    if _bnb_ok:
-        # Attempt 1 – 4-bit NF4
-        try:
-            _q4 = _BitsAndBytesConfig(
+    # GPU-only max_memory: 4-bit NF4 quantized 30B ≈ 15GB → fits on 2×T4 (32GB).
+    # Excluding "cpu" key forces accelerate to use ONLY GPU — no CPU RAM for
+    # model weights, avoiding the 29GB RAM OOM from 8-bit / partial-load leaks.
+    _n_gpus = torch.cuda.device_count()
+    _gpu_budget = {
+        i: f"{int(torch.cuda.get_device_properties(i).total_memory * 0.90 / 1024**3)}GiB"
+        for i in range(_n_gpus)
+    }
+    _diag(f"GPU budget (90%): {_gpu_budget}")
+
+    # ── 4-bit NF4 only — no 8-bit fallback ────────────────────────────────────
+    # 8-bit (30GB) plus failed-4-bit garbage easily exceeds 29GB RAM and OOMs.
+    # 4-bit (15GB) fits comfortably on GPU with headroom for KV-cache.
+    _diag("Loading base model (4-bit NF4) ...")
+    model = None
+    try:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            quantization_config=_BitsAndBytesConfig(
                 load_in_4bit=True,
                 bnb_4bit_compute_dtype=compute_dtype,
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
-            )
-            print(f"Attempt 1: Loading base model (4-bit NF4, compute={compute_dtype})")
-            model = AutoModelForCausalLM.from_pretrained(
-                model_path,
-                quantization_config=_q4,
-                device_map="auto",
-                trust_remote_code=True,
-            )
-            print("4-bit NF4 model load: OK")
-        except Exception as _e4:
-            print(f"4-bit NF4 load FAILED: {type(_e4).__name__}: {_e4}")
-            model = None
-
-        # Attempt 2 – 8-bit INT8
-        if model is None:
-            try:
-                _q8 = _BitsAndBytesConfig(load_in_8bit=True)
-                print("Attempt 2: Loading base model (8-bit INT8)")
-                model = AutoModelForCausalLM.from_pretrained(
-                    model_path,
-                    quantization_config=_q8,
-                    device_map="auto",
-                    trust_remote_code=True,
-                )
-                print("8-bit INT8 model load: OK")
-            except Exception as _e8:
-                print(f"8-bit INT8 load FAILED: {type(_e8).__name__}: {_e8}")
-                model = None
-
-    if model is None:
-        raise RuntimeError(
-            "FATAL: Could not load model with quantization.\n"
-            "The bfloat16 fallback is intentionally disabled — it would write "
-            "~30 GB to /kaggle/working/ and exceed Kaggle's 20 GB disk limit.\n\n"
-            "Diagnostics: run the following in a separate cell to debug:\n"
-            "  import bitsandbytes; print(bitsandbytes.__version__)\n"
-            "  from transformers import BitsAndBytesConfig\n"
-            "  print('bnb OK')\n\n"
-            "Common fixes:\n"
-            "  !pip install -q bitsandbytes --upgrade\n"
-            "  # then restart kernel and re-run"
+            ),
+            torch_dtype=compute_dtype,
+            device_map="auto",
+            max_memory=_gpu_budget,
+            low_cpu_mem_usage=True,
+            trust_remote_code=True,
         )
+        for _gi in range(torch.cuda.device_count()):
+            _fr, _ = torch.cuda.mem_get_info(_gi)
+            _diag(f"GPU {_gi} free after model load: {_fr/1024**3:.1f}GB")
+        _diag("4-bit NF4 load: OK")
+    except Exception as _e4:
+        _diag(f"4-bit NF4 FAILED: {type(_e4).__name__}: {_e4}")
+        try:
+            del model
+        except Exception:
+            pass
+        _gc.collect()
+        torch.cuda.empty_cache()
+        raise RuntimeError(
+            f"FATAL: 4-bit NF4 quantization failed: {type(_e4).__name__}: {_e4}\n"
+            f"Diagnostics saved to: {_diag_path}\n"
+            "Common fixes:\n"
+            "  !pip install -q bitsandbytes --upgrade  (restart kernel after)\n"
+            "  The Mamba MoE architecture may need a newer transformers or bnb version."
+        ) from _e4
 
     # Monkey-patch PEFT._update_offload to skip Mamba MoE keys that are absent
     # from named_modules() in the stub (experts.100.down_proj etc.).
