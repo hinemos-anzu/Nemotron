@@ -42,18 +42,21 @@ code(r"""# ============================================================
 # ============================================================
 
 # Goldenアダプターのパス（adapter_model.safetensors が含まれるディレクトリ）
-ADAPTER_PATH = "/path/to/adapter"
+# Kaggle: /kaggle/input/models/huikang/nemotron-adapter/transformers/default/20
+ADAPTER_PATH = "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20"
 
 # Nemotron-H 30B ベースモデルのパス
-MODEL_PATH = "/path/to/nemotron-3-nano-30b-a3b-bf16"
+# Kaggle: /kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1
+MODEL_PATH = "/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1"
 
 # 問題ファイル（JSONL または CSV）
-PROBLEMS_PATH = "./problems.jsonl"
+# Kaggle: /kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv
+PROBLEMS_PATH = "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv"
 
 # 結果出力先
-OUTPUT_DIR = "./nemotron_results"
+OUTPUT_DIR = "/kaggle/working/phase3_analysis"
 
-# カテゴリマップ CSV（なければ空文字 "" でOK）
+# カテゴリマップ CSV（なければ空文字 "" でOK、Step 1で自動生成される）
 CATEGORY_MAP_PATH = ""
 
 # 乱数シード（Golden Baseline と一致）
