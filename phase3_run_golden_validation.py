@@ -662,25 +662,25 @@ def run_inference_transformers(
             _gen_inputs["attention_mask"] = inputs["attention_mask"]
         _input_len = _gen_inputs["input_ids"].shape[1]
 
-        # Initialize a fresh NemotronHHybridDynamicCache per problem so generate()
-        # can store SSM states incrementally (O(1) per step) rather than reprocessing
-        # the full growing sequence at every step (O(N) → OOM on long outputs).
-        # Without this, the warning "NemotronH requires an initialized
-        # NemotronHHybridDynamicCache" fires and torch_forward runs over the full
-        # sequence each step until GPU 1 exhausts memory.
-        # Try multiple constructor signatures — the class may accept different kwargs.
-        # Log which signature worked (idx==0 only to avoid log spam).
+        # Initialize a fresh HybridMambaAttentionDynamicCache per problem.
+        # IMPORTANT: device must match the GPU each layer runs on.
+        # device=None (default) creates CPU tensors → cuBLAS "GET was unable to find
+        # an engine" when the forward pass tries to update SSM states on CUDA.
+        # With device_map="auto" (T4×2), layers span cuda:0 and cuda:1, so we init
+        # on cuda:0 then correct each SSM state tensor to its layer's actual device.
         _past_kv = None
         if _nemh_cache_cls is not None:
             _cfg = _model_cfg_for_cache
             _init_opts: List[Dict[str, Any]] = (
                 [
+                    {"config": _cfg, "batch_size": 1, "dtype": compute_dtype, "device": input_device},
                     {"config": _cfg, "batch_size": 1, "dtype": compute_dtype},
+                    {"config": _cfg, "max_batch_size": 1, "dtype": compute_dtype, "device": input_device},
                     {"config": _cfg, "max_batch_size": 1, "dtype": compute_dtype},
                     {"config": _cfg, "batch_size": 1},
-                    {},  # no-arg (e.g., subclass of DynamicCache)
+                    {},
                 ]
-                if _cfg is not None else [{}]
+                if _cfg is not None else [{"device": input_device}, {}]
             )
             for _ik, _kw in enumerate(_init_opts):
                 try:
@@ -696,6 +696,33 @@ def run_inference_transformers(
                     break
             if _past_kv is None and idx == 0:
                 _diag("[cache] all init signatures failed — OOM risk")
+
+            # Per-layer device correction: move each pre-allocated SSM state tensor
+            # from the init device to the device that actually holds that layer's
+            # parameters (handles device_map="auto" multi-GPU splits).
+            if _past_kv is not None:
+                try:
+                    _layers = getattr(_inner_model, "layers", None)
+                    _kc = getattr(_past_kv, "key_cache", [])
+                    if _layers is not None:
+                        for _li, _ks in enumerate(_kc):
+                            if not isinstance(_ks, torch.Tensor) or _li >= len(_layers):
+                                continue
+                            try:
+                                _ld = next(_layers[_li].parameters()).device
+                                if _ks.device != _ld:
+                                    _past_kv.key_cache[_li] = _ks.to(_ld)
+                            except Exception:
+                                continue
+                    if idx == 0:
+                        _devs = [str(_past_kv.key_cache[i].device)
+                                 for i in range(len(_past_kv.key_cache))
+                                 if isinstance(_past_kv.key_cache[i], torch.Tensor)]
+                        _diag(f"[cache] SSM state devices after correction: "
+                              f"{sorted(set(_devs))} ({len(_devs)} tensors)")
+                except Exception as _dc_e:
+                    if idx == 0:
+                        _diag(f"[cache] device correction error: {type(_dc_e).__name__}: {_dc_e}")
 
         # Free fragmented CUDA allocations before each generation step.
         # With expandable_segments=True this reclaims reserved-unallocated blocks
