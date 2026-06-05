@@ -345,21 +345,38 @@ if _existing_mamba is None or getattr(_existing_mamba, "__version__", "0") >= "2
     _mamba_ln_gated.__spec__ = _ilib_util_pre.spec_from_loader(
         "mamba_ssm.ops.triton.layernorm_gated", loader=None)
 
-    def _rmsnorm_fn_stub(x, weight, bias=None, residual=None, x_bias=None, eps=1e-6,
-                         prenorm=False, residual_in_fp32=False, is_rms_norm=True,
-                         return_dropout_mask=False):
+    def _rmsnorm_fn_stub(x, weight, bias=None, residual=None, x_bias=None,
+                         z=None, z_bias=None,
+                         prenorm=False, residual_in_fp32=False,
+                         eps=1e-6, is_rms_norm=True,
+                         return_dropout_mask=False, norm_before_gate=True):
         import torch as _t
+        import torch.nn.functional as _tF
         orig_dtype = x.dtype
         x_f = x.float()
+        if x_bias is not None:
+            x_f = x_f + x_bias.float()
         if residual is not None:
             x_f = x_f + residual.float()
+        # Gated RMSNorm: Nemotron-H Mamba2 layers pass z as the SiLU gate
+        _gate = None
+        if z is not None:
+            z_f = z.float()
+            if z_bias is not None:
+                z_f = z_f + z_bias.float()
+            _gate = _tF.silu(z_f)
+            if not norm_before_gate:
+                x_f = x_f * _gate
         x_n = x_f * _t.rsqrt(x_f.pow(2).mean(-1, keepdim=True) + eps)
         out = weight.float() * x_n
         if bias is not None:
             out = out + bias.float()
+        if _gate is not None and norm_before_gate:
+            out = out * _gate
         out = out.to(orig_dtype)
         if prenorm:
-            res_out = x_f.to(orig_dtype)
+            # residual_in_fp32=True: keep residual in float32 to prevent bfloat16 drift
+            res_out = x_f if residual_in_fp32 else x_f.to(orig_dtype)
             return (out, res_out) if not return_dropout_mask else (out, res_out, None)
         return out if not return_dropout_mask else (out, None)
 
