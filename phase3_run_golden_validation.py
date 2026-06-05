@@ -350,14 +350,14 @@ def run_inference_transformers(
         _fr, _tot = torch.cuda.mem_get_info(_gi)
         _diag(f"GPU {_gi}: {_pr.name}  {_tot/1024**3:.1f}GB total  {_fr/1024**3:.1f}GB free")
 
-    # T4 (Volta) doesn't support bfloat16 natively
-    has_bf16 = (
-        torch.cuda.is_available()
-        and hasattr(torch.cuda, "is_bf16_supported")
-        and torch.cuda.is_bf16_supported()
-    )
+    # T4 (SM 7.5) reports bf16 as "supported" via torch.cuda.is_bf16_supported() on
+    # CUDA 12.8, but cuDNN's conv1d kernel for bf16 is NOT available on SM < 8.0.
+    # Mamba SSM uses nn.Conv1d which calls F.conv1d → cuDNN → fails with bf16 on T4.
+    # Use device capability to gate on true BF16 tensor-core support (requires SM 8.0+).
+    _cap0 = torch.cuda.get_device_capability(0) if torch.cuda.is_available() else (0, 0)
+    has_bf16 = _cap0[0] >= 8  # Ampere+ required for cuDNN bf16 conv kernels
     compute_dtype = torch.bfloat16 if has_bf16 else torch.float16
-    _diag(f"bf16 native: {has_bf16}  →  compute_dtype={compute_dtype}")
+    _diag(f"GPU SM cap: {_cap0}  bf16 kernels: {has_bf16}  →  compute_dtype={compute_dtype}")
 
     # bitsandbytes probe
     _bnb_ok = False
@@ -498,6 +498,24 @@ def run_inference_transformers(
             f"Check adapter path: {adapter_path}"
         ) from _peft_exc
     model.eval()
+
+    # On SM < 8.0 (T4 etc.) cast any residual bfloat16 non-quantized parameters
+    # to float16.  The base model checkpoint is bf16, so nn.Conv1d, LayerNorm,
+    # and embedding weights load as bf16 even when torch_dtype=float16 is specified
+    # (quantized linear layers are unaffected — their 4-bit storage is dtype-agnostic).
+    # cuDNN's conv1d kernel for bf16 is absent on SM 7.5, triggering "GET was unable
+    # to find an engine" at the first Mamba SSM forward pass.
+    if not has_bf16:
+        _n_bf16_cast = 0
+        for _pn, _par in model.named_parameters():
+            if _par.dtype == torch.bfloat16:
+                try:
+                    _par.data = _par.data.to(torch.float16)
+                    _n_bf16_cast += 1
+                except Exception as _cast_e:
+                    _diag(f"[fp16-cast] skipped {_pn}: {_cast_e}")
+        if _n_bf16_cast > 0:
+            _diag(f"[fp16-cast] Cast {_n_bf16_cast} bf16 params → fp16 (SM {_cap0} cuDNN limitation)")
 
     # PEFT's adapter loading runs a validation forward pass that caches large
     # temporary tensors in PyTorch's CUDA allocator.  Flush them now so they
@@ -646,18 +664,33 @@ def run_inference_transformers(
             pass
     _diag(f"[eos] effective eos_token_ids: {_eos_ids}")
 
-    # Hoist SDPA context manager creation outside the loop.
-    # T4 (SM 7.5) does not support Flash Attention 2, and the mem-efficient backend
-    # also fails in decode mode.  Force math SDP which is pure PyTorch.
-    # Catch RuntimeError too — sdp_kernel() raises RuntimeError on unsupported combos
-    # (not just AttributeError/TypeError), which would leave _sdp_ctx unbound.
+    # Build a factory that creates a FRESH SDP context manager on each call.
+    # torch.backends.cuda.sdp_kernel() is a @contextmanager (generator-based) and is
+    # single-use: Python 3.12 contextlib.__enter__ deletes self.args/kwds/func after
+    # the first enter, so re-entering the same instance raises AttributeError.
+    # A factory function sidesteps this by constructing a new CM per generate() call.
+    # Prefer torch.nn.attention.sdpa_kernel (PyTorch ≥2.0, class-based, reusable)
+    # over the deprecated torch.backends.cuda.sdp_kernel (generator-based, single-use).
     from contextlib import nullcontext as _nullctx
+    _sdp_ctx_factory = None
     try:
-        _sdp_ctx = torch.backends.cuda.sdp_kernel(
-            enable_flash=False, enable_math=True, enable_mem_efficient=False
-        )
-    except (AttributeError, TypeError, RuntimeError):
-        _sdp_ctx = _nullctx()
+        from torch.nn.attention import sdpa_kernel as _sdpa_kernel_new, SDPBackend as _SDPBackend
+        _sdp_ctx_factory = lambda: _sdpa_kernel_new([_SDPBackend.MATH])
+        _diag("[sdp] Using torch.nn.attention.sdpa_kernel([MATH])")
+    except (ImportError, AttributeError):
+        pass
+    if _sdp_ctx_factory is None:
+        try:
+            torch.backends.cuda.sdp_kernel(
+                enable_flash=False, enable_math=True, enable_mem_efficient=False
+            )
+            _sdp_ctx_factory = lambda: torch.backends.cuda.sdp_kernel(
+                enable_flash=False, enable_math=True, enable_mem_efficient=False
+            )
+            _diag("[sdp] Using torch.backends.cuda.sdp_kernel (legacy, per-call factory)")
+        except (AttributeError, TypeError, RuntimeError):
+            _sdp_ctx_factory = _nullctx
+            _diag("[sdp] sdp_kernel unavailable — using nullcontext")
 
     # Hoist cache init option list outside the loop (constant after cache discovery).
     _cfg_for_init = _model_cfg_for_cache
@@ -828,9 +861,9 @@ def run_inference_transformers(
                 )
                 if _past_kv is not None:
                     _generate_kwargs["past_key_values"] = _past_kv
-                # _sdp_ctx hoisted outside loop — disables Flash/MemEfficient SDPA
-                # which fail on T4 (SM 7.5) and in decode mode respectively.
-                with _sdp_ctx:
+                # Create a fresh SDP context each call — generator-based CMs are
+                # single-use (Python 3.12 deletes .args/.kwds/.func after __enter__).
+                with _sdp_ctx_factory():
                     output = model.generate(**_generate_kwargs)
             elapsed = time.time() - t0
         except Exception as _gen_exc:
