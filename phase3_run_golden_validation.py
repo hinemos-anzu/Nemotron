@@ -560,19 +560,28 @@ def run_inference_transformers(
         _diag(f"[cache] nemotron in sys.modules: {_nemotron_mods}")
         _diag(f"[cache] transformers_modules in sys.modules: {_custom_mods}")
 
-        # After warmup, NemotronHHybridDynamicCache should now be importable.
-        # Broad scan of ALL loaded modules — catches class regardless of where
-        # it ended up (same file, sibling module, or re-exported).
+        # After warmup, the cache class should be in sys.modules.
+        # Source inspection revealed the actual Python class name is
+        # "HybridMambaAttentionDynamicCache" (a DynamicCache subclass).
+        # "NemotronHHybridDynamicCache" only appears as a string in the
+        # warning message — it is NOT a Python class name.
+        _cache_class_names = [
+            "HybridMambaAttentionDynamicCache",  # actual class in modeling_nemotron_h.py
+            "NemotronHHybridDynamicCache",        # kept as fallback for other model versions
+        ]
         for _mn, _mod in list(_sys.modules.items()):
             if _mod is None:
                 continue
-            try:
-                _cls = getattr(_mod, "NemotronHHybridDynamicCache", None)
-            except Exception:
-                continue
-            if _cls is not None and isinstance(_cls, type):
-                _nemh_cache_cls = _cls
-                _diag(f"[cache] Found NemotronHHybridDynamicCache in: {_mn}")
+            for _cn in _cache_class_names:
+                try:
+                    _cls = getattr(_mod, _cn, None)
+                except Exception:
+                    continue
+                if _cls is not None and isinstance(_cls, type):
+                    _nemh_cache_cls = _cls
+                    _diag(f"[cache] Found {_cn} in: {_mn}")
+                    break
+            if _nemh_cache_cls is not None:
                 break
 
         # If still not found, log source file contents for diagnosis.
@@ -598,7 +607,7 @@ def run_inference_transformers(
         if _nemh_cache_cls is not None:
             try:
                 _init_sig = str(_inspect.signature(_nemh_cache_cls.__init__))
-                _diag(f"[cache] __init__ signature: {_init_sig}")
+                _diag(f"[cache] {_nemh_cache_cls.__name__}.__init__ signature: {_init_sig}")
             except Exception:
                 pass
             _model_cfg_for_cache = (
