@@ -349,7 +349,8 @@ if _existing_mamba is None or getattr(_existing_mamba, "__version__", "0") >= "2
                          z=None, z_bias=None,
                          prenorm=False, residual_in_fp32=False,
                          eps=1e-6, is_rms_norm=True,
-                         return_dropout_mask=False, norm_before_gate=True):
+                         return_dropout_mask=False, norm_before_gate=True,
+                         group_size=None, **_kwargs):
         import torch as _t
         import torch.nn.functional as _tF
         orig_dtype = x.dtype
@@ -367,7 +368,13 @@ if _existing_mamba is None or getattr(_existing_mamba, "__version__", "0") >= "2
             _gate = _tF.silu(z_f)
             if not norm_before_gate:
                 x_f = x_f * _gate
-        x_n = x_f * _t.rsqrt(x_f.pow(2).mean(-1, keepdim=True) + eps)
+        # Group RMSNorm: normalize within groups of group_size features
+        if group_size is not None and group_size > 1:
+            _shape = x_f.shape
+            x_g = x_f.reshape(*_shape[:-1], -1, group_size)
+            x_n = (x_g * _t.rsqrt(x_g.pow(2).mean(-1, keepdim=True) + eps)).reshape(_shape)
+        else:
+            x_n = x_f * _t.rsqrt(x_f.pow(2).mean(-1, keepdim=True) + eps)
         out = weight.float() * x_n
         if bias is not None:
             out = out + bias.float()
