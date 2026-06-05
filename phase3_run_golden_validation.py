@@ -700,9 +700,13 @@ def run_inference_transformers(
             # Per-layer device correction: move each pre-allocated SSM state tensor
             # from the init device to the device that actually holds that layer's
             # parameters (handles device_map="auto" multi-GPU splits).
+            # NemotronHForCausalLM stores layers under .model.layers, not .layers.
             if _past_kv is not None:
                 try:
-                    _layers = getattr(_inner_model, "layers", None)
+                    _layers = (
+                        getattr(_inner_model, "layers", None)
+                        or getattr(getattr(_inner_model, "model", None), "layers", None)
+                    )
                     _kc = getattr(_past_kv, "key_cache", [])
                     if _layers is not None:
                         for _li, _ks in enumerate(_kc):
@@ -714,6 +718,9 @@ def run_inference_transformers(
                                     _past_kv.key_cache[_li] = _ks.to(_ld)
                             except Exception:
                                 continue
+                    else:
+                        if idx == 0:
+                            _diag("[cache] _layers not found — skipping per-layer device correction")
                     if idx == 0:
                         _devs = [str(_past_kv.key_cache[i].device)
                                  for i in range(len(_past_kv.key_cache))
@@ -743,11 +750,27 @@ def run_inference_transformers(
                 )
                 if _past_kv is not None:
                     _generate_kwargs["past_key_values"] = _past_kv
-                output = model.generate(**_generate_kwargs)
+                # Disable Flash/MemEfficient SDPA backends — T4 (SM 7.5, Turing) does
+                # not support Flash Attention 2 (requires Ampere SM 8.0+).  In decode
+                # mode (1-token query, N-token KV cache) the mem-efficient backend also
+                # fails with "GET was unable to find an engine."  Force math SDP which
+                # is pure PyTorch and always works.
+                try:
+                    _sdp_ctx = torch.backends.cuda.sdp_kernel(
+                        enable_flash=False, enable_math=True, enable_mem_efficient=False
+                    )
+                except (AttributeError, TypeError):
+                    from contextlib import nullcontext as _nullctx
+                    _sdp_ctx = _nullctx()
+                with _sdp_ctx:
+                    output = model.generate(**_generate_kwargs)
             elapsed = time.time() - t0
         except Exception as _gen_exc:
+            import traceback as _tb
             _diag(f"[{idx+1:4d}/{len(problems)}] {pid}: GENERATE_ERROR "
                   f"{type(_gen_exc).__name__}: {_gen_exc}")
+            if idx < 3:
+                _diag(f"[traceback]\n{_tb.format_exc()}")
             _gc.collect()
             torch.cuda.empty_cache()
             entry = {
