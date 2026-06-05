@@ -303,27 +303,91 @@ if USE_MAMBA_PATCH:
 
 # Auto-suppress broken mamba_ssm CUDA extension BEFORE model loading.
 #
-# modeling_nemotron_h.py executes `if is_mamba_2_ssm_available():` at module load time.
-# is_mamba_2_ssm_available() does `import mamba_ssm` → if the .so was compiled against
-# a different PyTorch ABI, it crashes with "undefined symbol".
-# (Seen: ryanholbrook/nvidia-utility-script/selective_scan_cuda.so v2.3.1 on PyTorch 2.10)
+# modeling_nemotron_h.py has TWO mamba_ssm import paths:
+#   1. is_mamba_2_ssm_available() check (conditional) → suppressed by version < 2.0.4
+#   2. Lines 63-66 (UNCONDITIONAL): from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn
+#      This runs regardless of version checks and re-raises any ImportError.
 #
-# Fix: inject a minimal stub with __version__="1.2.0" (<2.0.4) into sys.modules FIRST.
-# `import mamba_ssm` then returns the cached stub without executing the broken __init__.py.
-# Result: is_mamba_2_ssm_available()=False → model uses pure-PyTorch torch_forward (nn.Conv1d).
-# On SM >= 8.0 (this GPU), bfloat16 conv1d is fully supported.
+# Root cause: the Kaggle mamba_ssm v2.3.1 .so was compiled against a different PyTorch
+# ABI → "undefined symbol: _ZNK3c104cuda10CUDAStream5queryEv" on import.
+#
+# Fix: inject a full package hierarchy stub into sys.modules BEFORE from_pretrained().
+#   __version__ = "1.2.0" (<2.0.4) → is_mamba_2_ssm_available() returns False
+#   __path__ = []                    → Python recognizes it as a package (not plain module)
+#   Full submodule tree               → satisfies the unconditional rmsnorm_fn import
+#   Pure-PyTorch rmsnorm_fn          → works on any SM without Triton or CUDA extensions
 import sys as _sys_mamba_pre, types as _types_mamba_pre
 import importlib.util as _ilib_util_pre
 _existing_mamba = _sys_mamba_pre.modules.get("mamba_ssm")
 if _existing_mamba is None or getattr(_existing_mamba, "__version__", "0") >= "2.0.4":
+    # Top-level package
     _mamba_stub = _types_mamba_pre.ModuleType("mamba_ssm")
     _mamba_stub.__version__ = "1.2.0"
-    # Python 3.12: importlib.util.find_spec() raises ValueError when __spec__ is None.
-    # Manually constructed ModuleType objects have __spec__=None by default.
-    # Setting a real ModuleSpec makes find_spec() return it instead of raising.
+    _mamba_stub.__path__ = []        # required: marks it as a package for submodule imports
+    _mamba_stub.__package__ = "mamba_ssm"
     _mamba_stub.__spec__ = _ilib_util_pre.spec_from_loader("mamba_ssm", loader=None)
-    _sys_mamba_pre.modules["mamba_ssm"] = _mamba_stub
-    _diag("[mamba_pre] Injected mamba_ssm stub v1.2.0 with __spec__ (Python 3.12 compat)")
+
+    # mamba_ssm.ops
+    _mamba_ops = _types_mamba_pre.ModuleType("mamba_ssm.ops")
+    _mamba_ops.__path__ = []
+    _mamba_ops.__package__ = "mamba_ssm.ops"
+    _mamba_ops.__spec__ = _ilib_util_pre.spec_from_loader("mamba_ssm.ops", loader=None)
+
+    # mamba_ssm.ops.triton
+    _mamba_ops_triton = _types_mamba_pre.ModuleType("mamba_ssm.ops.triton")
+    _mamba_ops_triton.__path__ = []
+    _mamba_ops_triton.__package__ = "mamba_ssm.ops.triton"
+    _mamba_ops_triton.__spec__ = _ilib_util_pre.spec_from_loader("mamba_ssm.ops.triton", loader=None)
+
+    # mamba_ssm.ops.triton.layernorm_gated — rmsnorm_fn (pure-PyTorch, no Triton/CUDA needed)
+    _mamba_ln_gated = _types_mamba_pre.ModuleType("mamba_ssm.ops.triton.layernorm_gated")
+    _mamba_ln_gated.__package__ = "mamba_ssm.ops.triton"
+    _mamba_ln_gated.__spec__ = _ilib_util_pre.spec_from_loader(
+        "mamba_ssm.ops.triton.layernorm_gated", loader=None)
+
+    def _rmsnorm_fn_stub(x, weight, bias=None, residual=None, x_bias=None, eps=1e-6,
+                         prenorm=False, residual_in_fp32=False, is_rms_norm=True,
+                         return_dropout_mask=False):
+        import torch as _t
+        orig_dtype = x.dtype
+        x_f = x.float()
+        if residual is not None:
+            x_f = x_f + residual.float()
+        x_n = x_f * _t.rsqrt(x_f.pow(2).mean(-1, keepdim=True) + eps)
+        out = weight.float() * x_n
+        if bias is not None:
+            out = out + bias.float()
+        out = out.to(orig_dtype)
+        if prenorm:
+            res_out = x_f.to(orig_dtype)
+            return (out, res_out) if not return_dropout_mask else (out, res_out, None)
+        return out if not return_dropout_mask else (out, None)
+
+    _mamba_ln_gated.rmsnorm_fn = _rmsnorm_fn_stub
+
+    # mamba_ssm.ops.selective_scan_interface (used by is_mamba_ssm_available path; stub suffices)
+    _mamba_sel_scan = _types_mamba_pre.ModuleType("mamba_ssm.ops.selective_scan_interface")
+    _mamba_sel_scan.__spec__ = _ilib_util_pre.spec_from_loader(
+        "mamba_ssm.ops.selective_scan_interface", loader=None)
+    def _stub_ssm_fn(*a, **k):
+        raise NotImplementedError("mamba_ssm stub: CUDA SSM kernels disabled (ABI mismatch)")
+    _mamba_sel_scan.selective_scan_fn = _stub_ssm_fn
+    _mamba_sel_scan.mamba_inner_fn   = _stub_ssm_fn
+
+    # Wire attributes for `from mamba_ssm.ops import ...` style imports
+    _mamba_stub.ops                           = _mamba_ops
+    _mamba_ops.triton                         = _mamba_ops_triton
+    _mamba_ops.selective_scan_interface       = _mamba_sel_scan
+    _mamba_ops_triton.layernorm_gated         = _mamba_ln_gated
+
+    # Register all modules so Python finds them via sys.modules cache
+    _sys_mamba_pre.modules["mamba_ssm"]                              = _mamba_stub
+    _sys_mamba_pre.modules["mamba_ssm.ops"]                         = _mamba_ops
+    _sys_mamba_pre.modules["mamba_ssm.ops.triton"]                  = _mamba_ops_triton
+    _sys_mamba_pre.modules["mamba_ssm.ops.triton.layernorm_gated"]  = _mamba_ln_gated
+    _sys_mamba_pre.modules["mamba_ssm.ops.selective_scan_interface"] = _mamba_sel_scan
+
+    _diag("[mamba_pre] Injected mamba_ssm stub v1.2.0: full package hierarchy + rmsnorm_fn (PyTorch fallback)")
 
 # --- Tokenizer ---
 _diag(f"Loading tokenizer from {MODEL_PATH}")
