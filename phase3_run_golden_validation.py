@@ -518,33 +518,51 @@ def run_inference_transformers(
     input_device = _infer_input_device(model)
     _diag(f"Input device: {input_device}")
 
+    # ---------------------------------------------------------------
+    # WARMUP: trigger the lazy import of NemotronHHybridDynamicCache
+    # BEFORE searching sys.modules.  The class is imported inside the
+    # model's forward pass (function-scoped), so it is absent from
+    # sys.modules until generate() actually runs.  A 4-token input with
+    # max_new_tokens=1 is safe: SSM intermediate ≈ 2 MB vs 481 MB free.
+    # ---------------------------------------------------------------
+    _diag("[cache-warmup] Running 1-token warmup to force lazy imports...")
+    try:
+        _wu_ids = torch.tensor([[1, 2, 3, 4]], dtype=torch.long, device=input_device)
+        with torch.no_grad():
+            _ = model.generate(
+                input_ids=_wu_ids,
+                max_new_tokens=1,
+                do_sample=False,
+                pad_token_id=tokenizer.eos_token_id,
+            )
+        del _, _wu_ids
+        _gc.collect()
+        torch.cuda.empty_cache()
+        _diag("[cache-warmup] Done — lazy imports now in sys.modules")
+    except Exception as _wu_e:
+        _diag(f"[cache-warmup] Error (non-fatal): {type(_wu_e).__name__}: {_wu_e}")
+
     # Locate NemotronH's custom hybrid cache class so each generate() call can
     # store SSM states incrementally (O(1) per step) rather than reprocessing
     # the full growing sequence each step (O(N) → OOM on 2048-token generation).
-    #
-    # The class is referenced by modeling_nemotron_h.py but may NOT be a top-level
-    # attribute of that module if it is: (a) lazy-imported inside a function, or
-    # (b) defined in a sibling module.  Use three escalating strategies.
     import sys as _sys
     import inspect as _inspect
     _nemh_cache_cls = None
     _model_cfg_for_cache = None
     try:
-        # Identify the inner model class and its source module for diagnostics.
         _inner_model = getattr(getattr(model, "base_model", model), "model", model)
         _model_cls_name = type(_inner_model).__name__
         _model_module_name = type(_inner_model).__module__
         _diag(f"[cache] model class: {_model_cls_name}  module: {_model_module_name}")
 
-        # Diagnostic: log every nemotron/transformers_modules name in sys.modules.
         _nemotron_mods = [m for m in _sys.modules if "nemotron" in m.lower()]
         _custom_mods = [m for m in _sys.modules if "transformers_modules" in m]
         _diag(f"[cache] nemotron in sys.modules: {_nemotron_mods}")
         _diag(f"[cache] transformers_modules in sys.modules: {_custom_mods}")
 
-        # Strategy 1: broad scan of ALL loaded modules.
-        # Narrow filter ("modeling_nemotron_h" substring) previously missed the
-        # class when it lives in a sibling module or is only a local variable.
+        # After warmup, NemotronHHybridDynamicCache should now be importable.
+        # Broad scan of ALL loaded modules — catches class regardless of where
+        # it ended up (same file, sibling module, or re-exported).
         for _mn, _mod in list(_sys.modules.items()):
             if _mod is None:
                 continue
@@ -554,64 +572,35 @@ def run_inference_transformers(
                 continue
             if _cls is not None and isinstance(_cls, type):
                 _nemh_cache_cls = _cls
-                _diag(f"[cache] Strategy-1 found NemotronHHybridDynamicCache in: {_mn}")
+                _diag(f"[cache] Found NemotronHHybridDynamicCache in: {_mn}")
                 break
 
-        # Strategy 2: inspect source file directory for sibling .py modules and
-        # try importing each one (handles case where class is in a separate file).
+        # If still not found, log source file contents for diagnosis.
         if _nemh_cache_cls is None:
             _mod = _sys.modules.get(_model_module_name)
             if _mod is not None:
                 try:
-                    import os as _os2, importlib as _il2, importlib.util as _ilu
+                    import os as _os2
                     _src_file = _inspect.getfile(_mod)
-                    _src_dir = _os2.path.dirname(_src_file)
-                    _diag(f"[cache] source dir: {_src_dir}")
-
-                    # Log NemotronHHybridDynamicCache refs in the main source file
-                    # and all top-level class definitions — useful for diagnosis.
+                    _diag(f"[cache] source file: {_src_file}")
                     with open(_src_file) as _sf:
                         _src_text = _sf.read()
                     _cache_refs = [l.strip() for l in _src_text.splitlines()
                                    if "NemotronHHybridDynamicCache" in l
                                    or ("class" in l and "Cache" in l)]
                     _diag(f"[cache] cache refs in source: {_cache_refs[:10]}")
-
-                    # List sibling .py files and log cache-like attrs from each.
-                    _pkg_name = _model_module_name.rsplit(".", 1)[0] if "." in _model_module_name else ""
-                    for _pyf in sorted(_os2.listdir(_src_dir)):
-                        if not _pyf.endswith(".py"):
-                            continue
-                        _pypath = _os2.path.join(_src_dir, _pyf)
-                        # Try package-relative import first (handles relative imports).
-                        _probe_mod = None
-                        if _pkg_name:
-                            _rel = _pyf[:-3]
-                            try:
-                                _probe_mod = _il2.import_module(f".{_rel}", package=_pkg_name)
-                            except Exception:
-                                pass
-                        # Fall back to raw file load (fails on relative imports but still
-                        # lets us inspect top-level class definitions).
-                        if _probe_mod is None:
-                            try:
-                                _spec = _ilu.spec_from_file_location(f"_nemh_probe_{_pyf[:-3]}", _pypath)
-                                _probe_mod = _ilu.module_from_spec(_spec)
-                                _spec.loader.exec_module(_probe_mod)
-                            except Exception as _pfe:
-                                _diag(f"[cache]   probe {_pyf}: {type(_pfe).__name__}: {str(_pfe)[:80]}")
-                                continue
-                        _cls = getattr(_probe_mod, "NemotronHHybridDynamicCache", None)
-                        if _cls is not None and isinstance(_cls, type):
-                            _nemh_cache_cls = _cls
-                            _diag(f"[cache] Strategy-2 found NemotronHHybridDynamicCache in: {_pyf}")
-                            break
-                        _c_attrs = [a for a in dir(_probe_mod) if "cache" in a.lower()]
-                        _diag(f"[cache]   {_pyf} cache attrs: {_c_attrs}")
-                except Exception as _s2e:
-                    _diag(f"[cache] Strategy-2 error: {type(_s2e).__name__}: {_s2e}")
+                    _py_files = [f for f in _os2.listdir(_os2.path.dirname(_src_file))
+                                 if f.endswith(".py")]
+                    _diag(f"[cache] sibling .py files: {_py_files}")
+                except Exception as _src_e:
+                    _diag(f"[cache] source inspection: {type(_src_e).__name__}: {_src_e}")
 
         if _nemh_cache_cls is not None:
+            try:
+                _init_sig = str(_inspect.signature(_nemh_cache_cls.__init__))
+                _diag(f"[cache] __init__ signature: {_init_sig}")
+            except Exception:
+                pass
             _model_cfg_for_cache = (
                 getattr(model, "config", None)
                 or getattr(getattr(model, "base_model", None), "config", None)
@@ -623,7 +612,7 @@ def run_inference_transformers(
                     pass
             _diag("[cache] NemotronHHybridDynamicCache found — SSM states will be cached")
         else:
-            _diag("[cache] NemotronHHybridDynamicCache not found after all strategies — OOM risk")
+            _diag("[cache] NemotronHHybridDynamicCache not found — OOM risk on long generation")
     except Exception as _ce:
         _diag(f"[cache] lookup failed: {type(_ce).__name__}: {_ce}")
 
@@ -670,19 +659,34 @@ def run_inference_transformers(
         # Without this, the warning "NemotronH requires an initialized
         # NemotronHHybridDynamicCache" fires and torch_forward runs over the full
         # sequence each step until GPU 1 exhausts memory.
+        # Try multiple constructor signatures — the class may accept different kwargs.
+        # Log which signature worked (idx==0 only to avoid log spam).
         _past_kv = None
-        if _nemh_cache_cls is not None and _model_cfg_for_cache is not None:
-            try:
-                _past_kv = _nemh_cache_cls(
-                    config=_model_cfg_for_cache,
-                    batch_size=1,
-                    dtype=compute_dtype,
-                )
-            except Exception as _cache_init_err:
-                _diag(f"[{idx+1:4d}/{len(problems)}] {pid}: cache init failed "
-                      f"({type(_cache_init_err).__name__}: {_cache_init_err}) — "
-                      "falling back to no cache (OOM risk)")
-                _past_kv = None
+        if _nemh_cache_cls is not None:
+            _cfg = _model_cfg_for_cache
+            _init_opts: List[Dict[str, Any]] = (
+                [
+                    {"config": _cfg, "batch_size": 1, "dtype": compute_dtype},
+                    {"config": _cfg, "max_batch_size": 1, "dtype": compute_dtype},
+                    {"config": _cfg, "batch_size": 1},
+                    {},  # no-arg (e.g., subclass of DynamicCache)
+                ]
+                if _cfg is not None else [{}]
+            )
+            for _ik, _kw in enumerate(_init_opts):
+                try:
+                    _past_kv = _nemh_cache_cls(**_kw)
+                    if idx == 0:
+                        _diag(f"[cache] init OK with kwargs: {list(_kw.keys())}")
+                    break
+                except TypeError:
+                    continue
+                except Exception as _cie:
+                    if idx == 0:
+                        _diag(f"[cache] init error: {type(_cie).__name__}: {_cie}")
+                    break
+            if _past_kv is None and idx == 0:
+                _diag("[cache] all init signatures failed — OOM risk")
 
         # Free fragmented CUDA allocations before each generation step.
         # With expandable_segments=True this reclaims reserved-unallocated blocks
