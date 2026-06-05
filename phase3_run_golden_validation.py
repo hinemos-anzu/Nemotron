@@ -527,7 +527,8 @@ def run_inference_transformers(
     # ---------------------------------------------------------------
     _diag("[cache-warmup] Running 1-token warmup to force lazy imports...")
     try:
-        _wu_ids = torch.tensor([[1, 2, 3, 4]], dtype=torch.long, device=input_device)
+        _wu_text = tokenizer.decode([tokenizer.eos_token_id or 1] * 4)
+        _wu_ids = tokenizer(_wu_text, return_tensors="pt").input_ids.to(input_device)
         with torch.no_grad():
             _ = model.generate(
                 input_ids=_wu_ids,
@@ -619,9 +620,9 @@ def run_inference_transformers(
                     _model_cfg_for_cache = model.base_model.model.config
                 except Exception:
                     pass
-            _diag("[cache] NemotronHHybridDynamicCache found — SSM states will be cached")
+            _diag(f"[cache] {_nemh_cache_cls.__name__} found — SSM states will be cached")
         else:
-            _diag("[cache] NemotronHHybridDynamicCache not found — OOM risk on long generation")
+            _diag("[cache] cache class not found — OOM risk on long generation")
     except Exception as _ce:
         _diag(f"[cache] lookup failed: {type(_ce).__name__}: {_ce}")
 
@@ -629,13 +630,72 @@ def run_inference_transformers(
     records: List[Dict[str, Any]] = []
     _MAX_INPUT_TOKENS = 768  # cap prompt length to keep SSM intermediate tensors small
     _truncation_warned = False  # fire once on first truncation event (not just idx==0)
+    _n_gen_errors = 0  # count generate() failures so traceback guard uses error count not idx
+
+    # Build extended EOS list from GOLDEN_GENERATION_CONFIG["stop"] so <|im_end|>
+    # (a distinct chat stop token) is honoured alongside tokenizer.eos_token_id.
+    _eos_ids: List[int] = []
+    if tokenizer.eos_token_id is not None:
+        _eos_ids.append(int(tokenizer.eos_token_id))
+    for _st in GOLDEN_GENERATION_CONFIG.get("stop", []):
+        try:
+            _tids = tokenizer.encode(_st, add_special_tokens=False)
+            if len(_tids) == 1 and _tids[0] not in _eos_ids:
+                _eos_ids.append(_tids[0])
+        except Exception:
+            pass
+    _diag(f"[eos] effective eos_token_ids: {_eos_ids}")
+
+    # Hoist SDPA context manager creation outside the loop.
+    # T4 (SM 7.5) does not support Flash Attention 2, and the mem-efficient backend
+    # also fails in decode mode.  Force math SDP which is pure PyTorch.
+    # Catch RuntimeError too — sdp_kernel() raises RuntimeError on unsupported combos
+    # (not just AttributeError/TypeError), which would leave _sdp_ctx unbound.
+    from contextlib import nullcontext as _nullctx
+    try:
+        _sdp_ctx = torch.backends.cuda.sdp_kernel(
+            enable_flash=False, enable_math=True, enable_mem_efficient=False
+        )
+    except (AttributeError, TypeError, RuntimeError):
+        _sdp_ctx = _nullctx()
+
+    # Hoist cache init option list outside the loop (constant after cache discovery).
+    _cfg_for_init = _model_cfg_for_cache
+    _init_opts: List[Dict[str, Any]] = (
+        [
+            {"config": _cfg_for_init, "batch_size": 1, "dtype": compute_dtype, "device": input_device},
+            {"config": _cfg_for_init, "batch_size": 1, "dtype": compute_dtype},
+            {"config": _cfg_for_init, "max_batch_size": 1, "dtype": compute_dtype, "device": input_device},
+            {"config": _cfg_for_init, "max_batch_size": 1, "dtype": compute_dtype},
+            {"config": _cfg_for_init, "batch_size": 1},
+            {},
+        ]
+        if _cfg_for_init is not None else [{"device": input_device}, {}]
+    ) if _nemh_cache_cls is not None else []
+    _best_init_kw: Optional[Dict[str, Any]] = None  # saved after first successful init
 
     # Write JSONL incrementally so partial results survive a kernel OOM restart.
     _jsonl_path = output_dir / "golden_validation_predictions.jsonl"
 
-    with _jsonl_path.open("w", encoding="utf-8") as _jsonl_fh:
+    # Load already-completed problem IDs so we can skip them on restart.
+    _done_ids: set = set()
+    if _jsonl_path.exists():
+        with _jsonl_path.open("r", encoding="utf-8") as _rf:
+            for _rline in _rf:
+                try:
+                    _rd = json.loads(_rline.strip())
+                    if "problem_id" in _rd:
+                        _done_ids.add(_rd["problem_id"])
+                except Exception:
+                    pass
+        if _done_ids:
+            _diag(f"[resume] Skipping {len(_done_ids)} already-completed problems")
+
+    with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
       for idx, record in enumerate(problems):
         pid = get_problem_id(record, idx)
+        if pid in _done_ids:
+            continue
         cat_info = category_map.get(pid, {"category": "other", "subcategory": "unknown"})
         question = str(record.get("question", record.get("prompt", ""))).strip()
         gold_answer = str(record.get("answer", record.get("target", ""))).strip()
@@ -667,66 +727,78 @@ def run_inference_transformers(
         # device=None (default) creates CPU tensors → cuBLAS "GET was unable to find
         # an engine" when the forward pass tries to update SSM states on CUDA.
         # With device_map="auto" (T4×2), layers span cuda:0 and cuda:1, so we init
-        # on cuda:0 then correct each SSM state tensor to its layer's actual device.
+        # on cuda:0 then correct each SSM/KV tensor to its layer's actual device.
         _past_kv = None
         if _nemh_cache_cls is not None:
-            _cfg = _model_cfg_for_cache
-            _init_opts: List[Dict[str, Any]] = (
-                [
-                    {"config": _cfg, "batch_size": 1, "dtype": compute_dtype, "device": input_device},
-                    {"config": _cfg, "batch_size": 1, "dtype": compute_dtype},
-                    {"config": _cfg, "max_batch_size": 1, "dtype": compute_dtype, "device": input_device},
-                    {"config": _cfg, "max_batch_size": 1, "dtype": compute_dtype},
-                    {"config": _cfg, "batch_size": 1},
-                    {},
-                ]
-                if _cfg is not None else [{"device": input_device}, {}]
-            )
-            for _ik, _kw in enumerate(_init_opts):
+            # Use saved best kwargs from first successful init to avoid re-probing.
+            _try_opts = [_best_init_kw] if _best_init_kw is not None else _init_opts
+            for _ik, _kw in enumerate(_try_opts):
                 try:
                     _past_kv = _nemh_cache_cls(**_kw)
-                    if idx == 0:
+                    if _best_init_kw is None:
+                        _best_init_kw = _kw
                         _diag(f"[cache] init OK with kwargs: {list(_kw.keys())}")
                     break
                 except TypeError:
                     continue
                 except Exception as _cie:
-                    if idx == 0:
-                        _diag(f"[cache] init error: {type(_cie).__name__}: {_cie}")
+                    _diag(f"[cache] init error (idx={idx}): {type(_cie).__name__}: {_cie}")
                     break
-            if _past_kv is None and idx == 0:
-                _diag("[cache] all init signatures failed — OOM risk")
+            if _past_kv is None:
+                if idx == 0 or _best_init_kw is None:
+                    _diag(f"[cache] all init signatures failed at idx={idx} — OOM risk")
 
-            # Per-layer device correction: move each pre-allocated SSM state tensor
+            # Per-layer device correction: move each pre-allocated SSM/KV state tensor
             # from the init device to the device that actually holds that layer's
             # parameters (handles device_map="auto" multi-GPU splits).
             # NemotronHForCausalLM stores layers under .model.layers, not .layers.
             if _past_kv is not None:
                 try:
+                    import types as _types
                     _layers = (
                         getattr(_inner_model, "layers", None)
                         or getattr(getattr(_inner_model, "model", None), "layers", None)
                     )
-                    _kc = getattr(_past_kv, "key_cache", [])
                     if _layers is not None:
-                        for _li, _ks in enumerate(_kc):
-                            if not isinstance(_ks, torch.Tensor) or _li >= len(_layers):
-                                continue
-                            try:
-                                _ld = next(_layers[_li].parameters()).device
-                                if _ks.device != _ld:
-                                    _past_kv.key_cache[_li] = _ks.to(_ld)
-                            except Exception:
-                                continue
+                        # Correct both key_cache (SSM states + attn keys) and
+                        # value_cache (SSM states + attn values) for multi-GPU splits.
+                        for _cache_attr in ("key_cache", "value_cache"):
+                            _tc = getattr(_past_kv, _cache_attr, [])
+                            for _li, _ts in enumerate(_tc):
+                                if not isinstance(_ts, torch.Tensor) or _li >= len(_layers):
+                                    continue
+                                try:
+                                    _ld = next(_layers[_li].parameters()).device
+                                    if _ts.device != _ld:
+                                        getattr(_past_kv, _cache_attr)[_li] = _ts.to(_ld)
+                                except Exception:
+                                    continue
+                        if idx == 0:
+                            _devs = [str(_past_kv.key_cache[i].device)
+                                     for i in range(len(_past_kv.key_cache))
+                                     if isinstance(_past_kv.key_cache[i], torch.Tensor)]
+                            _diag(f"[cache] SSM/KV state devices after correction: "
+                                  f"{sorted(set(_devs))} ({len(_devs)} tensors)")
                     else:
                         if idx == 0:
                             _diag("[cache] _layers not found — skipping per-layer device correction")
-                    if idx == 0:
-                        _devs = [str(_past_kv.key_cache[i].device)
-                                 for i in range(len(_past_kv.key_cache))
-                                 if isinstance(_past_kv.key_cache[i], torch.Tensor)]
-                        _diag(f"[cache] SSM state devices after correction: "
-                              f"{sorted(set(_devs))} ({len(_devs)} tensors)")
+
+                    # Monkey-patch get_seq_length to return 0 for a fresh cache.
+                    # DynamicCache.get_seq_length(layer_idx=0) returns
+                    # key_cache[0].shape[-2], which for Mamba SSM states of shape
+                    # [batch, d_state, d_inner] equals d_state (64-256) instead of 0.
+                    # generate() uses this to derive position_ids, so without the patch
+                    # RoPE embeddings start at offset d_state, corrupting all attention
+                    # layers.  We look for 4-D attention tensors (batch, seq, heads, dim)
+                    # to find the true sequence length; return 0 if only SSM states exist.
+                    def _get_seq_length_safe(self, layer_idx=0):
+                        for _t in getattr(self, "key_cache", []):
+                            if isinstance(_t, torch.Tensor) and _t.dim() == 4:
+                                return int(_t.shape[-2])
+                        return 0
+                    _past_kv.get_seq_length = _types.MethodType(
+                        _get_seq_length_safe, _past_kv
+                    )
                 except Exception as _dc_e:
                     if idx == 0:
                         _diag(f"[cache] device correction error: {type(_dc_e).__name__}: {_dc_e}")
@@ -743,25 +815,14 @@ def run_inference_transformers(
                     **_gen_inputs,
                     max_new_tokens=GOLDEN_GENERATION_CONFIG["max_new_tokens"],
                     do_sample=GOLDEN_GENERATION_CONFIG["do_sample"],
-                    temperature=None,  # greedy when do_sample=False
                     repetition_penalty=GOLDEN_GENERATION_CONFIG["repetition_penalty"],
-                    eos_token_id=tokenizer.eos_token_id,
+                    eos_token_id=_eos_ids if _eos_ids else tokenizer.eos_token_id,
                     pad_token_id=tokenizer.eos_token_id,
                 )
                 if _past_kv is not None:
                     _generate_kwargs["past_key_values"] = _past_kv
-                # Disable Flash/MemEfficient SDPA backends — T4 (SM 7.5, Turing) does
-                # not support Flash Attention 2 (requires Ampere SM 8.0+).  In decode
-                # mode (1-token query, N-token KV cache) the mem-efficient backend also
-                # fails with "GET was unable to find an engine."  Force math SDP which
-                # is pure PyTorch and always works.
-                try:
-                    _sdp_ctx = torch.backends.cuda.sdp_kernel(
-                        enable_flash=False, enable_math=True, enable_mem_efficient=False
-                    )
-                except (AttributeError, TypeError):
-                    from contextlib import nullcontext as _nullctx
-                    _sdp_ctx = _nullctx()
+                # _sdp_ctx hoisted outside loop — disables Flash/MemEfficient SDPA
+                # which fail on T4 (SM 7.5) and in decode mode respectively.
                 with _sdp_ctx:
                     output = model.generate(**_generate_kwargs)
             elapsed = time.time() - t0
@@ -769,8 +830,9 @@ def run_inference_transformers(
             import traceback as _tb
             _diag(f"[{idx+1:4d}/{len(problems)}] {pid}: GENERATE_ERROR "
                   f"{type(_gen_exc).__name__}: {_gen_exc}")
-            if idx < 3:
+            if _n_gen_errors < 3:
                 _diag(f"[traceback]\n{_tb.format_exc()}")
+            _n_gen_errors += 1
             _gc.collect()
             torch.cuda.empty_cache()
             entry = {
@@ -803,8 +865,11 @@ def run_inference_transformers(
         # Determine finish reason by checking the last generated token against EOS.
         # The `< max_new_tokens` check misclassifies EOS generated at exactly the limit.
         _last_tok = int(generated_ids[-1]) if n_tokens > 0 else None
+        _eos_set = set(_eos_ids) if _eos_ids else {tokenizer.eos_token_id}
         finish_reason = (
-            "eos" if _last_tok == tokenizer.eos_token_id else "length"
+            "unknown" if _last_tok is None
+            else "eos" if _last_tok in _eos_set
+            else "length"
         )
 
         entry = {
