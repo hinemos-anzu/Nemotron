@@ -755,10 +755,17 @@ def run_inference_transformers(
             if _past_kv is not None:
                 try:
                     import types as _types
+                    # NemotronHForCausalLM stores layers under .backbone.layers
+                    # (confirmed from PEFT warning: base_model.model.backbone.layers.N.mixer...)
+                    # Fallback chain: .layers → .model.layers → .backbone.layers
                     _layers = (
                         getattr(_inner_model, "layers", None)
                         or getattr(getattr(_inner_model, "model", None), "layers", None)
+                        or getattr(getattr(_inner_model, "backbone", None), "layers", None)
                     )
+                    if idx == 0:
+                        _diag(f"[cache] _layers found: {_layers is not None}"
+                              f"  (checked .layers / .model.layers / .backbone.layers)")
                     if _layers is not None:
                         # Correct both key_cache (SSM states + attn keys) and
                         # value_cache (SSM states + attn values) for multi-GPU splits.
