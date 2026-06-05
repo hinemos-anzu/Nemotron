@@ -301,6 +301,25 @@ _diag(f"GPU SM cap: {_cap0}  bf16 conv kernel: {has_bf16}  -> compute_dtype={com
 if USE_MAMBA_PATCH:
     _apply_mamba_patch()
 
+# Auto-suppress broken mamba_ssm CUDA extension BEFORE model loading.
+#
+# modeling_nemotron_h.py executes `if is_mamba_2_ssm_available():` at module load time.
+# is_mamba_2_ssm_available() does `import mamba_ssm` → if the .so was compiled against
+# a different PyTorch ABI, it crashes with "undefined symbol".
+# (Seen: ryanholbrook/nvidia-utility-script/selective_scan_cuda.so v2.3.1 on PyTorch 2.10)
+#
+# Fix: inject a minimal stub with __version__="1.2.0" (<2.0.4) into sys.modules FIRST.
+# `import mamba_ssm` then returns the cached stub without executing the broken __init__.py.
+# Result: is_mamba_2_ssm_available()=False → model uses pure-PyTorch torch_forward (nn.Conv1d).
+# On SM >= 8.0 (this GPU), bfloat16 conv1d is fully supported.
+import sys as _sys_mamba_pre, types as _types_mamba_pre
+_existing_mamba = _sys_mamba_pre.modules.get("mamba_ssm")
+if _existing_mamba is None or getattr(_existing_mamba, "__version__", "0") >= "2.0.4":
+    _mamba_stub = _types_mamba_pre.ModuleType("mamba_ssm")
+    _mamba_stub.__version__ = "1.2.0"
+    _sys_mamba_pre.modules["mamba_ssm"] = _mamba_stub
+    _diag("[mamba_pre] Injected mamba_ssm stub v1.2.0 (bypasses broken selective_scan_cuda.so)")
+
 # --- Tokenizer ---
 _diag(f"Loading tokenizer from {MODEL_PATH}")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
