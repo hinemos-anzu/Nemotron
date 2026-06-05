@@ -262,7 +262,7 @@ print("Utilities loaded OK")
 # Cell 4: Model loading
 # ---------------------------------------------------------------------------
 code(r"""import os, gc, torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed, BitsAndBytesConfig
+from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
 from peft import PeftModel
 
 # CUDA allocator: must be set before any CUDA alloc
@@ -309,30 +309,53 @@ _diag(f"Tokenizer OK  eos_token_id={tokenizer.eos_token_id}")
 gc.collect()
 torch.cuda.empty_cache()
 
-# GPU budget (80% per GPU)
+# GPU budget (85% per GPU)
 _n_gpus = torch.cuda.device_count()
 _gpu_budget = {
-    i: f"{int(torch.cuda.get_device_properties(i).total_memory * 0.80 / 1024**3)}GiB"
+    i: f"{int(torch.cuda.get_device_properties(i).total_memory * 0.85 / 1024**3)}GiB"
     for i in range(_n_gpus)
 }
-_diag(f"GPU budget (80%): {_gpu_budget}")
+_diag(f"GPU budget (85%): {_gpu_budget}")
 
-# --- Load base model in 4-bit NF4 ---
-_diag("Loading base model (4-bit NF4) ...")
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_PATH,
-    quantization_config=BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_compute_dtype=compute_dtype,
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_quant_type="nf4",
-    ),
+# Auto-select quantization based on total VRAM:
+#   >= 50GB total → full bfloat16 (~60GB for 30B model)   e.g. RTX PRO 6000 (95GB)
+#   <  50GB total → 4-bit NF4 via bitsandbytes             e.g. T4x2 (29GB), RTX 3090 (24GB)
+_total_vram_gb = sum(
+    torch.cuda.get_device_properties(i).total_memory for i in range(_n_gpus)
+) / 1024**3
+_diag(f"Total VRAM: {_total_vram_gb:.1f}GB across {_n_gpus} GPU(s)")
+_use_4bit = _total_vram_gb < 50.0
+_bnb_config = None
+
+if _use_4bit:
+    try:
+        from transformers import BitsAndBytesConfig as _BnBCfg
+        _bnb_config = _BnBCfg(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=compute_dtype,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+        )
+        _diag(f"Quantization: 4-bit NF4 (bitsandbytes)  [VRAM {_total_vram_gb:.1f}GB < 50GB]")
+    except Exception as _bnb_e:
+        raise RuntimeError(
+            f"Total VRAM {_total_vram_gb:.1f}GB < 50GB: bitsandbytes required for 4-bit NF4.\n"
+            f"Install: pip install bitsandbytes\nError: {_bnb_e}"
+        ) from _bnb_e
+else:
+    _diag(f"Quantization: none — full bfloat16  [VRAM {_total_vram_gb:.1f}GB >= 50GB]")
+
+_diag(f"Loading base model ({'4-bit NF4' if _use_4bit else 'bfloat16'}) ...")
+_load_kwargs = dict(
     torch_dtype=compute_dtype,
     device_map="auto",
     max_memory=_gpu_budget,
     low_cpu_mem_usage=True,
     trust_remote_code=True,
 )
+if _bnb_config is not None:
+    _load_kwargs["quantization_config"] = _bnb_config
+model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, **_load_kwargs)
 for _gi in range(_n_gpus):
     _fr, _tot = torch.cuda.mem_get_info(_gi)
     _diag(f"GPU {_gi} after base model: {_fr/1024**3:.1f}GB free / {_tot/1024**3:.1f}GB")
