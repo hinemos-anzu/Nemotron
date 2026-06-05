@@ -518,23 +518,100 @@ def run_inference_transformers(
     input_device = _infer_input_device(model)
     _diag(f"Input device: {input_device}")
 
-    # Try to find NemotronH's custom hybrid cache class so generate() can cache
-    # SSM states incrementally (O(1) memory per step) instead of reprocessing the
-    # full growing sequence at every step (O(N) → OOM on long outputs).
-    # The warning "NemotronH requires an initialized NemotronHHybridDynamicCache"
-    # confirms that without this, torch_forward runs over the full sequence each step.
+    # Locate NemotronH's custom hybrid cache class so each generate() call can
+    # store SSM states incrementally (O(1) per step) rather than reprocessing
+    # the full growing sequence each step (O(N) → OOM on 2048-token generation).
+    #
+    # The class is referenced by modeling_nemotron_h.py but may NOT be a top-level
+    # attribute of that module if it is: (a) lazy-imported inside a function, or
+    # (b) defined in a sibling module.  Use three escalating strategies.
     import sys as _sys
+    import inspect as _inspect
     _nemh_cache_cls = None
     _model_cfg_for_cache = None
     try:
-        for _mn in list(_sys.modules.keys()):
-            if "modeling_nemotron_h" in _mn:
-                _cls = getattr(_sys.modules[_mn], "NemotronHHybridDynamicCache", None)
-                if _cls is not None:
-                    _nemh_cache_cls = _cls
-                    break
+        # Identify the inner model class and its source module for diagnostics.
+        _inner_model = getattr(getattr(model, "base_model", model), "model", model)
+        _model_cls_name = type(_inner_model).__name__
+        _model_module_name = type(_inner_model).__module__
+        _diag(f"[cache] model class: {_model_cls_name}  module: {_model_module_name}")
+
+        # Diagnostic: log every nemotron/transformers_modules name in sys.modules.
+        _nemotron_mods = [m for m in _sys.modules if "nemotron" in m.lower()]
+        _custom_mods = [m for m in _sys.modules if "transformers_modules" in m]
+        _diag(f"[cache] nemotron in sys.modules: {_nemotron_mods}")
+        _diag(f"[cache] transformers_modules in sys.modules: {_custom_mods}")
+
+        # Strategy 1: broad scan of ALL loaded modules.
+        # Narrow filter ("modeling_nemotron_h" substring) previously missed the
+        # class when it lives in a sibling module or is only a local variable.
+        for _mn, _mod in list(_sys.modules.items()):
+            if _mod is None:
+                continue
+            try:
+                _cls = getattr(_mod, "NemotronHHybridDynamicCache", None)
+            except Exception:
+                continue
+            if _cls is not None and isinstance(_cls, type):
+                _nemh_cache_cls = _cls
+                _diag(f"[cache] Strategy-1 found NemotronHHybridDynamicCache in: {_mn}")
+                break
+
+        # Strategy 2: inspect source file directory for sibling .py modules and
+        # try importing each one (handles case where class is in a separate file).
+        if _nemh_cache_cls is None:
+            _mod = _sys.modules.get(_model_module_name)
+            if _mod is not None:
+                try:
+                    import os as _os2, importlib as _il2, importlib.util as _ilu
+                    _src_file = _inspect.getfile(_mod)
+                    _src_dir = _os2.path.dirname(_src_file)
+                    _diag(f"[cache] source dir: {_src_dir}")
+
+                    # Log NemotronHHybridDynamicCache refs in the main source file
+                    # and all top-level class definitions — useful for diagnosis.
+                    with open(_src_file) as _sf:
+                        _src_text = _sf.read()
+                    _cache_refs = [l.strip() for l in _src_text.splitlines()
+                                   if "NemotronHHybridDynamicCache" in l
+                                   or ("class" in l and "Cache" in l)]
+                    _diag(f"[cache] cache refs in source: {_cache_refs[:10]}")
+
+                    # List sibling .py files and log cache-like attrs from each.
+                    _pkg_name = _model_module_name.rsplit(".", 1)[0] if "." in _model_module_name else ""
+                    for _pyf in sorted(_os2.listdir(_src_dir)):
+                        if not _pyf.endswith(".py"):
+                            continue
+                        _pypath = _os2.path.join(_src_dir, _pyf)
+                        # Try package-relative import first (handles relative imports).
+                        _probe_mod = None
+                        if _pkg_name:
+                            _rel = _pyf[:-3]
+                            try:
+                                _probe_mod = _il2.import_module(f".{_rel}", package=_pkg_name)
+                            except Exception:
+                                pass
+                        # Fall back to raw file load (fails on relative imports but still
+                        # lets us inspect top-level class definitions).
+                        if _probe_mod is None:
+                            try:
+                                _spec = _ilu.spec_from_file_location(f"_nemh_probe_{_pyf[:-3]}", _pypath)
+                                _probe_mod = _ilu.module_from_spec(_spec)
+                                _spec.loader.exec_module(_probe_mod)
+                            except Exception as _pfe:
+                                _diag(f"[cache]   probe {_pyf}: {type(_pfe).__name__}: {str(_pfe)[:80]}")
+                                continue
+                        _cls = getattr(_probe_mod, "NemotronHHybridDynamicCache", None)
+                        if _cls is not None and isinstance(_cls, type):
+                            _nemh_cache_cls = _cls
+                            _diag(f"[cache] Strategy-2 found NemotronHHybridDynamicCache in: {_pyf}")
+                            break
+                        _c_attrs = [a for a in dir(_probe_mod) if "cache" in a.lower()]
+                        _diag(f"[cache]   {_pyf} cache attrs: {_c_attrs}")
+                except Exception as _s2e:
+                    _diag(f"[cache] Strategy-2 error: {type(_s2e).__name__}: {_s2e}")
+
         if _nemh_cache_cls is not None:
-            # Config lives on the base model, not the PeftModel wrapper
             _model_cfg_for_cache = (
                 getattr(model, "config", None)
                 or getattr(getattr(model, "base_model", None), "config", None)
@@ -546,10 +623,9 @@ def run_inference_transformers(
                     pass
             _diag("[cache] NemotronHHybridDynamicCache found — SSM states will be cached")
         else:
-            _diag("[cache] NemotronHHybridDynamicCache not found — "
-                  "each generation step will reprocess the full sequence (OOM risk on long outputs)")
+            _diag("[cache] NemotronHHybridDynamicCache not found after all strategies — OOM risk")
     except Exception as _ce:
-        _diag(f"[cache] Cache class lookup failed: {_ce}")
+        _diag(f"[cache] lookup failed: {type(_ce).__name__}: {_ce}")
 
 
     records: List[Dict[str, Any]] = []
