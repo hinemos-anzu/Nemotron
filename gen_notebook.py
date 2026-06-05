@@ -313,12 +313,17 @@ if USE_MAMBA_PATCH:
 # Result: is_mamba_2_ssm_available()=False → model uses pure-PyTorch torch_forward (nn.Conv1d).
 # On SM >= 8.0 (this GPU), bfloat16 conv1d is fully supported.
 import sys as _sys_mamba_pre, types as _types_mamba_pre
+import importlib.util as _ilib_util_pre
 _existing_mamba = _sys_mamba_pre.modules.get("mamba_ssm")
 if _existing_mamba is None or getattr(_existing_mamba, "__version__", "0") >= "2.0.4":
     _mamba_stub = _types_mamba_pre.ModuleType("mamba_ssm")
     _mamba_stub.__version__ = "1.2.0"
+    # Python 3.12: importlib.util.find_spec() raises ValueError when __spec__ is None.
+    # Manually constructed ModuleType objects have __spec__=None by default.
+    # Setting a real ModuleSpec makes find_spec() return it instead of raising.
+    _mamba_stub.__spec__ = _ilib_util_pre.spec_from_loader("mamba_ssm", loader=None)
     _sys_mamba_pre.modules["mamba_ssm"] = _mamba_stub
-    _diag("[mamba_pre] Injected mamba_ssm stub v1.2.0 (bypasses broken selective_scan_cuda.so)")
+    _diag("[mamba_pre] Injected mamba_ssm stub v1.2.0 with __spec__ (Python 3.12 compat)")
 
 # --- Tokenizer ---
 _diag(f"Loading tokenizer from {MODEL_PATH}")
