@@ -50,7 +50,7 @@ PROBLEMS_PATH = os.environ.get("PROBLEMS_PATH",
     "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv")
 OUTPUT_DIR    = os.environ.get("OUTPUT_DIR", "/kaggle/working/phase3_analysis")
 SEED          = 42
-MAX_PROBLEMS  = 20    # smoke test: 20問で動作確認。分析時は 200 に変更
+MAX_PROBLEMS  = 5     # smoke test: 5問で動作確認。分析時は 200 に変更
 
 # Stratified sampling quota (used when MAX_PROBLEMS > 0)
 CATEGORY_QUOTA = {
@@ -64,8 +64,11 @@ CATEGORY_QUOTA = {
 }
 
 # Generation config -- identical to Golden Baseline (do not modify)
+# NemotronH は reasoning model: 思考チェーンに 2000-8000 tokens 必要。
+# 512 では全問が思考途中で打ち切られ \boxed{} に到達しない → 0 accuracy。
+# Golden Baseline (gen_notebook.py) に合わせて 2048 に設定。
 GOLDEN_GENERATION_CONFIG = {
-    "max_new_tokens": 512,   # EOS未確認時の安全網。正常なら早期停止する
+    "max_new_tokens": 2048,
     "temperature":    0.0,
     "do_sample":      False,
     "repetition_penalty": 1.0,
@@ -350,20 +353,24 @@ THEREFORE_RE = re.compile(
 )
 LAST_LINE_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9 _\-]*$")
 
-def extract_answer(raw):
+def extract_answer(raw, truncated=False):
+    # Priority 1: \boxed{...}
     m = BOXED_RE.search(raw)
     if m:
         return m.group(1).strip(), raw[:m.start()].strip(), m.group(0)
+    # Priority 2: "therefore ... answer" patterns
     m = THEREFORE_RE.search(raw)
     if m:
         a = re.sub(r"[^A-Za-z0-9]", "", m.group(1)).strip()
         if a:
             return a, raw[:m.start()].strip(), m.group(0)
-    lines = [l.strip() for l in raw.strip().splitlines() if l.strip()]
-    if lines:
-        m2 = LAST_LINE_RE.search(lines[-1])
-        if m2:
-            return m2.group(0).strip(), "\n".join(lines[:-1]), lines[-1]
+    # Priority 3: last-line fallback -- skip if truncated (reasoning mid-chain)
+    if not truncated:
+        lines = [l.strip() for l in raw.strip().splitlines() if l.strip()]
+        if lines:
+            m2 = LAST_LINE_RE.search(lines[-1])
+            if m2:
+                return m2.group(0).strip(), "\n".join(lines[:-1]), lines[-1]
     return None, raw.strip(), None
 
 def normalize_answer(a):
@@ -372,8 +379,9 @@ def normalize_answer(a):
 def answers_match(pred, gold):
     return bool(pred) and normalize_answer(pred) == normalize_answer(gold)
 
-def parse_error_type(pred, raw):
+def parse_error_type(pred, raw, truncated=False):
     if pred is not None: return None
+    if truncated: return "truncated_no_boxed"
     if BOXED_RE.search(raw): return "boxed_found_but_empty"
     if len(raw.strip()) < 10: return "empty_output"
     return "no_extractable_answer"
@@ -919,13 +927,14 @@ with _jsonl_path.open("a", encoding="utf-8") as _jfh:
     if idx < 3:
         _diag(f"[sample {idx}] raw_output[:300]: {repr(raw_out[:300])}")
 
-    pred, reasoning, final_txt = extract_answer(raw_out)
-    is_ok  = answers_match(pred, gold_answer)
     n_tok  = int(gen_ids.shape[0])
     _last_t = int(gen_ids[-1]) if n_tok > 0 else None
     _eos_set = set(_eos_ids) if _eos_ids else {tokenizer.eos_token_id}
     finish  = ("unknown" if _last_t is None
                else "eos" if _last_t in _eos_set else "length")
+    _truncated = (finish == "length")
+    pred, reasoning, final_txt = extract_answer(raw_out, truncated=_truncated)
+    is_ok  = answers_match(pred, gold_answer)
 
     entry = {
         "problem_id": pid, "category": cat, "subcategory": "unknown",
@@ -933,7 +942,7 @@ with _jsonl_path.open("a", encoding="utf-8") as _jfh:
         "pred_answer": pred or "", "raw_output": raw_out,
         "reasoning_text": reasoning, "final_answer_text": final_txt or "",
         "is_correct": is_ok, "parse_success": pred is not None,
-        "parse_error_type": parse_error_type(pred, raw_out) or "",
+        "parse_error_type": parse_error_type(pred, raw_out, truncated=_truncated) or "",
         "generation_token_count": n_tok, "finish_reason": finish,
         "was_prompt_truncated": _was_truncated,
         "elapsed_seconds": round(elapsed, 2), "seed": SEED,
