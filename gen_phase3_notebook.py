@@ -174,21 +174,21 @@ def _selective_state_update(state, x, dt, A, B, C, D=None, z=None,
         y = (ns * C.unsqueeze(1)).sum(-1)
         if D is not None: y = y + D * x
         if z is not None: y = y * _F.silu(z)
-        return y
+        return y.to(x.dtype)
     # Mamba2: state(batch, nheads, headdim, dstate)
-    dA = _t.exp(dt * A)                                # (batch, nheads)
+    dA = _t.exp(dt.float() * A.float())               # float32 for numerical stability
     hpg = max(state.shape[1] // max(ngroups, 1), 1)
     B_e = B.repeat_interleave(hpg, dim=1) if B.shape[1] < state.shape[1] else B
     C_e = C.repeat_interleave(hpg, dim=1) if C.shape[1] < state.shape[1] else C
-    dB  = dt.unsqueeze(-1) * B_e                       # (batch, nheads, dstate)
+    dB  = dt.float().unsqueeze(-1) * B_e.float()      # (batch, nheads, dstate)
     ns  = (dA[:, :, None, None] * state
-           + dB[:, :, None, :] * x[:, :, :, None]).to(dtype)
+           + dB[:, :, None, :] * x.float()[:, :, :, None]).to(dtype)
     state.copy_(ns)
-    y = (ns * C_e[:, :, None, :]).sum(-1)              # (batch, nheads, headdim)
+    y = (ns * C_e.float()[:, :, None, :]).sum(-1)     # (batch, nheads, headdim)
     if D is not None:
-        y = y + (D[:, None] * x if D.dim() == 1 else D * x)
-    if z is not None: y = y * _F.silu(z)
-    return y
+        y = y + (D.float()[:, None] * x.float() if D.dim() == 1 else D.float() * x.float())
+    if z is not None: y = y * _F.silu(z.float())
+    return y.to(x.dtype)                              # cast back to model dtype (bfloat16)
 
 # ------------------------------------------------------------------
 # mamba_chunk_scan_combined  (sequential PyTorch prefill scan)
@@ -222,8 +222,7 @@ def _mamba_chunk_scan_combined(x, dt, A, B, C, chunk_size,
             dt_softplus=False, ngroups=ngroups,
         )
         ys.append(yt)
-    y = _t.stack(ys, dim=1)
-    if out_dtype is not None: y = y.to(out_dtype)
+    y = _t.stack(ys, dim=1).to(out_dtype if out_dtype is not None else x.dtype)
     if return_final_states:
         return y, state.to(x.dtype if not states_in_fp32 else _t.float32)
     return y
