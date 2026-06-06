@@ -802,7 +802,30 @@ with _jsonl_path.open("a", encoding="utf-8") as _jfh:
     question    = str(record.get("question", record.get("prompt", ""))).strip()
     gold_answer = str(record.get("answer", record.get("target", ""))).strip()
 
-    prompt = build_prompt(record)
+    _user_text = build_prompt(record)
+    # Try ChatML format: <|im_start|>user\n...\n<|im_end|>\n<|im_start|>assistant\n
+    # This ensures the model generates in chat mode and terminates with <|im_end|> naturally.
+    _chat_ok = False
+    try:
+        if hasattr(tokenizer, "apply_chat_template") and getattr(tokenizer, "chat_template", None):
+            _msgs = [{"role": "user", "content": _user_text}]
+            prompt = tokenizer.apply_chat_template(_msgs, tokenize=False, add_generation_prompt=True)
+            _chat_ok = True
+    except Exception:
+        pass
+    if not _chat_ok:
+        # Manual ChatML: find <|im_start|> token ID
+        _im_start_id = (tokenizer.added_tokens_encoder.get("<|im_start|>")
+                        or tokenizer.convert_tokens_to_ids("<|im_start|>") or None)
+        if _im_start_id and _im_start_id != getattr(tokenizer, "unk_token_id", None):
+            _im_start = tokenizer.decode([_im_start_id])
+            prompt = f"{_im_start}user\n{_user_text}\n<|im_end|>\n{_im_start}assistant\n"
+            _chat_ok = True
+    if not _chat_ok:
+        prompt = _user_text  # plain text fallback
+    if idx == 0:
+        _diag(f"[prompt] chat_ok={_chat_ok}  first 200: {repr(prompt[:200])}")
+
     inputs = tokenizer(prompt, return_tensors="pt").to(input_device)
 
     _was_truncated = False
@@ -891,6 +914,11 @@ with _jsonl_path.open("a", encoding="utf-8") as _jfh:
 
     gen_ids = output[0][_input_len:]
     raw_out = tokenizer.decode(gen_ids, skip_special_tokens=True)
+
+    # Diagnostic: print first 300 chars of first 3 problems
+    if idx < 3:
+        _diag(f"[sample {idx}] raw_output[:300]: {repr(raw_out[:300])}")
+
     pred, reasoning, final_txt = extract_answer(raw_out)
     is_ok  = answers_match(pred, gold_answer)
     n_tok  = int(gen_ids.shape[0])
