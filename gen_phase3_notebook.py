@@ -65,11 +65,11 @@ from pathlib import Path
 # ★ 設定: 実行前にここを修正してください
 # ================================================================
 ADAPTER_PATH  = os.environ.get("ADAPTER_PATH",
-    "/path/to/nemotron-adapter")          # Golden adapter (READ-ONLY)
+    "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20")
 MODEL_PATH    = os.environ.get("MODEL_PATH",
-    "/path/to/nemotron-3-nano-30b-a3b-bf16")  # Base model
+    "/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1")
 PROBLEMS_PATH = os.environ.get("PROBLEMS_PATH",
-    "/path/to/train.csv")                 # Competition train.csv
+    "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv")
 OUTPUT_DIR    = Path(os.environ.get("OUTPUT_DIR", "phase3_analysis"))
 
 # --- Sampling ---
