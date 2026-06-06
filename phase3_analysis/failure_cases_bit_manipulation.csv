@@ -1,0 +1,2 @@
+problem_id,category,subcategory,question,gold_answer,pred_answer,is_correct,min_logprob,answer_min_logprob,failure_type,failure_reason,solver_check_possible,synthetic_generation_possible,recommended_template,example_priority
+SCHEMA_TEMPLATE_ROW_2,bit_manipulation,xor,What is 0b1010 XOR 0b1100?,0b0110,0b0100,False,-3.45,-2.91,xor_error,XOR result is incorrect,True,True,bitwise_xor_step_cot,5

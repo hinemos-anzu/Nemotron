@@ -1,0 +1,7 @@
+problem_id,category,subcategory,is_correct,parse_success,min_logprob,mean_logprob,answer_min_logprob,answer_mean_logprob,low_conf_token_count,lowest_logprob_token,lowest_logprob_context,answer_low_conf_token_count,logprob_source
+SCHEMA_TEMPLATE_ROW_1,cryptarithm,string_transform,True,True,-0.82,-0.21,-0.35,-0.18,1,forward_concat,"rule is: forward_concat",0,inline
+SCHEMA_TEMPLATE_ROW_2,bit_manipulation,xor,False,True,-3.45,-0.89,-2.91,-1.42,8,XOR,"1010 XOR 1100",5,inline
+SCHEMA_TEMPLATE_ROW_3,numeral_conversion,binary_to_decimal,True,True,-0.71,-0.15,-0.28,-0.12,0,*16," 1*16 + 0*8",0,inline
+SCHEMA_TEMPLATE_ROW_4,cipher,n/a,True,True,-0.45,-0.12,-0.22,-0.09,0,K-3,"K-3=H",0,inline
+SCHEMA_TEMPLATE_ROW_5,equation,n/a,True,True,-0.38,-0.11,-0.19,-0.08,0,=>,"2x = 8 =>",0,inline
+SCHEMA_TEMPLATE_PLACEHOLDER,ALL,ALL,False,False,,,,,,DATA_NOT_AVAILABLE,,0,missing
