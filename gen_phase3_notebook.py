@@ -239,8 +239,11 @@ def _mamba_split_conv1d_scan_combined(*args, **kwargs):
 # ------------------------------------------------------------------
 def _causal_conv1d_fn(x, weight, bias=None, initial_states=None,
                        final_states_out=None, activation=None):
-    # Causal depthwise conv1d. x(batch,dim,seqlen) weight(dim,1,kernel_size)
+    # x(batch,dim,seqlen)  weight: (dim,kernel_size) OR (dim,1,kernel_size)
+    # transformers Mamba2 passes weight as 2D after rearrange("d 1 w -> d w")
     import torch.nn.functional as _F
+    if weight.dim() == 2:
+        weight = weight.unsqueeze(1)   # (dim, kernel_size) -> (dim, 1, kernel_size)
     k = weight.shape[-1]
     out = _F.conv1d(_F.pad(x, (k - 1, 0)), weight, bias=bias, groups=x.shape[1])
     if activation in ("silu", "swish"): out = _F.silu(out)
@@ -248,12 +251,14 @@ def _causal_conv1d_fn(x, weight, bias=None, initial_states=None,
 
 def _causal_conv1d_update(x, conv_state, weight, bias=None,
                            activation=None, cache_seqlens=None):
-    # Single-step conv. x(batch,dim) conv_state(batch,dim,kernel_size) in-place
+    # x(batch,dim)  conv_state(batch,dim,kernel_size)  in-place
+    # weight: (dim,kernel_size) OR (dim,1,kernel_size) — handle both
     import torch as _t, torch.nn.functional as _F
     ns = _t.roll(conv_state, -1, dims=-1)
     ns[:, :, -1] = x
     conv_state.copy_(ns)
-    out = (ns * weight[:, 0, :]).sum(-1)
+    w2 = weight[:, 0, :] if weight.dim() == 3 else weight  # -> (dim, kernel_size)
+    out = (ns * w2).sum(-1)
     if bias is not None: out = out + bias
     if activation in ("silu", "swish"): out = _F.silu(out)
     return out
