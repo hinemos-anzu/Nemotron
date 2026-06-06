@@ -50,7 +50,7 @@ PROBLEMS_PATH = os.environ.get("PROBLEMS_PATH",
     "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv")
 OUTPUT_DIR    = os.environ.get("OUTPUT_DIR", "/kaggle/working/phase3_analysis")
 SEED          = 42
-MAX_PROBLEMS  = 200   # 0 = all; 200 for stratified sample
+MAX_PROBLEMS  = 20    # smoke test: 20問で動作確認。分析時は 200 に変更
 
 # Stratified sampling quota (used when MAX_PROBLEMS > 0)
 CATEGORY_QUOTA = {
@@ -65,7 +65,7 @@ CATEGORY_QUOTA = {
 
 # Generation config -- identical to Golden Baseline (do not modify)
 GOLDEN_GENERATION_CONFIG = {
-    "max_new_tokens": 2048,
+    "max_new_tokens": 512,   # EOS未確認時の安全網。正常なら早期停止する
     "temperature":    0.0,
     "do_sample":      False,
     "repetition_penalty": 1.0,
@@ -678,34 +678,50 @@ except Exception:
     pass
 
 # -----------------------------------------------------------------------
-# EOS token list: use added_tokens_encoder to avoid the tok=1 bug.
-#
-# tokenizer.encode("<|im_end|>", add_special_tokens=False) can return
-# MULTIPLE char-level tokens when the tokenizer treats angle-brackets as
-# regular BPE characters (e.g. [28766, 321, 28730, 416, 28766]).
-# Any of those common sub-tokens in eos_token_id causes generation to
-# stop after the very first output token.
-#
-# added_tokens_encoder is a dict {str -> int} of specially registered
-# tokens; it gives the single correct ID directly.
+# EOS token list — multi-strategy lookup.
+# Strategy 1: added_tokens_encoder (directly registered special tokens)
+# Strategy 2: convert_tokens_to_ids (works for tokens added to vocab)
+# Strategy 3: all_special_tokens / all_special_ids scan
+# Strategy 4: encode() single-token fallback (last resort)
 # -----------------------------------------------------------------------
 _eos_ids: List[int] = []
+_unk_id = getattr(tokenizer, "unk_token_id", None)
 if tokenizer.eos_token_id is not None:
     _eos_ids.append(int(tokenizer.eos_token_id))
 
-for _st in GOLDEN_GENERATION_CONFIG.get("stop", []):
+_stop_tokens = GOLDEN_GENERATION_CONFIG.get("stop", [])
+# Also try common chat-template terminators even if not in config
+_stop_candidates = list(_stop_tokens) + ["<|im_end|>", "<|endoftext|>", "</s>", "<|eot_id|>"]
+
+_all_sp_toks = list(getattr(tokenizer, "all_special_tokens", []))
+_all_sp_ids  = list(getattr(tokenizer, "all_special_ids",  []))
+_sp_map = dict(zip(_all_sp_toks, _all_sp_ids))
+
+for _st in _stop_candidates:
+    _tid = None
+    # Strategy 1
     if hasattr(tokenizer, "added_tokens_encoder") and _st in tokenizer.added_tokens_encoder:
         _tid = int(tokenizer.added_tokens_encoder[_st])
-        if _tid not in _eos_ids: _eos_ids.append(_tid)
-    else:
+    # Strategy 2
+    if _tid is None:
+        try:
+            _cid = int(tokenizer.convert_tokens_to_ids(_st))
+            if _cid not in (0, _unk_id): _tid = _cid
+        except Exception: pass
+    # Strategy 3
+    if _tid is None and _st in _sp_map:
+        _tid = int(_sp_map[_st])
+    # Strategy 4: encode, accept only if result is single token
+    if _tid is None:
         try:
             _tids = tokenizer.encode(_st, add_special_tokens=False)
-            if len(_tids) == 1 and _tids[0] not in _eos_ids:
-                _eos_ids.append(_tids[0])
-        except Exception:
-            pass
+            if len(_tids) == 1: _tid = int(_tids[0])
+        except Exception: pass
+    if _tid is not None and _tid not in _eos_ids:
+        _eos_ids.append(_tid)
 
 _diag(f"[eos] effective eos_token_ids: {_eos_ids}")
+_diag(f"[eos] special tokens (first 20): {list(zip(_all_sp_toks[:20], _all_sp_ids[:20]))}")
 
 _sdp_ctx_factory = None
 try:
