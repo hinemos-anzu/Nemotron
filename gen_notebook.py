@@ -804,6 +804,8 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
                 repetition_penalty=GOLDEN_GENERATION_CONFIG["repetition_penalty"],
                 eos_token_id=_eos_ids if _eos_ids else tokenizer.eos_token_id,
                 pad_token_id=tokenizer.eos_token_id,
+                output_scores=True,
+                return_dict_in_generate=True,
             )
             if _past_kv is not None:
                 _generate_kwargs["past_key_values"] = _past_kv
@@ -829,6 +831,7 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
             "generation_token_count": 0, "finish_reason": "error",
             "was_prompt_truncated": _was_truncated,
             "elapsed_seconds": 0.0, "seed": SEED,
+            "token_logprobs": None, "min_logprob": None, "mean_logprob": None,
             "generation_config": dict(GOLDEN_GENERATION_CONFIG),
         }
         records.append(entry)
@@ -838,6 +841,25 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
 
     generated_ids = output[0][_input_len:]
     raw_output = tokenizer.decode(generated_ids, skip_special_tokens=True)
+
+    # Extract per-token logprobs (chosen token only — full vocab not stored → OOM safe)
+    _token_logprobs = None
+    _min_logprob = None
+    _mean_logprob = None
+    if getattr(output, "scores", None) is not None:
+        try:
+            import torch.nn.functional as _F
+            _lps = []
+            for _score_t, _tok_id in zip(output.scores, generated_ids.tolist()):
+                _lp = float(_F.log_softmax(_score_t[0].float(), dim=-1)[_tok_id])
+                _lps.append(round(_lp, 4))
+            if _lps:
+                _token_logprobs = _lps
+                _min_logprob    = round(min(_lps), 4)
+                _mean_logprob   = round(sum(_lps) / len(_lps), 4)
+        except Exception as _lpe:
+            if idx == 0:
+                _diag(f"[logprob] extraction error (non-fatal): {_lpe}")
 
     pred_answer, reasoning_text, final_answer_text = extract_answer(raw_output)
     is_correct = answers_match(pred_answer, gold_answer)
@@ -871,6 +893,9 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
         "was_prompt_truncated": _was_truncated,
         "elapsed_seconds": round(elapsed, 2),
         "seed": SEED,
+        "token_logprobs": _token_logprobs,
+        "min_logprob": _min_logprob,
+        "mean_logprob": _mean_logprob,
         "generation_config": dict(GOLDEN_GENERATION_CONFIG),
     }
     records.append(entry)
