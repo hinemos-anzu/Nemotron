@@ -62,8 +62,8 @@ CATEGORY_MAP_PATH = ""
 # 乱数シード（Golden Baseline と一致）
 SEED = 42
 
-# 問題数上限（0 = 全件、動作確認は 5 推奨）
-MAX_PROBLEMS = 0
+# 問題数上限（0 = 全件、分析用は 30 推奨: ~9時間以内）
+MAX_PROBLEMS = 30
 
 # Kaggle の壊れた mamba_ssm を差し替えるか（RTX Pro 5000 では False）
 USE_MAMBA_PATCH = False
@@ -673,10 +673,13 @@ print("Setup complete — ready to run inference")
 # Cell 6: Load problems + inference loop
 # ---------------------------------------------------------------------------
 code(r"""# --- Load problems ---
+import random as _random
 problems = load_problems(PROBLEMS_PATH)
 if MAX_PROBLEMS and MAX_PROBLEMS > 0:
+    _random.seed(SEED)
+    _random.shuffle(problems)
     problems = problems[:MAX_PROBLEMS]
-    print(f"[max-problems] Capped at {MAX_PROBLEMS}")
+    print(f"[max-problems] Shuffled (seed={SEED}) and capped at {MAX_PROBLEMS}")
 category_map = load_category_map(CATEGORY_MAP_PATH) if CATEGORY_MAP_PATH else {}
 print(f"Problems loaded   : {len(problems)}")
 print(f"Category map size : {len(category_map)}")
