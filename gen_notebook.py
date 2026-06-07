@@ -839,7 +839,8 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
         _jsonl_fh.flush()
         continue
 
-    generated_ids = output[0][_input_len:]
+    _seq = output.sequences if hasattr(output, "sequences") else output
+    generated_ids = _seq[0][_input_len:]
     raw_output = tokenizer.decode(generated_ids, skip_special_tokens=True)
 
     # Extract per-token logprobs (chosen token only — full vocab not stored → OOM safe)
