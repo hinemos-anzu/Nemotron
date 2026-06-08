@@ -68,6 +68,10 @@ MAX_PROBLEMS = 30
 # Kaggle の壊れた mamba_ssm を差し替えるか（RTX Pro 5000 では False）
 USE_MAMBA_PATCH = False
 
+# Smoke test: 1問・50トークンのみで動作確認（本番前に True で実行推奨）
+# 縮退生成・スライスバグを ~30秒で検出して即停止する
+SMOKE_TEST = False
+
 # ============================================================
 # Generation config — Golden Baseline と完全一致（変更禁止）
 # ============================================================
@@ -684,6 +688,14 @@ category_map = load_category_map(CATEGORY_MAP_PATH) if CATEGORY_MAP_PATH else {}
 print(f"Problems loaded   : {len(problems)}")
 print(f"Category map size : {len(category_map)}")
 
+# --- Smoke test override ---
+_smoke_max_tokens = None
+if SMOKE_TEST:
+    problems = problems[:1]
+    _smoke_max_tokens = 50
+    print("[smoke] SMOKE_TEST=True: 1問 / 50トークンで動作確認します")
+    print("[smoke] 縮退生成またはトークン数=0 を検出した場合は即停止します")
+
 # --- Inference loop ---
 records: List[Dict[str, Any]] = []
 _MAX_INPUT_TOKENS = 768   # cap prompt to keep SSM intermediate tensors small
@@ -824,7 +836,7 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
         with torch.no_grad():
             _generate_kwargs: Dict[str, Any] = dict(
                 **_gen_inputs,
-                max_new_tokens=GOLDEN_GENERATION_CONFIG["max_new_tokens"],
+                max_new_tokens=(_smoke_max_tokens or GOLDEN_GENERATION_CONFIG["max_new_tokens"]),
                 do_sample=GOLDEN_GENERATION_CONFIG["do_sample"],
                 repetition_penalty=GOLDEN_GENERATION_CONFIG["repetition_penalty"],
                 eos_token_id=_eos_ids if _eos_ids else tokenizer.eos_token_id,
@@ -867,6 +879,24 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
     _seq = output.sequences if hasattr(output, "sequences") else output
     generated_ids = _seq[0][_input_len:]
     raw_output = tokenizer.decode(generated_ids, skip_special_tokens=True)
+
+    # Smoke test: degenerate generation / empty output の即時検出
+    if SMOKE_TEST:
+        _n_gen_toks = int(generated_ids.shape[0])
+        _degen_marker = '"\n\nOptions:\n\n- **'
+        if _n_gen_toks == 0:
+            raise RuntimeError(
+                "[smoke] FAIL: 生成トークン数=0\n"
+                "  → output slicing バグの可能性 (return_dict_in_generate 確認)"
+            )
+        if _degen_marker in raw_output[:120]:
+            raise RuntimeError(
+                f"[smoke] FAIL: 縮退生成を検出 (token 7以降が繰り返し)\n"
+                f"  → ChatML設定を確認してください\n"
+                f"  preview: {raw_output[:120]!r}"
+            )
+        print(f"[smoke] PASS: tokens={_n_gen_toks}  preview={raw_output[:80]!r}")
+        print("[smoke] 本番実行は SMOKE_TEST=False に戻してください")
 
     # Extract per-token logprobs (chosen token only — full vocab not stored → OOM safe)
     _token_logprobs = None
