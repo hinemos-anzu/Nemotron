@@ -716,7 +716,29 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
     question = str(record.get("question", record.get("prompt", ""))).strip()
     gold_answer = str(record.get("answer", record.get("target", ""))).strip()
 
-    prompt = build_prompt(record)
+    _user_text = build_prompt(record)
+    _chat_ok = False
+    try:
+        if hasattr(tokenizer, "apply_chat_template") and getattr(tokenizer, "chat_template", None):
+            _msgs = [{"role": "user", "content": _user_text}]
+            prompt = tokenizer.apply_chat_template(_msgs, tokenize=False, add_generation_prompt=True)
+            _chat_ok = True
+    except Exception:
+        pass
+    if not _chat_ok:
+        _im_start_id = (
+            tokenizer.added_tokens_encoder.get("<|im_start|>")
+            or tokenizer.convert_tokens_to_ids("<|im_start|>")
+            or None
+        )
+        if _im_start_id and _im_start_id != getattr(tokenizer, "unk_token_id", None):
+            _im_start = tokenizer.decode([_im_start_id])
+            prompt = f"{_im_start}user\n{_user_text}\n<|im_end|>\n{_im_start}assistant\n"
+            _chat_ok = True
+    if not _chat_ok:
+        prompt = _user_text
+    if idx == 0:
+        _diag(f"[prompt] ChatML={'ok' if _chat_ok else 'fallback'}, len={len(prompt)}")
     inputs = tokenizer(prompt, return_tensors="pt").to(input_device)
 
     _was_truncated = False
