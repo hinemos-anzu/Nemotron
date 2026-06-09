@@ -14,6 +14,16 @@ This is a **control experiment**, not an improvement experiment.
 - **Preceding rejected candidate:** `B3_GATE15_X17_ASYMMETRIC_INPROJ_SPLIT`
 - **Reason for control:** `gate=15 / x=17` regressed to `0.85` weak despite passing visible structural diagnostics.
 
+
+## Preparation artifacts
+
+Use these files before any execution or submission:
+
+- `preflight_checklist.md` — execution-preparation checklist and go/no-go rule.
+- `golden_fixed_conditions.md` — immutable Golden conditions for this control.
+- `diagnostics_template.md` — values to record before promotion or submission.
+- `runbook.md` — later command/notebook procedure, including diagnostics templates.
+
 ## Variables fixed to Golden
 
 Keep all of the following unchanged from the Golden Baseline:
