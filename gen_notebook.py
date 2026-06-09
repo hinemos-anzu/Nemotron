@@ -844,8 +844,6 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
                 output_scores=True,
                 return_dict_in_generate=True,
             )
-            if _past_kv is not None:
-                _generate_kwargs["past_key_values"] = _past_kv
             with _sdp_ctx_factory():
                 output = model.generate(**_generate_kwargs)
         elapsed = time.time() - t0
@@ -883,16 +881,35 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
     # Smoke test: degenerate generation / empty output の即時検出
     if SMOKE_TEST:
         _n_gen_toks = int(generated_ids.shape[0])
-        _degen_marker = '"\n\nOptions:\n\n- **'
         if _n_gen_toks == 0:
             raise RuntimeError(
                 "[smoke] FAIL: 生成トークン数=0\n"
                 "  → output slicing バグの可能性 (return_dict_in_generate 確認)"
             )
-        if _degen_marker in raw_output[:120]:
+        # logprob パターンで縮退を検出: 連続10トークン以上が同一値 → ループ確定
+        _lp_check = None
+        if getattr(output, "scores", None) is not None and _n_gen_toks >= 10:
+            try:
+                import torch.nn.functional as _F2
+                _lp_vals = []
+                for _st, _tid in zip(list(output.scores)[:20], generated_ids.tolist()[:20]):
+                    _lp_vals.append(round(float(_F2.log_softmax(_st[0].float(), dim=-1)[_tid]), 4))
+                _run = 1
+                for _pi in range(1, len(_lp_vals)):
+                    if _lp_vals[_pi] == _lp_vals[_pi-1]:
+                        _run += 1
+                    else:
+                        _run = 1
+                    if _run >= 10:
+                        _lp_check = f"logprob={_lp_vals[_pi]:.4f} が {_run}連続 (pos {_pi+1})"
+                        break
+            except Exception:
+                pass
+        if _lp_check:
             raise RuntimeError(
-                f"[smoke] FAIL: 縮退生成を検出 (token 7以降が繰り返し)\n"
-                f"  → ChatML設定を確認してください\n"
+                f"[smoke] FAIL: 縮退生成を検出\n"
+                f"  → {_lp_check}\n"
+                f"  → past_key_values / ChatML / キャッシュ設定を確認してください\n"
                 f"  preview: {raw_output[:120]!r}"
             )
         print(f"[smoke] PASS: tokens={_n_gen_toks}  preview={raw_output[:80]!r}")
