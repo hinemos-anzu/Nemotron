@@ -260,6 +260,45 @@ def _apply_mamba_patch():
         print(f"[mamba_patch] Warning: {e}")
 
 print("Utilities loaded OK")
+
+# --- Problem category classifier (keyword-based) ---
+_CRYPTO_WORD_RE = re.compile(r'\b[A-Z]{2,}\s*[+\-*]\s*[A-Z]{2,}')
+
+def classify_problem(question):
+    q = question.lower()
+    # Cryptarithmetic: letter-to-digit assignment puzzles
+    if any(w in q for w in ['cryptarithm', 'each letter represents', 'each digit represents',
+                              'distinct digits', 'unique digits', 'no two letters',
+                              'different nonzero digits', 'leading digit']):
+        sub = 'word_arithmetic' if _CRYPTO_WORD_RE.search(question) else 'digit_assignment'
+        return 'cryptarithmetic', sub
+    if _CRYPTO_WORD_RE.search(question) and any(w in q for w in ['unique', 'digit', 'represents']):
+        return 'cryptarithmetic', 'word_arithmetic'
+    # Bit manipulation: XOR/AND/OR/shift/rotation/binary operations
+    if any(w in q for w in ['xor', 'bit shift', 'bitwise', 'bit rotation', 'bit manipulation',
+                              'majority', 'choice function', 'hamming', 'parity bit', '8-bit',
+                              'binary string', 'bits']):
+        sub = 'pattern_discovery' if re.search(r'[01]{4,}\s*->', question) else 'single_operation'
+        return 'bit_manipulation', sub
+    if re.search(r'[01]{4,}\s*->\s*[01]{4,}', question):
+        return 'bit_manipulation', 'pattern_discovery'
+    # Numeral conversion: base changes
+    if any(w in q for w in ['hexadecimal', 'octal', 'base-', 'base 16', 'base 8', 'base 2',
+                              'convert to decimal', 'convert to binary', '0x', 'radix',
+                              'numeral system']):
+        sub = ('hex_decimal' if 'hex' in q else
+               'octal_decimal' if 'oct' in q else 'cross_base')
+        return 'numeral_conversion', sub
+    return 'other', 'unknown'
+
+def build_category_map(problems):
+    result = {}
+    for idx, rec in enumerate(problems):
+        pid = get_problem_id(rec, idx)
+        q = str(rec.get('question', rec.get('prompt', ''))).strip()
+        cat, sub = classify_problem(q)
+        result[pid] = {'category': cat, 'subcategory': sub}
+    return result
 """)
 
 # ---------------------------------------------------------------------------
@@ -685,6 +724,20 @@ if MAX_PROBLEMS and MAX_PROBLEMS > 0:
     problems = problems[:MAX_PROBLEMS]
     print(f"[max-problems] Shuffled (seed={SEED}) and capped at {MAX_PROBLEMS}")
 category_map = load_category_map(CATEGORY_MAP_PATH) if CATEGORY_MAP_PATH else {}
+if not category_map:
+    category_map = build_category_map(problems)
+    _cm_path = Path(OUTPUT_DIR) / "category_map.csv"
+    with _cm_path.open("w", encoding="utf-8", newline="") as _cmf:
+        _cw = csv.writer(_cmf)
+        _cw.writerow(["problem_id", "category", "subcategory"])
+        for _pid, _ci in sorted(category_map.items()):
+            _cw.writerow([_pid, _ci["category"], _ci["subcategory"]])
+    _cc = defaultdict(int)
+    for _ci in category_map.values():
+        _cc[_ci["category"]] += 1
+    print(f"[category] Auto-classified {len(category_map)} problems:")
+    for _c, _n in sorted(_cc.items()):
+        print(f"  {_c}: {_n}")
 print(f"Problems loaded   : {len(problems)}")
 print(f"Category map size : {len(category_map)}")
 
@@ -1049,6 +1102,137 @@ print(f"\nOutputs saved to: {OUTPUT_DIR}/")
 print(f"  {_pred_path.name}")
 print(f"  {_summary_path.name}")
 print(f"  step2_diagnostics.txt")
+
+# ============================================================
+# Goal 3: Min logprob 分析
+# ============================================================
+_lp_path = Path(OUTPUT_DIR) / "min_logprob_analysis.csv"
+with _lp_path.open("w", encoding="utf-8", newline="") as _lf:
+    _lw = csv.writer(_lf)
+    _lw.writerow(["problem_id","category","subcategory","is_correct",
+                  "min_logprob","mean_logprob","generation_token_count","finish_reason"])
+    for r in records:
+        _lw.writerow([r["problem_id"], r["category"], r["subcategory"], r["is_correct"],
+                      r.get("min_logprob",""), r.get("mean_logprob",""),
+                      r["generation_token_count"], r["finish_reason"]])
+
+_cat_lp = defaultdict(list)
+for r in records:
+    if r.get("min_logprob") is not None:
+        _cat_lp[r["category"]].append(
+            {"min": r["min_logprob"], "mean": r["mean_logprob"], "ok": r["is_correct"]})
+
+print(f"\n{'Min logprob by category':}")
+print(f"  {'category':<22} {'n':>4} {'acc':>6} {'avg_min_lp':>11} {'avg_mean_lp':>12}")
+for _cat in sorted(_cat_lp):
+    _vs = _cat_lp[_cat]
+    _n = len(_vs)
+    _acc = sum(1 for v in _vs if v["ok"]) / max(_n, 1)
+    _avg_min  = sum(v["min"]  for v in _vs) / max(_n, 1)
+    _avg_mean = sum(v["mean"] for v in _vs) / max(_n, 1)
+    print(f"  {_cat:<22} {_n:>4} {_acc:>6.3f} {_avg_min:>11.4f} {_avg_mean:>12.4f}")
+
+# ============================================================
+# Goals 4+5: 失敗タイプ分類
+# ============================================================
+def _classify_failure(r):
+    if r["is_correct"]:
+        return "correct"
+    raw  = r.get("raw_output", "")
+    cat  = r.get("category", "other")
+    finish   = r.get("finish_reason", "")
+    parse_ok = r.get("parse_success", False)
+    if not parse_ok:
+        return "parse_fail"
+    if finish == "length":
+        return "timeout"
+    if cat == "cryptarithmetic":
+        if re.search(r'[A-Z]\s*[=:]\s*\d|\d\s*[=:]\s*[A-Z]', raw):
+            return "wrong_digit_assignment"
+        if re.search(r"\\boxed\{", raw):
+            return "wrong_answer_boxed"
+        return "no_systematic_attempt"
+    if cat == "bit_manipulation":
+        if re.search(r'\b[01]{4,}\b', raw):
+            return "wrong_binary_result"
+        if re.search(r"\\boxed\{", raw):
+            return "wrong_answer_boxed"
+        return "no_binary_analysis"
+    if cat == "numeral_conversion":
+        if re.search(r"\\boxed\{", raw):
+            return "wrong_converted_value"
+        return "no_conversion_attempt"
+    return "wrong_answer"
+
+_fail_path = Path(OUTPUT_DIR) / "failure_analysis.csv"
+with _fail_path.open("w", encoding="utf-8", newline="") as _ff:
+    _fw = csv.writer(_ff)
+    _fw.writerow(["problem_id","category","subcategory","failure_type",
+                  "finish_reason","generation_token_count","min_logprob","pred_answer"])
+    for r in records:
+        _fw.writerow([r["problem_id"], r["category"], r["subcategory"],
+                      _classify_failure(r), r["finish_reason"],
+                      r["generation_token_count"], r.get("min_logprob",""),
+                      r.get("pred_answer","")])
+
+_fail_by_cat = defaultdict(list)
+for r in records:
+    _fail_by_cat[r["category"]].append(_classify_failure(r))
+
+print("\nFailure types by category:")
+for _cat in sorted(_fail_by_cat):
+    _ft_cnt = defaultdict(int)
+    for _ft in _fail_by_cat[_cat]:
+        _ft_cnt[_ft] += 1
+    print(f"  {_cat} (n={len(_fail_by_cat[_cat])}):")
+    for _ft, _cnt in sorted(_ft_cnt.items(), key=lambda x: -x[1]):
+        print(f"    {_ft}: {_cnt}")
+
+# ============================================================
+# 弱点分析サマリーレポート
+# ============================================================
+_rec_path = Path(OUTPUT_DIR) / "phase3_recommendation.md"
+with _rec_path.open("w", encoding="utf-8") as _rf:
+    _rf.write("# Phase 3 弱点分析レポート\n\n")
+    _rf.write(f"**実行日時**: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
+    _rf.write("## 全体精度\n\n")
+    _rf.write(f"| 指標 | 値 |\n|---|---|\n")
+    _rf.write(f"| 問題数 | {n_total} |\n")
+    _rf.write(f"| 正解数 | {n_correct} ({100*n_correct/max(n_total,1):.1f}%) |\n")
+    _rf.write(f"| 平均トークン数 | {avg_tok:.0f} |\n\n")
+    _rf.write("## カテゴリ別精度\n\n")
+    _rf.write("| カテゴリ | n | 正解 | 精度 | avg_min_logprob |\n")
+    _rf.write("|---|---|---|---|---|\n")
+    for _cat in sorted(_cat_lp):
+        _vs = _cat_lp[_cat]
+        _n = len(_vs); _nc = sum(1 for v in _vs if v["ok"])
+        _avg_min = sum(v["min"] for v in _vs) / max(_n, 1)
+        _rf.write(f"| {_cat} | {_n} | {_nc} | {_nc/_n:.1%} | {_avg_min:.4f} |\n")
+    _rf.write("\n## 失敗パターン分析\n\n")
+    for _cat in sorted(_fail_by_cat):
+        _ft_cnt = defaultdict(int)
+        for _ft in _fail_by_cat[_cat]:
+            _ft_cnt[_ft] += 1
+        _rf.write(f"### {_cat}\n\n")
+        _total_cat = len(_fail_by_cat[_cat])
+        for _ft, _cnt in sorted(_ft_cnt.items(), key=lambda x: -x[1]):
+            _rf.write(f"- **{_ft}**: {_cnt}件 ({100*_cnt/_total_cat:.0f}%)\n")
+        _rf.write("\n")
+    if _cat_lp:
+        _rf.write("## 推奨改善アクション\n\n")
+        _worst_acc_cat = min(_cat_lp, key=lambda c:
+            sum(v["ok"] for v in _cat_lp[c]) / max(len(_cat_lp[c]), 1))
+        _worst_acc = sum(v["ok"] for v in _cat_lp[_worst_acc_cat]) / max(len(_cat_lp[_worst_acc_cat]), 1)
+        _rf.write(f"1. **最弱カテゴリ**: `{_worst_acc_cat}` (精度 {_worst_acc:.1%}) → 重点的なデータ補強を推奨\n")
+        _worst_lp_cat = min(_cat_lp, key=lambda c:
+            sum(v["min"] for v in _cat_lp[c]) / max(len(_cat_lp[c]), 1))
+        _worst_avg_min = sum(v["min"] for v in _cat_lp[_worst_lp_cat]) / max(len(_cat_lp[_worst_lp_cat]), 1)
+        _rf.write(f"2. **最低確信度カテゴリ**: `{_worst_lp_cat}` (avg_min_logprob {_worst_avg_min:.4f})"
+                  f" → モデルが最も迷うカテゴリ\n")
+
+print(f"  {_lp_path.name}")
+print(f"  {_fail_path.name}")
+print(f"  {_rec_path.name}")
 """)
 
 # ---------------------------------------------------------------------------
