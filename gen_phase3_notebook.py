@@ -50,7 +50,7 @@ PROBLEMS_PATH = os.environ.get("PROBLEMS_PATH",
     "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv")
 OUTPUT_DIR    = os.environ.get("OUTPUT_DIR", "/kaggle/working/phase3_analysis")
 SEED          = 42
-MAX_PROBLEMS  = 200   # 0 = all; 200 for stratified sample
+MAX_PROBLEMS  = 5     # smoke test: 5問で動作確認。分析時は 200 に変更
 
 # Stratified sampling quota (used when MAX_PROBLEMS > 0)
 CATEGORY_QUOTA = {
@@ -64,6 +64,9 @@ CATEGORY_QUOTA = {
 }
 
 # Generation config -- identical to Golden Baseline (do not modify)
+# NemotronH は reasoning model: 思考チェーンに 2000-8000 tokens 必要。
+# 512 では全問が思考途中で打ち切られ \boxed{} に到達しない → 0 accuracy。
+# Golden Baseline (gen_notebook.py) に合わせて 2048 に設定。
 GOLDEN_GENERATION_CONFIG = {
     "max_new_tokens": 2048,
     "temperature":    0.0,
@@ -174,21 +177,21 @@ def _selective_state_update(state, x, dt, A, B, C, D=None, z=None,
         y = (ns * C.unsqueeze(1)).sum(-1)
         if D is not None: y = y + D * x
         if z is not None: y = y * _F.silu(z)
-        return y
+        return y.to(x.dtype)
     # Mamba2: state(batch, nheads, headdim, dstate)
-    dA = _t.exp(dt * A)                                # (batch, nheads)
+    dA = _t.exp(dt.float() * A.float())               # float32 for numerical stability
     hpg = max(state.shape[1] // max(ngroups, 1), 1)
     B_e = B.repeat_interleave(hpg, dim=1) if B.shape[1] < state.shape[1] else B
     C_e = C.repeat_interleave(hpg, dim=1) if C.shape[1] < state.shape[1] else C
-    dB  = dt.unsqueeze(-1) * B_e                       # (batch, nheads, dstate)
+    dB  = dt.float().unsqueeze(-1) * B_e.float()      # (batch, nheads, dstate)
     ns  = (dA[:, :, None, None] * state
-           + dB[:, :, None, :] * x[:, :, :, None]).to(dtype)
+           + dB[:, :, None, :] * x.float()[:, :, :, None]).to(dtype)
     state.copy_(ns)
-    y = (ns * C_e[:, :, None, :]).sum(-1)              # (batch, nheads, headdim)
+    y = (ns * C_e.float()[:, :, None, :]).sum(-1)     # (batch, nheads, headdim)
     if D is not None:
-        y = y + (D[:, None] * x if D.dim() == 1 else D * x)
-    if z is not None: y = y * _F.silu(z)
-    return y
+        y = y + (D.float()[:, None] * x.float() if D.dim() == 1 else D.float() * x.float())
+    if z is not None: y = y * _F.silu(z.float())
+    return y.to(x.dtype)                              # cast back to model dtype (bfloat16)
 
 # ------------------------------------------------------------------
 # mamba_chunk_scan_combined  (sequential PyTorch prefill scan)
@@ -222,8 +225,7 @@ def _mamba_chunk_scan_combined(x, dt, A, B, C, chunk_size,
             dt_softplus=False, ngroups=ngroups,
         )
         ys.append(yt)
-    y = _t.stack(ys, dim=1)
-    if out_dtype is not None: y = y.to(out_dtype)
+    y = _t.stack(ys, dim=1).to(out_dtype if out_dtype is not None else x.dtype)
     if return_final_states:
         return y, state.to(x.dtype if not states_in_fp32 else _t.float32)
     return y
@@ -351,20 +353,24 @@ THEREFORE_RE = re.compile(
 )
 LAST_LINE_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9 _\-]*$")
 
-def extract_answer(raw):
+def extract_answer(raw, truncated=False):
+    # Priority 1: \boxed{...}
     m = BOXED_RE.search(raw)
     if m:
         return m.group(1).strip(), raw[:m.start()].strip(), m.group(0)
+    # Priority 2: "therefore ... answer" patterns
     m = THEREFORE_RE.search(raw)
     if m:
         a = re.sub(r"[^A-Za-z0-9]", "", m.group(1)).strip()
         if a:
             return a, raw[:m.start()].strip(), m.group(0)
-    lines = [l.strip() for l in raw.strip().splitlines() if l.strip()]
-    if lines:
-        m2 = LAST_LINE_RE.search(lines[-1])
-        if m2:
-            return m2.group(0).strip(), "\n".join(lines[:-1]), lines[-1]
+    # Priority 3: last-line fallback -- skip if truncated (reasoning mid-chain)
+    if not truncated:
+        lines = [l.strip() for l in raw.strip().splitlines() if l.strip()]
+        if lines:
+            m2 = LAST_LINE_RE.search(lines[-1])
+            if m2:
+                return m2.group(0).strip(), "\n".join(lines[:-1]), lines[-1]
     return None, raw.strip(), None
 
 def normalize_answer(a):
@@ -373,8 +379,9 @@ def normalize_answer(a):
 def answers_match(pred, gold):
     return bool(pred) and normalize_answer(pred) == normalize_answer(gold)
 
-def parse_error_type(pred, raw):
+def parse_error_type(pred, raw, truncated=False):
     if pred is not None: return None
+    if truncated: return "truncated_no_boxed"
     if BOXED_RE.search(raw): return "boxed_found_but_empty"
     if len(raw.strip()) < 10: return "empty_output"
     return "no_extractable_answer"
@@ -679,34 +686,50 @@ except Exception:
     pass
 
 # -----------------------------------------------------------------------
-# EOS token list: use added_tokens_encoder to avoid the tok=1 bug.
-#
-# tokenizer.encode("<|im_end|>", add_special_tokens=False) can return
-# MULTIPLE char-level tokens when the tokenizer treats angle-brackets as
-# regular BPE characters (e.g. [28766, 321, 28730, 416, 28766]).
-# Any of those common sub-tokens in eos_token_id causes generation to
-# stop after the very first output token.
-#
-# added_tokens_encoder is a dict {str -> int} of specially registered
-# tokens; it gives the single correct ID directly.
+# EOS token list — multi-strategy lookup.
+# Strategy 1: added_tokens_encoder (directly registered special tokens)
+# Strategy 2: convert_tokens_to_ids (works for tokens added to vocab)
+# Strategy 3: all_special_tokens / all_special_ids scan
+# Strategy 4: encode() single-token fallback (last resort)
 # -----------------------------------------------------------------------
 _eos_ids: List[int] = []
+_unk_id = getattr(tokenizer, "unk_token_id", None)
 if tokenizer.eos_token_id is not None:
     _eos_ids.append(int(tokenizer.eos_token_id))
 
-for _st in GOLDEN_GENERATION_CONFIG.get("stop", []):
+_stop_tokens = GOLDEN_GENERATION_CONFIG.get("stop", [])
+# Also try common chat-template terminators even if not in config
+_stop_candidates = list(_stop_tokens) + ["<|im_end|>", "<|endoftext|>", "</s>", "<|eot_id|>"]
+
+_all_sp_toks = list(getattr(tokenizer, "all_special_tokens", []))
+_all_sp_ids  = list(getattr(tokenizer, "all_special_ids",  []))
+_sp_map = dict(zip(_all_sp_toks, _all_sp_ids))
+
+for _st in _stop_candidates:
+    _tid = None
+    # Strategy 1
     if hasattr(tokenizer, "added_tokens_encoder") and _st in tokenizer.added_tokens_encoder:
         _tid = int(tokenizer.added_tokens_encoder[_st])
-        if _tid not in _eos_ids: _eos_ids.append(_tid)
-    else:
+    # Strategy 2
+    if _tid is None:
+        try:
+            _cid = int(tokenizer.convert_tokens_to_ids(_st))
+            if _cid not in (0, _unk_id): _tid = _cid
+        except Exception: pass
+    # Strategy 3
+    if _tid is None and _st in _sp_map:
+        _tid = int(_sp_map[_st])
+    # Strategy 4: encode, accept only if result is single token
+    if _tid is None:
         try:
             _tids = tokenizer.encode(_st, add_special_tokens=False)
-            if len(_tids) == 1 and _tids[0] not in _eos_ids:
-                _eos_ids.append(_tids[0])
-        except Exception:
-            pass
+            if len(_tids) == 1: _tid = int(_tids[0])
+        except Exception: pass
+    if _tid is not None and _tid not in _eos_ids:
+        _eos_ids.append(_tid)
 
 _diag(f"[eos] effective eos_token_ids: {_eos_ids}")
+_diag(f"[eos] special tokens (first 20): {list(zip(_all_sp_toks[:20], _all_sp_ids[:20]))}")
 
 _sdp_ctx_factory = None
 try:
@@ -787,7 +810,30 @@ with _jsonl_path.open("a", encoding="utf-8") as _jfh:
     question    = str(record.get("question", record.get("prompt", ""))).strip()
     gold_answer = str(record.get("answer", record.get("target", ""))).strip()
 
-    prompt = build_prompt(record)
+    _user_text = build_prompt(record)
+    # Try ChatML format: <|im_start|>user\n...\n<|im_end|>\n<|im_start|>assistant\n
+    # This ensures the model generates in chat mode and terminates with <|im_end|> naturally.
+    _chat_ok = False
+    try:
+        if hasattr(tokenizer, "apply_chat_template") and getattr(tokenizer, "chat_template", None):
+            _msgs = [{"role": "user", "content": _user_text}]
+            prompt = tokenizer.apply_chat_template(_msgs, tokenize=False, add_generation_prompt=True)
+            _chat_ok = True
+    except Exception:
+        pass
+    if not _chat_ok:
+        # Manual ChatML: find <|im_start|> token ID
+        _im_start_id = (tokenizer.added_tokens_encoder.get("<|im_start|>")
+                        or tokenizer.convert_tokens_to_ids("<|im_start|>") or None)
+        if _im_start_id and _im_start_id != getattr(tokenizer, "unk_token_id", None):
+            _im_start = tokenizer.decode([_im_start_id])
+            prompt = f"{_im_start}user\n{_user_text}\n<|im_end|>\n{_im_start}assistant\n"
+            _chat_ok = True
+    if not _chat_ok:
+        prompt = _user_text  # plain text fallback
+    if idx == 0:
+        _diag(f"[prompt] chat_ok={_chat_ok}  first 200: {repr(prompt[:200])}")
+
     inputs = tokenizer(prompt, return_tensors="pt").to(input_device)
 
     _was_truncated = False
@@ -876,13 +922,19 @@ with _jsonl_path.open("a", encoding="utf-8") as _jfh:
 
     gen_ids = output[0][_input_len:]
     raw_out = tokenizer.decode(gen_ids, skip_special_tokens=True)
-    pred, reasoning, final_txt = extract_answer(raw_out)
-    is_ok  = answers_match(pred, gold_answer)
+
+    # Diagnostic: print first 300 chars of first 3 problems
+    if idx < 3:
+        _diag(f"[sample {idx}] raw_output[:300]: {repr(raw_out[:300])}")
+
     n_tok  = int(gen_ids.shape[0])
     _last_t = int(gen_ids[-1]) if n_tok > 0 else None
     _eos_set = set(_eos_ids) if _eos_ids else {tokenizer.eos_token_id}
     finish  = ("unknown" if _last_t is None
                else "eos" if _last_t in _eos_set else "length")
+    _truncated = (finish == "length")
+    pred, reasoning, final_txt = extract_answer(raw_out, truncated=_truncated)
+    is_ok  = answers_match(pred, gold_answer)
 
     entry = {
         "problem_id": pid, "category": cat, "subcategory": "unknown",
@@ -890,7 +942,7 @@ with _jsonl_path.open("a", encoding="utf-8") as _jfh:
         "pred_answer": pred or "", "raw_output": raw_out,
         "reasoning_text": reasoning, "final_answer_text": final_txt or "",
         "is_correct": is_ok, "parse_success": pred is not None,
-        "parse_error_type": parse_error_type(pred, raw_out) or "",
+        "parse_error_type": parse_error_type(pred, raw_out, truncated=_truncated) or "",
         "generation_token_count": n_tok, "finish_reason": finish,
         "was_prompt_truncated": _was_truncated,
         "elapsed_seconds": round(elapsed, 2), "seed": SEED,
