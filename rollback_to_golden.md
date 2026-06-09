@@ -44,7 +44,7 @@ Adoption condition: Public LB = 0.86 equivalent
 Failure meaning: current environment, zip packaging, or adapter generation flow has drifted from Golden.
 ```
 
-This record-only phase creates the experiment directory but does **not** regenerate adapters, rebuild `submission.zip`, submit to Kaggle, start SFT, or launch additional rank/split experiments.
+Use `experiments/B3_GOLDEN_EXACT_REGEN/README.md` as the execution checklist for that control. This record-only phase creates the experiment directory and plan but does **not** regenerate adapters, rebuild `submission.zip`, submit to Kaggle, start SFT, or launch additional rank/split experiments.
 
 ## Next Improvement Direction After Control
 
