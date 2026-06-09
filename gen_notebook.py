@@ -1029,8 +1029,10 @@ with _jsonl_path.open("a", encoding="utf-8") as _jsonl_fh:
     _jsonl_fh.flush()
 
     status = "OK" if is_correct else ("PARSE_FAIL" if not parse_success else "WRONG")
-    print(f"[{idx+1:4d}/{len(problems)}] {pid}: {status}  tokens={n_tokens}"
-          + (" [TRUNC]" if _was_truncated else ""))
+    _lp_str = f"  min_lp={_min_logprob:.4f}" if _min_logprob is not None else ""
+    print(f"[{idx+1:03d}/{len(problems):03d}] pid={pid}  cat={cat_info['category']}"
+          f"  {status}  parse={parse_success}  tokens={n_tokens}{_lp_str}"
+          + ("  [TRUNC]" if _was_truncated else ""))
 
 print(f"\nInference done: {len(records)} problems processed")
 """)
