@@ -1,0 +1,52 @@
+{
+  "experiment_name": "B3_GATE15_X17_ASYMMETRIC_INPROJ_SPLIT",
+  "candidate_type": "asymmetric_inproj_gate_x_split",
+  "gate_rank": 15,
+  "x_rank": 17,
+  "public_lb": "0.85_weak",
+  "golden_baseline_public_lb": "0.86",
+  "decision": "REJECT",
+  "rollback_target": "B3_GOLDEN_BASELINE_GATE16_X16",
+  "structural_diagnostics": {
+    "prompt_stage": "Prompt5",
+    "num_tensors": 12010,
+    "max_rank_seen": 32,
+    "rank_violations_observed": false,
+    "nan_or_inf_observed": false,
+    "in_proj_module_count": 23
+  },
+  "lessons": [
+    "Visible structural health checks and Public LB performance are separate signals.",
+    "Increasing rank near higher SVD error locations does not necessarily improve Public LB.",
+    "Nearby asymmetric gate/x split variants are not worth additional submissions at this point."
+  ],
+  "hold_or_reject_related_experiments": [
+    {
+      "experiment_family": "gate_x_asymmetric_split",
+      "status": "HOLD_REJECT",
+      "blocked_variants": ["14/18", "17/15", "18/14"],
+      "reason": "15/17 regressed below Golden Baseline despite passing structure diagnostics."
+    },
+    {
+      "experiment_family": "rank_map_micro_adjustment",
+      "status": "HOLD",
+      "reason": "Rank/SVD surgery is considered high LB-risk after this regression."
+    },
+    {
+      "experiment_family": "in_proj_reallocation",
+      "status": "HOLD",
+      "reason": "Further in-projection redistribution is paused until Golden exact control is reconfirmed."
+    }
+  ],
+  "next_experiment": {
+    "name": "B3_GOLDEN_EXACT_REGEN",
+    "purpose": "Regenerate the Golden Baseline gate=16 / x=16 candidate using the safe Prompt1-Prompt6 process to reconfirm the 0.86 reference.",
+    "changes": "none",
+    "gate_rank": 16,
+    "x_rank": 16,
+    "adapter_generation_in_this_phase": false,
+    "submission_zip_generation_in_this_phase": false,
+    "kaggle_submit_in_this_phase": false,
+    "sft_in_this_phase": false
+  }
+}
