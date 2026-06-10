@@ -1083,6 +1083,24 @@ def main() -> None:
         help="Limit inference to first N problems (0 = all). Useful for quick smoke tests.",
     )
     parser.add_argument(
+        "--problem-ids-file",
+        default=None,
+        help="Path to a CSV with a 'problem_id' column. If set, restrict "
+             "inference to only the problems whose id appears in this file "
+             "(applied before --max-problems). Used to run a fixed subset, "
+             "e.g. phase3_token_budget_subset/subset_cases.csv.",
+    )
+    parser.add_argument(
+        "--max-new-tokens",
+        type=int,
+        default=None,
+        help="Override GOLDEN_GENERATION_CONFIG['max_new_tokens'] "
+             f"(default: {GOLDEN_GENERATION_CONFIG['max_new_tokens']}). Only "
+             "this single key is changed; all other generation settings "
+             "(temperature, do_sample, repetition_penalty, stop) remain "
+             "identical to the Golden config.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Validate inputs and config without running inference",
@@ -1108,9 +1126,25 @@ def main() -> None:
     category_map = load_category_map(Path(args.category_map))
     problems = load_problems(Path(args.problems))
 
+    if args.problem_ids_file:
+        wanted_ids: set = set()
+        with open(args.problem_ids_file, "r", encoding="utf-8", newline="") as fh:
+            for row in csv.DictReader(fh):
+                pid = row.get("problem_id")
+                if pid:
+                    wanted_ids.add(pid)
+        problems = [p for idx, p in enumerate(problems) if get_problem_id(p, idx) in wanted_ids]
+        print(f"[problem-ids-file] Filtered to {len(problems)}/{len(wanted_ids)} "
+              f"requested problem(s) from {args.problem_ids_file}")
+
     if args.max_problems and args.max_problems > 0:
         problems = problems[: args.max_problems]
         print(f"[max-problems] Capped at {args.max_problems}")
+
+    if args.max_new_tokens is not None:
+        GOLDEN_GENERATION_CONFIG["max_new_tokens"] = args.max_new_tokens
+        print(f"[max-new-tokens] Overriding GOLDEN_GENERATION_CONFIG['max_new_tokens'] "
+              f"to {args.max_new_tokens}")
 
     print(f"Problems loaded: {len(problems)}")
     print(f"Category map entries: {len(category_map)}")
